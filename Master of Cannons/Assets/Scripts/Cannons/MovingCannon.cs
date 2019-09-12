@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class MovingCannon : Cannon
 {
@@ -16,13 +16,14 @@ public class MovingCannon : Cannon
 
     private int targetCounter = 0;
 
+    private string moveToTargetMethod = "MoveToTarget";
+
     private void Start()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            targets.Add(transform.GetChild(i).position);
+            if (transform.GetChild(i).CompareTag("Target")) targets.Add(transform.GetChild(i).position);
         }
-        Debug.Log(targets.Count);
         if (startMoving) Move();
     }
 
@@ -38,7 +39,7 @@ public class MovingCannon : Cannon
 
     private void MoveToTarget()
     {
-        iTween.MoveTo(gameObject, iTween.Hash("position", targets[targetCounter], "easeType", easeType, "speed", speed, "oncomplete", "MoveToTarget"));
+        iTween.MoveTo(gameObject, iTween.Hash(hashPosition, targets[targetCounter], hashEaseType, easeType, hashSpeed, speed, hashOnComplete, moveToTargetMethod, hashIgnoreTimeScale, true));
         targetCounter = (targetCounter + 1) % targets.Count;
     }
 
