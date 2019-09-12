@@ -22,8 +22,7 @@ public class Cannon : MonoBehaviour
 
     protected void CatchCharacter()
     {
-        elapsedWickTime = 0f;
-        burningWick = true;
+
     }
 
     protected void OnTriggerEnter(Collider other)
