@@ -31,7 +31,7 @@ public class MovingCannon : Cannon
         base.Update();
     }
 
-    protected void Move()
+    protected virtual void Move()
     {
         MoveToTarget();
     }
