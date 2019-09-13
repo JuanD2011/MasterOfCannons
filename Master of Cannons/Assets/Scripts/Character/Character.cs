@@ -12,8 +12,11 @@ public class Character : MonoBehaviour
 
     public void CannonEnterReset(Cannon _cannonEntered)
     {
-        Rigidbody.velocity = Vector3.zero;
-        transform.rotation = Quaternion.identity;
-        transform.SetParent(_cannonEntered.transform);
+        transform.SetParent(_cannonEntered.transform, true);
+        //Rigidbody.velocity = Vector3.zero;
+        //transform.rotation = Quaternion.identity;
+        SetKinematic(true);
     }
+
+    public void SetKinematic(bool _value) => Rigidbody.isKinematic = _value;
 }
