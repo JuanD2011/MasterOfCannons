@@ -8,8 +8,9 @@ public class RotatingCannon : MovingCannon
 
     int anglesCounter = 0;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         if (startMoving) Move();
     }
 

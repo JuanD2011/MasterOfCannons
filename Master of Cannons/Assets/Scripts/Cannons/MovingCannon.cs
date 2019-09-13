@@ -9,21 +9,26 @@ public class MovingCannon : Cannon
     [SerializeField]
     protected float speed = 5f;
 
+    [SerializeField]
+    LeanTweenType tweenType;
+
     private List<Vector3> targets = new List<Vector3>();
 
     private int targetCounter = 0;
 
-    private string moveToTargetMethod = "MoveToTarget";
+    System.Action repeatMethod;
 
     protected override void Start()
     {
+        repeatMethod = delegate () { MoveToTarget(); };
+
         base.Start();
 
         for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).CompareTag("Target")) targets.Add(transform.GetChild(i).position);
         }
-        //if (startMoving) Move();
+        if (startMoving) Move();
     }
 
     protected override void Update()
@@ -38,6 +43,7 @@ public class MovingCannon : Cannon
 
     private void MoveToTarget()
     {
+        LeanTween.move(gameObject, targets[targetCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
         targetCounter = (targetCounter + 1) % targets.Count;
     }
 

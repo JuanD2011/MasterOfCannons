@@ -10,9 +10,17 @@ public class Character : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void CannonEnterReset(Cannon _cannonEntered)
+    private void Update()
     {
-        transform.SetParent(_cannonEntered.transform, true);
+        if (Rigidbody.velocity.y < 0)
+        {
+            Rigidbody.velocity += Physics.gravity * Time.deltaTime;
+        }
+    }
+
+    public void CannonEnterReset(Transform _reference)
+    {
+        transform.SetParent(_reference.transform);
         //Rigidbody.velocity = Vector3.zero;
         //transform.rotation = Quaternion.identity;
         SetKinematic(true);

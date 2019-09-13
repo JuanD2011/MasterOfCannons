@@ -379,13 +379,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee46ef1f266170d42a31a7d8b9455ea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootForce: 15
+  shootForce: 30
   wickLength: 5
-  CatchRotationEaseType: 14
   catchRotation: {x: 0, y: 0, z: 0}
   startMoving: 1
   speed: 5
-  easeType: 14
+  tweenType: 16
 --- !u!136 &532237931
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -510,7 +509,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootForce: 20
   wickLength: 5
-  CatchRotationEaseType: 21
   catchRotation: {x: 0, y: 0, z: 0}
 --- !u!135 &653227993
 SphereCollider:
@@ -649,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1090545243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,9 +660,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootForce: 20
+  shootForce: 30
   wickLength: 5
-  CatchRotationEaseType: 21
   catchRotation: {x: 0, y: 0, z: -180}
 --- !u!135 &1090545244
 SphereCollider:

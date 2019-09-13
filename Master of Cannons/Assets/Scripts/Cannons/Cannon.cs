@@ -13,8 +13,6 @@ public class Cannon : MonoBehaviour
     protected Transform reference;
     private Character characterInCannon = null;
 
-    protected internal string hashPosition = "position", hashEaseType = "easetype", hashIgnoreTimeScale = "ignoretimescale", hashRotation = "rotation", hashSpeed = "speed", hashOnComplete = "oncomplete", hashTime = "time";
-
     private void Awake()
     {
         PlayerInputHandler.OnShootAction -= Shoot;
@@ -45,7 +43,7 @@ public class Cannon : MonoBehaviour
         if (characterInCannon != null)
         {
             burningWick = false;
-            characterInCannon.transform.SetParent(null, true);
+            characterInCannon.transform.SetParent(null);
             characterInCannon.SetKinematic(false);
             characterInCannon.Rigidbody.AddForce(transform.up * shootForce, ForceMode.Impulse);
             characterInCannon = null; 
@@ -55,7 +53,7 @@ public class Cannon : MonoBehaviour
     protected void CatchCharacter()
     {
         characterInCannon.transform.position = reference.position;
-        characterInCannon.CannonEnterReset(this);
+        characterInCannon.CannonEnterReset(reference);
         CatchRotation();
     }
 
