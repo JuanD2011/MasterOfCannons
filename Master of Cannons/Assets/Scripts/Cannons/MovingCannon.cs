@@ -10,17 +10,17 @@ public class MovingCannon : Cannon
     protected float speed = 5f;
 
     [SerializeField]
-    LeanTweenType tweenType;
+    protected LeanTweenType tweenType = LeanTweenType.easeInOutSine;
 
     private List<Vector3> targets = new List<Vector3>();
 
     private int targetCounter = 0;
 
-    System.Action repeatMethod;
+    protected System.Action repeatMethod = null;
 
     protected override void Start()
     {
-        repeatMethod = delegate () { MoveToTarget(); };
+        repeatMethod += MoveToTarget;
 
         base.Start();
 

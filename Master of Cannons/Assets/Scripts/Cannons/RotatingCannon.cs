@@ -2,7 +2,6 @@
 
 public class RotatingCannon : MovingCannon
 {
-
     [Tooltip("Will find the shortest path to reach the angle")]
     [SerializeField] Vector3[] angles = new Vector3[2];
 
@@ -10,7 +9,7 @@ public class RotatingCannon : MovingCannon
 
     protected override void Start()
     {
-        base.Start();
+        repeatMethod += Rotate;
         if (startMoving) Move();
     }
 
@@ -27,6 +26,7 @@ public class RotatingCannon : MovingCannon
 
     private void Rotate()
     {
-
+        LeanTween.rotate(gameObject, angles[anglesCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
+        anglesCounter = (anglesCounter + 1) % angles.Length;
     }
 }

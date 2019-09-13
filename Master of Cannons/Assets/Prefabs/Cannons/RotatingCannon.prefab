@@ -46,10 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootForce: 10
   wickLength: 5
+  catchRotation: {x: 0, y: 0, z: 180}
   startMoving: 1
-  speed: 50
-  easeType: 14
-  loopType: 2
+  speed: 80
+  tweenType: 16
   angles:
   - {x: 0, y: 0, z: 89}
   - {x: 0, y: 0, z: -89}
