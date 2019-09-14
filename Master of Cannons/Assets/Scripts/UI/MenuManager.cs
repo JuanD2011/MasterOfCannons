@@ -3,7 +3,7 @@
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] GameObject[] panels = new GameObject[0];
-
+    [SerializeField] Settings settings = null;
     Animator[] panelAnimators = new Animator[0];
 
     int currentPanelIndex = 0;
@@ -14,12 +14,11 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
+        Memento.LoadData(settings);
+
         panelAnimators = new Animator[panels.Length];
 
-        for (int i = 0; i < panelAnimators.Length; i++)
-        {
-            panelAnimators[i] = panels[i].GetComponent<Animator>();
-        }
+        for (int i = 0; i < panelAnimators.Length; i++) panelAnimators[i] = panels[i].GetComponent<Animator>();
     }
 
     void Start()
@@ -39,5 +38,13 @@ public class MenuManager : MonoBehaviour
             currentPanelIndex = _newPanelIndex;
             panelAnimators[currentPanelIndex].Play(panelFadeIn);
         }
+    }
+
+    /// <summary>
+    /// Save settings
+    /// </summary>
+    public void SaveSettings()
+    {
+        Memento.SaveData(settings);
     }
 }
