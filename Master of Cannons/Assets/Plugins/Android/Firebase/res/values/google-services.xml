@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id" xmlns:tools="http://schemas.android.com/tools">
-  <string name="firebase_database_url" translatable="false">https://cannons-v2.firebaseio.com</string>
-  <string name="gcm_defaultSenderId" translatable="false">1069726216151</string>
-  <string name="google_storage_bucket" translatable="false">cannons-v2.appspot.com</string>
-  <string name="project_id" translatable="false">cannons-v2</string>
-  <string name="google_api_key" translatable="false">AIzaSyCBFv572CNTF9lZT-wuHPzTnmhaXZ0IKd0</string>
-  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCBFv572CNTF9lZT-wuHPzTnmhaXZ0IKd0</string>
-  <string name="google_app_id" translatable="false">1:1069726216151:android:b824d4fb6563d28ab12592</string>
-  <string name="default_web_client_id" translatable="false">1069726216151-gifjar02691rklrljkf3qvhrfta1qrog.apps.googleusercontent.com</string>
+  <string name="firebase_database_url" translatable="false">https://master-of-cannons.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">362747646851</string>
+  <string name="google_storage_bucket" translatable="false">master-of-cannons.appspot.com</string>
+  <string name="project_id" translatable="false">master-of-cannons</string>
+  <string name="google_api_key" translatable="false">AIzaSyCAxe6nRwgqoen4A_hXj6dWjXbWopt3nYM</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCAxe6nRwgqoen4A_hXj6dWjXbWopt3nYM</string>
+  <string name="google_app_id" translatable="false">1:362747646851:android:03dbc3e7d228f086b31cb6</string>
+  <string name="default_web_client_id" translatable="false">362747646851-ugufjm96kpkoihavj147eh28pheb6rqn.apps.googleusercontent.com</string>
 </resources>
