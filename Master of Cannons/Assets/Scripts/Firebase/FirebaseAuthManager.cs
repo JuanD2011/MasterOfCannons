@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Auth;
 using Firebase;
+using Firebase.Database;
+using System.Threading.Tasks;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -35,12 +37,14 @@ public class FirebaseAuthManager : MonoBehaviour
         //    }
         //}
     }
+    bool userExist = false;
 
-    public void AnonymousSignIn()
+    private async void AnonymousSignIn()
     {
-        Debug.Log("Creating an Anonymous Account...");
+        Debug.Log("Sign in into anonymous account...");
 
-        auth.SignInAnonymouslyAsync().ContinueWith(task => {
+        await auth.SignInAnonymouslyAsync().ContinueWith(async task =>
+        {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInAnonymouslyAsync was canceled.");
@@ -51,16 +55,55 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
                 return;
             }
-         
+
             myUser = task.Result;
-            User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId };
+
+            await CheckUserExistance();
+            // FirebaseDatabase.DefaultInstance.GetReference("users").Child(myUser.UserId).GetValueAsync().ContinueWith(dbTask => {
+            //    if (dbTask.IsFaulted)
+            //    {
+            //        Debug.LogError("Searching UserID in data base encountered an error: " + dbTask.Exception);
+            //    }
+            //    else if (dbTask.IsCompleted)
+            //    {
+            //        DataSnapshot snapshot = dbTask.Result;
+            //        Debug.Log("Searching UserID in data base COMPLETED...");
+            //    }
+            //    bool playerExists = dbTask.Result.Exists;
+
+            //    Debug.LogFormat("Player exists? {0} ", playerExist);
+            //});
+
+            if (!userExist)
+            {
+                Debug.Log("Add New Player To Database booy...");
+                User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId, coins = 20, skinAvailability = 0, xp = 0 };
+                FirebaseDBManager.DB.SaveData(mUser);
+            }
+
             //Memento.SaveData(mUser);
-            FirebaseDBManager.DB.SaveData(mUser.userId, mUser.username, mUser.email);
-            
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 myUser.DisplayName, myUser.UserId);
         });
         
+    }
+
+    public async Task CheckUserExistance()
+    {
+        await FirebaseDatabase.DefaultInstance.GetReference("users").Child(myUser.UserId).GetValueAsync().ContinueWith(dbTask =>
+        {
+            if (dbTask.IsFaulted)
+            {
+                Debug.LogError("Searching UserID in data base encountered an error: " + dbTask.Exception);
+            }
+            else if (dbTask.IsCompleted)
+            {
+                DataSnapshot snapshot = dbTask.Result;
+                Debug.Log("Searching UserID in data base COMPLETED...");
+            }
+            userExist = dbTask.Result.Exists;
+            Debug.LogFormat("Player exists? {0} ", userExist);
+        });
     }
 
     public void UpdateUserProfile(string displayName)

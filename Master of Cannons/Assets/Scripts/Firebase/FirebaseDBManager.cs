@@ -7,12 +7,13 @@ using Delegates;
 public class FirebaseDBManager : MonoBehaviour
 {
     public static FirebaseDBManager DB = null;
-    public DatabaseReference dataBaseRef;  
+    public DatabaseReference dataBaseRef;
+    FirebaseApp app;
 
     /// <summary>
     /// Save user data in Database (userID, name, email)
     /// </summary>    
-    public Action<string, string, string> SaveData;
+    public Action<User> SaveData;
 
     /// <summary>
     /// Update user name (userID, new username)
@@ -34,7 +35,7 @@ public class FirebaseDBManager : MonoBehaviour
         // Get the root reference location of the database.
         dataBaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
-        SaveData = (userId, name, email) => { WriteNewUser(userId, name, email); };
+        SaveData = (user) => { WriteNewUser(user); };
         UpdateUserName = UpdateUsername;
 
         InitializeDB();
@@ -46,35 +47,29 @@ public class FirebaseDBManager : MonoBehaviour
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
             {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
-                //   app = Firebase.FirebaseApp.DefaultInstance;
-
+                app = FirebaseApp.DefaultInstance;
                 print("Ready to use FIREBASE...");
-
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
             }
             else
             {
                 UnityEngine.Debug.LogError(System.String.Format(
                   "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-                // Firebase Unity SDK is not safe to use here.
             }
         });
     }
 
 
-    private void WriteNewUser(string userId, string name, string email)
+    private void WriteNewUser(User user)
     {
         Debug.Log("Writing new user in database bitch...");
-        User user = new User { username = name, email = email };
         string json = JsonUtility.ToJson(user);
-        dataBaseRef.Child("users").Child(userId).SetRawJsonValueAsync(json);
+        dataBaseRef.Child("users").Child(user.userId).SetRawJsonValueAsync(json);
     }
 
     public void UpdateUsername(string userId, string newUserName)
-    {
+    {        
         Debug.Log(string.Format("Ouh yeah updating name to: {0} ", newUserName));
         dataBaseRef.Child("users").Child(userId).Child("username").SetValueAsync(newUserName);
     }
+
 }
