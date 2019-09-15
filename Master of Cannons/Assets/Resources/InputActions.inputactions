@@ -17,7 +17,7 @@
                     "name": "Aim",
                     "type": "Value",
                     "id": "7ea2f9b5-0d1f-486b-907e-571ae5903191",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "NormalizeVector2",
                     "interactions": ""
                 }
@@ -52,6 +52,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6313408d-41ea-44f0-ada5-77ffc542f893",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touchscreen",
                     "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
