@@ -9,8 +9,13 @@ public class RotatingCannon : MovingCannon
 
     protected override void Start()
     {
-        repeatMethod += Rotate;
+        GetReference();
+
+        repeatMethod += Move;
+
         if (startMoving) Move();
+
+        PlayerInputHandler.OnShootAction += Shoot;
     }
 
     protected override void Update()
@@ -18,13 +23,7 @@ public class RotatingCannon : MovingCannon
         base.Update();
     }
 
-
     protected override void Move()
-    {
-        Rotate();
-    }
-
-    private void Rotate()
     {
         LeanTween.rotate(gameObject, angles[anglesCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
         anglesCounter = (anglesCounter + 1) % angles.Length;

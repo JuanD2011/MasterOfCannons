@@ -6,6 +6,9 @@ public class Cannon : MonoBehaviour
     protected float shootForce = 10f, wickLength = 5f;
 
     [SerializeField]
+    bool doCatchRotation = false;
+
+    [SerializeField]
     private Vector3 catchRotation = new Vector3(0, 0, 180f);
 
     protected bool burningWick = false;
@@ -13,12 +16,19 @@ public class Cannon : MonoBehaviour
     protected Transform reference;
     private Character characterInCannon = null;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         PlayerInputHandler.OnShootAction -= Shoot;
     }
 
     protected virtual void Start()
+    {
+        GetReference();
+
+        PlayerInputHandler.OnShootAction += Shoot;
+    }
+
+    protected void GetReference()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -27,8 +37,6 @@ public class Cannon : MonoBehaviour
                 reference = transform.GetChild(i);
             }
         }
-
-        PlayerInputHandler.OnShootAction += Shoot;
     }
 
     protected virtual void Update()
@@ -54,7 +62,8 @@ public class Cannon : MonoBehaviour
     {
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);
-        CatchRotation();
+
+        if (doCatchRotation) CatchRotation();
     }
 
     protected virtual void CatchRotation()

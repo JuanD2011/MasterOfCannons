@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootForce: 10
   wickLength: 5
+  doCatchRotation: 0
   catchRotation: {x: 0, y: 0, z: 0}
 --- !u!135 &1498731755091202328
 SphereCollider:

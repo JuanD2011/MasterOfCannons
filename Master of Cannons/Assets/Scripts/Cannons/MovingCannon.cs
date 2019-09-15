@@ -28,6 +28,7 @@ public class MovingCannon : Cannon
         {
             if (transform.GetChild(i).CompareTag("Target")) targets.Add(transform.GetChild(i).position);
         }
+
         if (startMoving) Move();
     }
 
