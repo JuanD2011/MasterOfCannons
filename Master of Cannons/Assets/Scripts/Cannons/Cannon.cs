@@ -59,7 +59,7 @@ public class Cannon : MonoBehaviour
 
     protected virtual void CatchRotation()
     {
-        
+        LeanTween.rotate(gameObject, catchRotation, 0.25f);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
