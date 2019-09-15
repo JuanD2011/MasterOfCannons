@@ -66,7 +66,7 @@ public class Cannon : MonoBehaviour
     {
         if (other.CompareTag("Character"))
         {
-            characterInCannon = other.GetComponent<Character>();
+            characterInCannon = other.GetComponentInParent<Character>();
             CatchCharacter();
         }
     }
