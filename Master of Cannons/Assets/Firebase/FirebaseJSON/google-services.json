@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1069726216151",
+    "firebase_url": "https://cannons-v2.firebaseio.com",
+    "project_id": "cannons-v2",
+    "storage_bucket": "cannons-v2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069726216151:android:b824d4fb6563d28ab12592",
+        "android_client_info": {
+          "package_name": "com.OcasoGames.MasterOfCannons"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069726216151-gifjar02691rklrljkf3qvhrfta1qrog.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBFv572CNTF9lZT-wuHPzTnmhaXZ0IKd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069726216151-gifjar02691rklrljkf3qvhrfta1qrog.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
