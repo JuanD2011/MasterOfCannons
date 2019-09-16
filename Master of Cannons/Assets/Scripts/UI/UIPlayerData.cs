@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using Delegates;
+using System.Collections;
 
 public class UIPlayerData : MonoBehaviour
 {
@@ -10,12 +11,18 @@ public class UIPlayerData : MonoBehaviour
     [SerializeField] TextMeshProUGUI xp;
     public static Action<string, string, string> showPlayerData;
 
-    private void Start()
+    private IEnumerator Start()
     {
-        showPlayerData = (username, coins, xp) => { this.username.text = username;
+        
+        showPlayerData = (username, coins, xp) => { this.username.text = string.Format("Username: {0}", username);
                                                     this.coins.text = coins;
-                                                    this.xp.text = xp; };
+                                                    this.xp.text = xp; ; };
+
+        yield return new WaitUntil(() => FirebaseAuthManager.myUser != null);
+        FirebaseDBManager.DB.GetPlayerData(showPlayerData);
 
     }
    
+
+
 }

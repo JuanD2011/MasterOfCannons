@@ -10,15 +10,14 @@ public class FirebaseAuthManager : MonoBehaviour
 {
     FirebaseAuth auth;
     public static FirebaseUser myUser;
-    //FirebaseApp app;
 
     private IEnumerator Start()
     {
+        yield return new WaitUntil(()=>FirebaseApp.CheckDependencies() == DependencyStatus.Available);
         auth = FirebaseAuth.DefaultInstance;
         AnonymousSignIn();
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
-        yield return null;
     }
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -57,22 +56,7 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             myUser = task.Result;
-
             await CheckUserExistance();
-            // FirebaseDatabase.DefaultInstance.GetReference("users").Child(myUser.UserId).GetValueAsync().ContinueWith(dbTask => {
-            //    if (dbTask.IsFaulted)
-            //    {
-            //        Debug.LogError("Searching UserID in data base encountered an error: " + dbTask.Exception);
-            //    }
-            //    else if (dbTask.IsCompleted)
-            //    {
-            //        DataSnapshot snapshot = dbTask.Result;
-            //        Debug.Log("Searching UserID in data base COMPLETED...");
-            //    }
-            //    bool playerExists = dbTask.Result.Exists;
-
-            //    Debug.LogFormat("Player exists? {0} ", playerExist);
-            //});
 
             if (!userExist)
             {
@@ -82,8 +66,7 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             //Memento.SaveData(mUser);
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                myUser.DisplayName, myUser.UserId);
+            Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
         });
         
     }
