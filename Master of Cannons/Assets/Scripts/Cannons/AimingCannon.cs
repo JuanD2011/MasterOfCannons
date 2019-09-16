@@ -14,13 +14,11 @@ public class AimingCannon : Cannon
     protected override void Awake()
     {
         base.Awake();
-        PlayerInputHandler.OnAimAction -= AimCannon;
     }
 
     protected override void Start()
     {
         base.Start();
-        PlayerInputHandler.OnAimAction += AimCannon;
         m_Camera = Camera.main;
     }
 
