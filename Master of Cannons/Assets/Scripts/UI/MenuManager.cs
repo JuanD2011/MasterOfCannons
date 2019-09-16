@@ -19,11 +19,19 @@ public class MenuManager : MonoBehaviour
         panelAnimators = new Animator[panels.Length];
 
         for (int i = 0; i < panelAnimators.Length; i++) panelAnimators[i] = panels[i].GetComponent<Animator>();
+
+        SetLanguage();
     }
 
     void Start()
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
+    }
+
+    private void SetLanguage()
+    {
+        Translation.currentLanguageId = settings.languageID;
+        Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
     }
 
     /// <summary>

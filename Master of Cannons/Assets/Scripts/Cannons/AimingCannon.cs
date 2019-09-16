@@ -2,12 +2,11 @@
 
 public class AimingCannon : Cannon
 {
-    float targetRotation = 0f;
-    float turnSmoothVel = 0f, turnSmooth = 0.15f;
+    private float targetRotation = 0f;
 
-    Vector3 direction = Vector3.zero;
+    private Vector3 direction = Vector3.zero;
 
-    Camera m_Camera = null;
+    private Camera m_Camera = null;
 
     private bool canAim = false;
 
