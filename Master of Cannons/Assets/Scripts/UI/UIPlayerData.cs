@@ -19,10 +19,8 @@ public class UIPlayerData : MonoBehaviour
                                                     this.xp.text = xp; ; };
 
         yield return new WaitUntil(() => FirebaseAuthManager.myUser != null);
+        //yield return new WaitUntil(() => FirebaseAuthManager.updateProfileTask?.IsCompleted == true && FirebaseAuthManager.myUser.DisplayName != string.Empty);
         FirebaseDBManager.DB.GetPlayerData(showPlayerData);
-
     }
    
-
-
 }

@@ -10,9 +10,10 @@ public class FirebaseAuthManager : MonoBehaviour
 {
     FirebaseAuth auth;
     public static FirebaseUser myUser;
+    public static Task updateProfileTask;
 
     private IEnumerator Start()
-    {
+    {        
         yield return new WaitUntil(()=>FirebaseApp.CheckDependencies() == DependencyStatus.Available);
         auth = FirebaseAuth.DefaultInstance;
         AnonymousSignIn();
@@ -22,19 +23,19 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
-        //if (auth.CurrentUser != myUser)
-        //{
-        //    bool signedIn = myUser != auth.CurrentUser && auth.CurrentUser != null;
-        //    if (!signedIn && myUser != null)
-        //    {
-        //        Debug.Log("Signed out " + myUser.UserId);
-        //    }
-        //    myUser = auth.CurrentUser;
-        //    if (signedIn)
-        //    {
-        //        Debug.Log("Signed in " + myUser.UserId);
-        //    }
-        //}
+        if (auth.CurrentUser != myUser)
+        {
+            bool signedIn = myUser != auth.CurrentUser && auth.CurrentUser != null;
+            if (!signedIn && myUser != null)
+            {
+                Debug.Log("Signed out " + myUser.UserId);
+            }
+            myUser = auth.CurrentUser;
+            if (signedIn)
+            {
+                Debug.Log("Signed in " + myUser.UserId);
+            }
+        }
     }
     bool userExist = false;
 
@@ -61,8 +62,9 @@ public class FirebaseAuthManager : MonoBehaviour
             if (!userExist)
             {
                 Debug.Log("Add New Player To Database booy...");
-                User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId, coins = 20, skinAvailability = 0, xp = 0 };
-                FirebaseDBManager.DB.SaveData(mUser);
+                User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId};                
+                PlayerInfo playerInfo = new PlayerInfo { coins = 30, skinAvailability = 0, xp = 10 };
+                FirebaseDBManager.DB.SaveData(mUser, playerInfo);
             }
 
             //Memento.SaveData(mUser);
@@ -89,11 +91,14 @@ public class FirebaseAuthManager : MonoBehaviour
         });
     }
 
-    public void UpdateUserProfile(string displayName)
+    public async static void UpdateUserProfile(string displayName)
     {
+       
         UserProfile userProfile = new UserProfile { DisplayName = displayName };
-        myUser.UpdateUserProfileAsync(userProfile).ContinueWith(task => {
-            if(task.IsCanceled)
+        await myUser.UpdateUserProfileAsync(userProfile).ContinueWith(task => {
+            updateProfileTask = task;
+
+            if (task.IsCanceled)
             {
                 Debug.LogError("UpdateUserProfileAsync Was Canceled");
             }
@@ -101,6 +106,8 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
             }
+
+            
             Debug.Log("User profile updated successfully.");
 
         });
