@@ -13,6 +13,6 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnAim(InputValue _Context)
     {
-        OnAimAction?.Invoke(_Context.Get<Vector2>());
+        //OnAimAction?.Invoke(_Context.Get<Vector2>());
     }
 }

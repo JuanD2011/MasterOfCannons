@@ -58,7 +58,7 @@ public class Cannon : MonoBehaviour
         }
     }
 
-    protected void CatchCharacter()
+    protected virtual void CatchCharacter()
     {
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);
