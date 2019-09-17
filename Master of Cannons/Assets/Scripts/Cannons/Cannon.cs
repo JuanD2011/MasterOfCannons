@@ -51,10 +51,11 @@ public class Cannon : MonoBehaviour
         if (characterInCannon != null)
         {
             burningWick = false;
+            elapsedWickTime = 0f;
             characterInCannon.transform.SetParent(null);
             characterInCannon.SetKinematic(false);
             characterInCannon.Rigidbody.AddForce(transform.up * shootForce, ForceMode.Impulse);
-            characterInCannon = null; 
+            characterInCannon = null;
         }
     }
 
