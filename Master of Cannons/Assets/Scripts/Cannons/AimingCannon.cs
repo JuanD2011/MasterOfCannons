@@ -37,7 +37,7 @@ public class AimingCannon : Cannon
     private void AimCannon(Vector2 _AimVector)
     {
         direction = new Vector3(_AimVector.x, _AimVector.y, 0) - m_Camera.WorldToScreenPoint(transform.position);
-        targetRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        targetRotation = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(targetRotation - 90, Vector3.forward);
     }
 
