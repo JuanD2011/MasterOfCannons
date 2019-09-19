@@ -5,20 +5,46 @@ using Firebase.Auth;
 using Firebase;
 using Firebase.Database;
 using System.Threading.Tasks;
+using Facebook.Unity;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
+    [SerializeField] Settings settings = null;
     FirebaseAuth auth;
     public static FirebaseUser myUser;
     public static Task updateProfileTask;
+    private bool isInitialized = false;
+    public bool MarikiSI;
 
     private IEnumerator Start()
     {        
         yield return new WaitUntil(()=>FirebaseApp.CheckDependencies() == DependencyStatus.Available);
         auth = FirebaseAuth.DefaultInstance;
         AnonymousSignIn();
+        //Memento.LoadData(settings);        
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
+        FB.Init(InitCallBack, OnHideUnity);        
+    }
+
+    void InitCallBack()
+    {
+        if(FB.IsInitialized)
+        {
+            FB.ActivateApp();
+            isInitialized = true;
+            Debug.Log("Facebook Initialized");
+            if (settings.hasFacebookLinked) FacebookSignIn();
+        }
+        else
+        {
+            Debug.LogError("Failed to Initialize Facebook");
+        }
+    }
+
+    void OnHideUnity(bool isUnityShown)
+    {
+        if (isUnityShown) FB.ActivateApp();
     }
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -71,6 +97,78 @@ public class FirebaseAuthManager : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
         });
         
+    }
+
+    public void FacebookSignIn()
+    {
+        Debug.Log("Sign In Into Facebook Account...");
+        List<string> permissions = new List<string>() { "public_profile", "email", "user_friends" };
+        FB.LogInWithReadPermissions(permissions, (result) => {
+            if(FB.IsLoggedIn)
+            {
+                AccessToken accesToken = AccessToken.CurrentAccessToken;
+                if (!settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
+                else FacebookAuthentication(accesToken);
+            }
+            else
+            {
+                Debug.Log("Login was cancelled");
+            }
+
+        });
+        
+    }
+
+    async void LinkFacebookAccount(AccessToken accesToken)
+    {
+        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
+        Task auxTask = null;
+        await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith(task => {
+
+            if (task.IsCanceled)
+            {
+                auxTask = task;
+                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                auxTask = task;
+                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            auxTask = task;
+            settings.hasFacebookLinked = true;
+            FirebaseUser newUser = task.Result;
+            Debug.LogFormat("Facebook User LINKED Succesfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+        });
+
+        if(auxTask.IsCompleted) Memento.SaveData(settings);
+
+    }
+
+    void FacebookAuthentication(AccessToken accesToken)
+    {
+        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
+        auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            FirebaseUser newUser = task.Result;
+            Debug.LogFormat("User FACEBOOK signed in successfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+        });
     }
 
     public async Task CheckUserExistance()
