@@ -6,6 +6,7 @@ using Firebase;
 using Firebase.Database;
 using System.Threading.Tasks;
 using Facebook.Unity;
+using Delegates;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -13,16 +14,21 @@ public class FirebaseAuthManager : MonoBehaviour
     FirebaseAuth auth;
     public static FirebaseUser myUser;
     public static Task updateProfileTask;
+    public static Action facebookLogHandler;
+    public static Action signOutHandler;
+    public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
+
     private bool isInitialized = false;
-    public bool MarikiSI;
+    private bool userExist = false;
 
     private IEnumerator Start()
     {        
-        yield return new WaitUntil(()=>FirebaseApp.CheckDependencies() == DependencyStatus.Available);
+        yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
         auth = FirebaseAuth.DefaultInstance;
-        AnonymousSignIn();
-        //Memento.LoadData(settings);        
-        auth.StateChanged += AuthStateChanged;
+        AnonymousSignIn();  
+        signOutHandler = delegate () { FB.LogOut(); };
+        facebookLogHandler = FacebookSignIn;
+        auth.StateChanged += AuthStateChanged;        
         AuthStateChanged(this, null);
         FB.Init(InitCallBack, OnHideUnity);        
     }
@@ -34,7 +40,12 @@ public class FirebaseAuthManager : MonoBehaviour
             FB.ActivateApp();
             isInitialized = true;
             Debug.Log("Facebook Initialized");
-            if (settings.hasFacebookLinked) FacebookSignIn();
+            UISocial.buttonStatusHandler?.Invoke();
+            if (FB.IsLoggedIn)
+            {
+                print("Already has logged in");
+                return;
+            }
         }
         else
         {
@@ -63,7 +74,6 @@ public class FirebaseAuthManager : MonoBehaviour
             }
         }
     }
-    bool userExist = false;
 
     private async void AnonymousSignIn()
     {
@@ -93,7 +103,6 @@ public class FirebaseAuthManager : MonoBehaviour
                 FirebaseDBManager.DB.SaveData(mUser, playerInfo);
             }
 
-            //Memento.SaveData(mUser);
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
         });
         
@@ -101,6 +110,11 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void FacebookSignIn()
     {
+        if (FB.IsLoggedIn)
+        {
+            print("Already has logged in");
+            return;
+        }
         Debug.Log("Sign In Into Facebook Account...");
         List<string> permissions = new List<string>() { "public_profile", "email", "user_friends" };
         FB.LogInWithReadPermissions(permissions, (result) => {
@@ -108,19 +122,24 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
                 if (!settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
-                else FacebookAuthentication(accesToken);
+                //else FacebookAuthentication(accesToken);
+                print("Login Facebook Succesfully");
+                UISocial.buttonStatusHandler.Invoke();
+
             }
             else
             {
                 Debug.Log("Login was cancelled");
-            }
-
+            }               
         });
+
         
+
     }
 
     async void LinkFacebookAccount(AccessToken accesToken)
     {
+        print("link facebook ");
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
         Task auxTask = null;
         await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith(task => {
@@ -139,20 +158,21 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             auxTask = task;
-            settings.hasFacebookLinked = true;
+            settings.hasFacebookLinked = true;          
             FirebaseUser newUser = task.Result;
-            Debug.LogFormat("Facebook User LINKED Succesfully: {0} ({1})",
+            Debug.LogFormat("Facebook User LINKED to FIREBASE Succesfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
 
-        if(auxTask.IsCompleted) Memento.SaveData(settings);
+        UISocial.buttonStatusHandler.Invoke();
+        if (auxTask.IsCompleted) Memento.SaveData(settings);
 
     }
 
-    void FacebookAuthentication(AccessToken accesToken)
+    async void FacebookAuthentication(AccessToken accesToken)
     {
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
-        auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+        await auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
 
             if (task.IsCanceled)
             {
@@ -165,10 +185,12 @@ public class FirebaseAuthManager : MonoBehaviour
                 return;
             }
 
-            FirebaseUser newUser = task.Result;
+            FirebaseUser newUser = task.Result;         
             Debug.LogFormat("User FACEBOOK signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
+
+        UISocial.buttonStatusHandler.Invoke();
     }
 
     public async Task CheckUserExistance()

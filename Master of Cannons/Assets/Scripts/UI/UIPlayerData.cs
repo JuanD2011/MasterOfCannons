@@ -8,8 +8,7 @@ public class UIPlayerData : MonoBehaviour
     [Header("UI Player Data")]
     [SerializeField] TextMeshProUGUI username;
     [SerializeField] TextMeshProUGUI coins;
-    [SerializeField] TextMeshProUGUI xp;
-    public static Action<string, string, string> showPlayerData;
+    [SerializeField] TextMeshProUGUI xp;    public static Action<string, string, string> showPlayerData;
 
     private IEnumerator Start()
     {
@@ -18,7 +17,7 @@ public class UIPlayerData : MonoBehaviour
                                                     this.coins.text = coins;
                                                     this.xp.text = xp; ; };
 
-        yield return new WaitUntil(() => FirebaseAuthManager.myUser != null);
+        yield return new WaitUntil(() => FirebaseAuthManager.myUser != null && FirebaseAuthManager.CheckDependenciesHandler());
         //yield return new WaitUntil(() => FirebaseAuthManager.updateProfileTask?.IsCompleted == true && FirebaseAuthManager.myUser.DisplayName != string.Empty);
         FirebaseDBManager.DB.GetPlayerData(showPlayerData);
     }
