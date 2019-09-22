@@ -12,12 +12,27 @@ public class FacebookData : MonoBehaviour
         
         string query = "/me/friends";
         FB.API(query, HttpMethod.GET, result =>
-        {
+        {          
             var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
             var friendsList = (List<object>)dictionary["data"];
             foreach (var dict in friendsList) Debug.Log(((Dictionary<string, object>)dict)["name"]);
         });
     }
+
+    //public Dictionary<string, object> GetFriendsData()
+    //{
+    //    if (!CheckLogIn()) { Debug.Log("You are not LOGGED IN Facebook..."); return null; }
+    //    Dictionary<string, object> friendsData = new Dictionary<string, object>();
+
+    //    string query = "/me/friends";
+    //    FB.API(query, HttpMethod.GET, result =>
+    //    {
+    //        var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
+    //        var friendsList = (List<object>)dictionary["data"];
+    //        foreach (var dict in friendsList) Debug.Log(((Dictionary<string, object>)dict)["name"]);
+    //    });
+    //}
+
 
     public static bool CheckLogIn()
     {        

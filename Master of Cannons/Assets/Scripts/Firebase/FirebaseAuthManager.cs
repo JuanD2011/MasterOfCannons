@@ -10,7 +10,6 @@ using Delegates;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
-    [SerializeField] Settings settings = null;
     FirebaseAuth auth;
     public static FirebaseUser myUser;
     public static Task updateProfileTask;
@@ -22,7 +21,8 @@ public class FirebaseAuthManager : MonoBehaviour
     private bool userExist = false;
 
     private IEnumerator Start()
-    {        
+    {
+        //Memento.ClearData(DataManager.DM.settings);
         yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
         auth = FirebaseAuth.DefaultInstance;
         AnonymousSignIn();  
@@ -100,7 +100,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId};                
                 PlayerInfo playerInfo = new PlayerInfo { coins = 30, skinAvailability = 0, xp = 10 };
-                FirebaseDBManager.DB.SaveData(mUser, playerInfo);
+                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
             }
 
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
@@ -121,7 +121,7 @@ public class FirebaseAuthManager : MonoBehaviour
             if(FB.IsLoggedIn)
             {
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
-                if (!settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
+                if (!DataManager.DM.settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
                 //else FacebookAuthentication(accesToken);
                 print("Login Facebook Succesfully");
                 UISocial.buttonStatusHandler.Invoke();
@@ -132,9 +132,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Login was cancelled");
             }               
         });
-
         
-
     }
 
     async void LinkFacebookAccount(AccessToken accesToken)
@@ -150,7 +148,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
                 return;
             }
-            if (task.IsFaulted)
+            else if (task.IsFaulted)
             {
                 auxTask = task;
                 Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
@@ -158,14 +156,18 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             auxTask = task;
-            settings.hasFacebookLinked = true;          
+            DataManager.DM.settings.hasFacebookLinked = true;          
             FirebaseUser newUser = task.Result;
             Debug.LogFormat("Facebook User LINKED to FIREBASE Succesfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
 
         UISocial.buttonStatusHandler.Invoke();
-        if (auxTask.IsCompleted) Memento.SaveData(settings);
+        if (auxTask.IsCompleted)
+        {
+            FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId);
+            Memento.SaveData(DataManager.DM.settings);
+        }
 
     }
 
@@ -179,7 +181,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
                 return;
             }
-            if (task.IsFaulted)
+            else if (task.IsFaulted)
             {
                 Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
@@ -222,7 +224,7 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.LogError("UpdateUserProfileAsync Was Canceled");
             }
-            if(task.IsFaulted)
+            else if(task.IsFaulted)
             {
                 Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
             }

@@ -16,3 +16,5 @@ MonoBehaviour:
   isSFXActive: 0
   musicSlider: 0
   sFXSlider: 0
+  languageID: 0
+  hasFacebookLinked: 0

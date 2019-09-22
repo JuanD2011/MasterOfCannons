@@ -17,7 +17,9 @@ public class FirebaseDBManager : MonoBehaviour
     /// <summary>
     /// Save user data in Database (userID, name, email)
     /// </summary>    
-    public Action<User, PlayerInfo> SaveData;
+    public Action<User, PlayerInfo> WriteNewUserHandler;
+
+    public Action<string> WriteFacebookUserHandler;
 
     /// <summary>
     /// Update user name (userID, new username)
@@ -32,14 +34,16 @@ public class FirebaseDBManager : MonoBehaviour
     }
 
     void Start()
-    {
+    {        
         // Set up the Editor before calling into the realtime database.
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://master-of-cannons.firebaseio.com/");
 
         // Get the root reference location of the database.
         dataBaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
-        SaveData = (user, playerInfo) => { WriteNewUser(user, playerInfo); };
+        WriteNewUserHandler = WriteNewUser;
+        WriteFacebookUserHandler = WriteFacebookUserData;
+
         UpdateUserName = UpdateUsername;
 
         InitializeDB();
@@ -65,10 +69,12 @@ public class FirebaseDBManager : MonoBehaviour
     private void WriteNewUser(User user, PlayerInfo playerInfo)
     {
         Debug.Log("Writing new user in database bitch...");
-        string json = JsonUtility.ToJson(user);
-        string json2 = JsonUtility.ToJson(playerInfo);
-        dataBaseRef.Child("users").Child(user.userId).SetRawJsonValueAsync(json);
-        dataBaseRef.Child("users").Child(user.userId).Child("player info").SetRawJsonValueAsync(json2);
+        string userJson = JsonUtility.ToJson(user);
+        string playerInfoJson = JsonUtility.ToJson(playerInfo);
+        dataBaseRef.Child("users").Child(user.userId).SetRawJsonValueAsync(userJson);
+        dataBaseRef.Child("player info").Child(user.userId).SetRawJsonValueAsync(playerInfoJson);
+        //if (DataManager.DM.settings.hasFacebookLinked) WriteFacebookUserData();
+
     }
 
     public void UpdateUsername(string userId, string newUserName)
@@ -84,13 +90,13 @@ public class FirebaseDBManager : MonoBehaviour
 
         string userId = FirebaseAuthManager.myUser.UserId;        
         Dictionary<string, string> iDictUser = new Dictionary<string, string>();
-        await dataBaseRef.Child("users").Child(userId).Child("player info").GetValueAsync().ContinueWith(task => {
+        await dataBaseRef.Child("player info").Child(userId).GetValueAsync().ContinueWith(task => {
 
             if (task.IsFaulted)
             {
-                Debug.LogError("Get user data error" + task.Exception);
+                Debug.LogError("Get Player data error" + task.Exception);
             }
-            if (task.IsCompleted)
+            else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
                 foreach (DataSnapshot data in snapshot.Children)
@@ -99,17 +105,23 @@ public class FirebaseDBManager : MonoBehaviour
                     print(data);
                 }
 
-                Debug.Log("Get User Data Succesful");
+                Debug.Log("Get Player Data Succesful");
             }
 
         });
-
+      
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
+    }
+
+    private async void WriteFacebookUserData(string facebookID)
+    {
+        string json = await GetPlayerDataAsJSON();
+        await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);
     }
 
     private void WriteNewPlayerInfo(float _coins, float _xp, int _skinAvailability)
     {
-        string key = dataBaseRef.Child("users").Child(FirebaseAuthManager.myUser.UserId).Child("player info").Key;
+        string key = dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Key;
         PlayerInfo playerInfo = new PlayerInfo { coins = _coins, xp = _xp, skinAvailability = _skinAvailability };
         Dictionary<string, System.Object> entryValues = playerInfo.ToDictionary();
 
@@ -122,16 +134,32 @@ public class FirebaseDBManager : MonoBehaviour
     }
 
 
-    //// For testing Database
-    //private float testing = 20;
-    //private void Update()
-    //{
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        testing += 20;
-    //        WriteNewPlayerInfo(testing, testing, (int)testing);
-    //    }
-    //}
+    // For testing Database
+    private float fumarato = 20;
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+
+        }
+    }
+
+    public async Task<string> GetPlayerDataAsJSON()
+    {
+        string json = string.Empty;
+        await dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).GetValueAsync().ContinueWith(task => {
+
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                json = snapshot.GetRawJsonValue();
+                Debug.Log("Get Player Data As JSON Succesful");
+            }
+
+        });
+
+        return json;
+    }
 }
 
 
