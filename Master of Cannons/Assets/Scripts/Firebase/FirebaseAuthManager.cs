@@ -22,7 +22,6 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private IEnumerator Start()
     {
-        //Memento.ClearData(DataManager.DM.settings);
         yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
         auth = FirebaseAuth.DefaultInstance;
         AnonymousSignIn();  
@@ -164,12 +163,15 @@ public class FirebaseAuthManager : MonoBehaviour
 
         UISocial.buttonStatusHandler.Invoke();
         if (auxTask.IsCompleted)
-        {
-            FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId);
+        {            
             Memento.SaveData(DataManager.DM.settings);
+            
+            string facebookName = await FacebookData.GetMyName();
+            FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, facebookName);
         }
 
     }
+
 
     async void FacebookAuthentication(AccessToken accesToken)
     {

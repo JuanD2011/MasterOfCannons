@@ -19,7 +19,7 @@ public class FirebaseDBManager : MonoBehaviour
     /// </summary>    
     public Action<User, PlayerInfo> WriteNewUserHandler;
 
-    public Action<string> WriteFacebookUserHandler;
+    public Action<string, string> WriteFacebookUserHandler;
 
     /// <summary>
     /// Update user name (userID, new username)
@@ -113,10 +113,11 @@ public class FirebaseDBManager : MonoBehaviour
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
     }
 
-    private async void WriteFacebookUserData(string facebookID)
+    private async void WriteFacebookUserData(string facebookID, string name)
     {
         string json = await GetPlayerDataAsJSON();
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);
+        await dataBaseRef.Child("facebook users").Child(facebookID).Child("name").SetValueAsync(name);
     }
 
     private void WriteNewPlayerInfo(float _coins, float _xp, int _skinAvailability)

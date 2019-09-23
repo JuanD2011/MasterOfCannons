@@ -15,6 +15,7 @@ public class Settings : ScriptableObject
 
     [Header("User Account Settings")]
     public bool hasFacebookLinked;
+    public int defaultScene = 0;
 
     public void MusicSlider(float _musicVol) { musicSlider = _musicVol; }
     public void SFXSlider(float _sFXVol) { sFXSlider = _sFXVol; }

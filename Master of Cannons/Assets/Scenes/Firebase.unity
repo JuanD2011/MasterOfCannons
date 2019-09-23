@@ -1319,7 +1319,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 340593946}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -2510,6 +2510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   facebookButt: {fileID: 1118091322}
+  friendsContainer: {fileID: 0}
 --- !u!1 &729933768
 GameObject:
   m_ObjectHideFlags: 0
@@ -5048,6 +5049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLoggedIn: 0
+  mName: 
 --- !u!4 &1714961529
 Transform:
   m_ObjectHideFlags: 0

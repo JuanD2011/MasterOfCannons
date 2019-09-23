@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facebook.Unity;
+using Delegates;
+using System.Threading.Tasks;
 
 public class FacebookData : MonoBehaviour
 {
+
     public bool isLoggedIn;
+    public string mName = string.Empty;
     public void GetFriendsPlayingThisGame()
     {
         if (!CheckLogIn()) { Debug.Log("You are not LOGGED IN Facebook..."); return; }
@@ -15,24 +19,34 @@ public class FacebookData : MonoBehaviour
         {          
             var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
             var friendsList = (List<object>)dictionary["data"];
-            foreach (var dict in friendsList) Debug.Log(((Dictionary<string, object>)dict)["name"]);
+            foreach (var dict in friendsList) {
+
+                Debug.Log(((Dictionary<string, object>)dict)["name"]);
+            }
         });
     }
 
-    //public Dictionary<string, object> GetFriendsData()
+    public static async Task<string> GetMyName()
+    {
+        string name = string.Empty;
+        FB.API("me?fields=name", HttpMethod.GET, result => {
+
+            name = result.ResultDictionary["name"].ToString();
+            Debug.Log("My Facebook Name Is : " + name);
+        });
+
+        while(name == string.Empty)
+            await Task.Delay(1000);
+
+        return name;
+    }
+
+    //For testing
+    //public async void ButtonName()
     //{
-    //    if (!CheckLogIn()) { Debug.Log("You are not LOGGED IN Facebook..."); return null; }
-    //    Dictionary<string, object> friendsData = new Dictionary<string, object>();
-
-    //    string query = "/me/friends";
-    //    FB.API(query, HttpMethod.GET, result =>
-    //    {
-    //        var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
-    //        var friendsList = (List<object>)dictionary["data"];
-    //        foreach (var dict in friendsList) Debug.Log(((Dictionary<string, object>)dict)["name"]);
-    //    });
+    //    await GetMyName();
+    //    FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, mName);
     //}
-
 
     public static bool CheckLogIn()
     {        

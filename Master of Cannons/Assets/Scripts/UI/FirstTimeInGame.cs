@@ -10,7 +10,12 @@ public class FirstTimeInGame : MonoBehaviour
 
     private void Start()
     {
-        confirmNameButt.onClick.AddListener(() => {FirebaseDBManager.DB.UpdateUserName(FirebaseAuthManager.myUser.UserId, nameInput.text); SceneManager.LoadScene(0); });
+        confirmNameButt.onClick.AddListener(() => {
+            FirebaseDBManager.DB.UpdateUserName(FirebaseAuthManager.myUser.UserId, nameInput.text);
+            DataManager.DM.settings.defaultScene = 1;
+            Memento.SaveData(DataManager.DM.settings);
+            SceneManager.LoadScene(1);
+        });
     }
 
 }
