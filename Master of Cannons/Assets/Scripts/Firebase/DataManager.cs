@@ -8,11 +8,11 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        if(clearData) Memento.ClearData(settings);
+        //if(clearData) Memento.ClearData(settings);
         if (DM == null) DM = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        
+        Memento.LoadData(settings);
     }
 
     private void Start()

@@ -40,9 +40,9 @@ public class FirebaseAuthManager : MonoBehaviour
             FB.ActivateApp();
             isInitialized = true;
             Debug.Log("Facebook Initialized");
-            UISocial.buttonStatusHandler?.Invoke();
             if (FB.IsLoggedIn)
-            {
+            {                
+                UISocial.buttonStatusHandler?.Invoke();
                 print("Already has logged in");
                 return;
             }
@@ -99,7 +99,7 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId};                
-                PlayerInfo playerInfo = new PlayerInfo { coins = 30, skinAvailability = 0, xp = 10 };
+                PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, xp = 10 };
                 FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
             }
 

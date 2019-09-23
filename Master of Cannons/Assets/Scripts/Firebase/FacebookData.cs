@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 public class FacebookData : MonoBehaviour
 {
-
-    public bool isLoggedIn;
-    public string mName = string.Empty;
+    public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
     public void GetFriendsPlayingThisGame()
     {
-        if (!CheckLogIn()) { Debug.Log("You are not LOGGED IN Facebook..."); return; }
+        friendsDataList.Clear();
+        if (!CheckLogIn()) {
+            Debug.Log("You are not LOGGED IN Facebook...");
+            return; }
         
         string query = "/me/friends";
         FB.API(query, HttpMethod.GET, async result =>
@@ -21,13 +22,14 @@ public class FacebookData : MonoBehaviour
             var friendsList = (List<object>)dictionary["data"];
             foreach (var dict in friendsList) {
 
-                await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
+                friendsDataList.Add(await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString()));
                 Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
             }
+            UISocial.showFriendDataHandler(friendsDataList);
         });
+       
     }
 
-    
     public static async Task<string> GetMyName()
     {
         string name = string.Empty;
@@ -43,12 +45,6 @@ public class FacebookData : MonoBehaviour
         return name;
     }
 
-    //For testing
-    //public async void ButtonName()
-    //{
-    //    await GetMyName();
-    //    FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, mName);
-    //}
 
     public static bool CheckLogIn()
     {        
