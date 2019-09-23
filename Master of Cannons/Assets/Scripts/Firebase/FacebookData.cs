@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 public class FacebookData : MonoBehaviour
 {
     public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
+
     public void GetFriendsPlayingThisGame()
-    {
-        friendsDataList.Clear();
+    {        
+        friendsDataList.RemoveRange(0, friendsDataList.Count);        
         if (!CheckLogIn()) {
             Debug.Log("You are not LOGGED IN Facebook...");
             return; }
