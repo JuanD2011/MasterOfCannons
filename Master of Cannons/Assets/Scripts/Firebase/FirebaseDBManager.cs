@@ -24,7 +24,7 @@ public class FirebaseDBManager : MonoBehaviour
     /// <summary>
     /// Update user name (userID, new username)
     /// </summary>
-    public Action<string, string> UpdateUserName;
+    public Func<string, string, Task> UpdateUserName;
 
     private void Awake()
     {
@@ -77,11 +77,11 @@ public class FirebaseDBManager : MonoBehaviour
 
     }
 
-    public void UpdateUsername(string userId, string newUserName)
+    public async Task UpdateUsername(string userId, string newUserName)
     {        
         Debug.LogFormat("Ouh yeah updating name to: {0} ", newUserName);
-        FirebaseAuthManager.UpdateUserProfile(newUserName);
-        dataBaseRef.Child("users").Child(userId).Child("username").SetValueAsync(newUserName);
+        await FirebaseAuthManager.UpdateUserProfile(newUserName);
+        await dataBaseRef.Child("users").Child(userId).Child("username").SetValueAsync(newUserName);
     }
 
     public async void GetPlayerData(Action<string, string, string> ShowPlayerData)
@@ -113,6 +113,36 @@ public class FirebaseDBManager : MonoBehaviour
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
     }
 
+    public async Task<Dictionary<string, string>> GetFacebookUserData(string userID)
+    {
+        if (FirebaseAuthManager.myUser == null) return null;
+
+        string userId = FirebaseAuthManager.myUser.UserId;
+        Dictionary<string, string> iDictUser = new Dictionary<string, string>();
+        await dataBaseRef.Child("facebook users").Child(userID).GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Get Player data error" + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                foreach (DataSnapshot data in snapshot.Children)
+                {
+                    iDictUser.Add(data.Key, data.Value.ToString());
+                    print(data);
+                }
+
+                Debug.Log("Get Player Data Succesful");
+            }
+
+        });
+
+        UISocial.showFriendDataHandler(iDictUser["name"]?.ToString(), string.Empty, iDictUser["coins"]?.ToString());
+        return iDictUser;        
+    }
+
     private async void WriteFacebookUserData(string facebookID, string name)
     {
         string json = await GetPlayerDataAsJSON();
@@ -132,17 +162,6 @@ public class FirebaseDBManager : MonoBehaviour
         dataBaseRef.UpdateChildrenAsync(childUpdates);
         Debug.LogFormat("Writing New Data Succesful, Coins: {0}, Xp: {1}, SkinAvailability: {2} ", _coins, _xp, _skinAvailability);
         UIPlayerData.showPlayerData(FirebaseAuthManager.myUser.DisplayName, _coins.ToString(), _xp.ToString());
-    }
-
-
-    // For testing Database
-    private float fumarato = 20;
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-
-        }
     }
 
     public async Task<string> GetPlayerDataAsJSON()

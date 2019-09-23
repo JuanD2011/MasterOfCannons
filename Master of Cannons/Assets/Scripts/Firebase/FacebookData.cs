@@ -15,17 +15,19 @@ public class FacebookData : MonoBehaviour
         if (!CheckLogIn()) { Debug.Log("You are not LOGGED IN Facebook..."); return; }
         
         string query = "/me/friends";
-        FB.API(query, HttpMethod.GET, result =>
+        FB.API(query, HttpMethod.GET, async result =>
         {          
             var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
             var friendsList = (List<object>)dictionary["data"];
             foreach (var dict in friendsList) {
 
-                Debug.Log(((Dictionary<string, object>)dict)["name"]);
+                await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
+                Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
             }
         });
     }
 
+    
     public static async Task<string> GetMyName()
     {
         string name = string.Empty;

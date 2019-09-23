@@ -21,10 +21,11 @@ public class FirebaseAuthManager : MonoBehaviour
     private bool userExist = false;
 
     private IEnumerator Start()
-    {
+    {        
         yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
         auth = FirebaseAuth.DefaultInstance;
-        AnonymousSignIn();  
+        Memento.LoadData(DataManager.DM.settings);
+        if(DataManager.DM.settings.defaultScene == 0) AnonymousSignIn();  
         signOutHandler = delegate () { FB.LogOut(); };
         facebookLogHandler = FacebookSignIn;
         auth.StateChanged += AuthStateChanged;        
@@ -63,7 +64,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             bool signedIn = myUser != auth.CurrentUser && auth.CurrentUser != null;
             if (!signedIn && myUser != null)
-            {
+            {                
                 Debug.Log("Signed out " + myUser.UserId);
             }
             myUser = auth.CurrentUser;
@@ -215,7 +216,7 @@ public class FirebaseAuthManager : MonoBehaviour
         });
     }
 
-    public async static void UpdateUserProfile(string displayName)
+    public async static Task UpdateUserProfile(string displayName)
     {
        
         UserProfile userProfile = new UserProfile { DisplayName = displayName };

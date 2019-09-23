@@ -4,10 +4,11 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager DM = null;
     public Settings settings;
+    [SerializeField] bool clearData;
 
     private void Awake()
     {
-        //Memento.ClearData(settings);
+        if(clearData) Memento.ClearData(settings);
         if (DM == null) DM = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
@@ -16,7 +17,7 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(settings.defaultScene);
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(settings.defaultScene);
     }
 
 }
