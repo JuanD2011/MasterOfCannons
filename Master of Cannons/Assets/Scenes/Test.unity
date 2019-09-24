@@ -211,6 +211,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &341924357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 681510735815896685, guid: ef034b2263cabf7429828a423e531b79,
+    type: 3}
+  m_PrefabInstance: {fileID: 2141926649655111097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &341924358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341924357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootForce: 10
+  wickLength: 5
+  doCatchRotation: 0
+  catchRotation: {x: 0, y: 0, z: 180}
+--- !u!1 &618574571 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6946837625399168602, guid: 19c5f2b6e3ee70149ba99a355155066c,
+    type: 3}
+  m_PrefabInstance: {fileID: 6946837624724983929}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &618574572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618574571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootForce: 10
+  wickLength: 5
+  doCatchRotation: 0
+  catchRotation: {x: 0, y: 0, z: 180}
 --- !u!114 &1031963404 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2963709827164362880, guid: 8da82facabc83834cbf26da440a0bce2,
@@ -526,6 +570,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &2095227718 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4564228077697818611, guid: 308f1c8ad9931684fb2ee28e77285993,
+    type: 3}
+  m_PrefabInstance: {fileID: 303567962153759960}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2095227719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095227718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootForce: 10
+  wickLength: 5
+  doCatchRotation: 0
+  catchRotation: {x: 0, y: 0, z: 180}
 --- !u!1001 &303567962153759960
 PrefabInstance:
   m_ObjectHideFlags: 0

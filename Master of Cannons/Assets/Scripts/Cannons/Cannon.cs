@@ -21,14 +21,14 @@ public class Cannon : MonoBehaviour
         PlayerInputHandler.OnShootAction -= Shoot;
     }
 
-    protected virtual void Start()
+    private void Start()
     {
         GetReference();
 
         PlayerInputHandler.OnShootAction += Shoot;
     }
 
-    protected void GetReference()
+    private void GetReference()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -39,14 +39,14 @@ public class Cannon : MonoBehaviour
         }
     }
 
-    protected virtual void Update()
+    private void Update()
     {
         if (burningWick && !MenuManager.IsPaused) elapsedWickTime += Time.deltaTime;
 
         if (elapsedWickTime > wickLength) Shoot();
     }
 
-    protected virtual void Shoot()
+    private void Shoot()
     {
         if (characterInCannon != null)
         {
@@ -59,7 +59,7 @@ public class Cannon : MonoBehaviour
         }
     }
 
-    protected virtual void CatchCharacter()
+    private void CatchCharacter()
     {
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);
@@ -67,12 +67,12 @@ public class Cannon : MonoBehaviour
         if (doCatchRotation) CatchRotation();
     }
 
-    protected virtual void CatchRotation()
+    private void CatchRotation()
     {
         LeanTween.rotate(gameObject, catchRotation, 0.25f);
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Character"))
         {

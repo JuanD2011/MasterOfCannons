@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MovingCannon : Cannon
+public class MovingCannon : MonoBehaviour
 {
     [SerializeField]
     protected bool startMoving = false;
@@ -18,11 +18,9 @@ public class MovingCannon : Cannon
 
     protected System.Action repeatMethod = null;
 
-    protected override void Start()
+    private void Start()
     {
         repeatMethod += MoveToTarget;
-
-        base.Start();
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -46,11 +44,6 @@ public class MovingCannon : Cannon
         }
     }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     protected virtual void Move()
     {
         MoveToTarget();
@@ -60,10 +53,5 @@ public class MovingCannon : Cannon
     {
         LeanTween.move(gameObject, targets[targetCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
         targetCounter = (targetCounter + 1) % targets.Count;
-    }
-
-    protected override void OnTriggerEnter(Collider other)
-    {
-        base.OnTriggerEnter(other);
     }
 }

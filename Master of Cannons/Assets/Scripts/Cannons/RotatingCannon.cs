@@ -7,20 +7,11 @@ public class RotatingCannon : MovingCannon
 
     int anglesCounter = 0;
 
-    protected override void Start()
+    private void Start()
     {
-        GetReference();
-
         repeatMethod += Move;
 
         if (startMoving) Move();
-
-        PlayerInputHandler.OnShootAction += Shoot;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
     }
 
     protected override void Move()
