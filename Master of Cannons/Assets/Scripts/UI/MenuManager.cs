@@ -71,4 +71,9 @@ public class MenuManager : MonoBehaviour
         IsPaused = _Value;
         OnPause?.Invoke(_Value);
     }
+
+    private void OnApplicationQuit()
+    {
+        Memento.SaveData(settings);
+    }
 }
