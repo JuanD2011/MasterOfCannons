@@ -12,10 +12,10 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        if (Rigidbody.velocity.y < 0)
-        {
-            Rigidbody.velocity += Physics.gravity * Time.deltaTime;
-        }
+        //if (Rigidbody.velocity.y < 0)
+        //{
+        //    Rigidbody.velocity += Physics.gravity * Time.deltaTime;
+        //}
     }
 
     public void CannonEnterReset(Transform _reference)

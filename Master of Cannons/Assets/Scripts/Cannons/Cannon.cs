@@ -65,6 +65,7 @@ public class Cannon : MonoBehaviour
     private void CatchCharacter()
     {
         OnCharacterInCannon?.Invoke(true);
+        burningWick = true;
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);
 

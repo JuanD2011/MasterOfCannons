@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 4564228077697818620}
   - component: {fileID: 4564228077697818621}
   - component: {fileID: 3860451973644911084}
+  - component: {fileID: 2095227719}
   m_Layer: 0
   m_Name: Rotating Cannon
   m_TagString: Untagged
@@ -168,10 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2e7ad79b4115e4cb60ec97088242ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootForce: 10
-  wickLength: 5
-  doCatchRotation: 0
-  catchRotation: {x: 0, y: 0, z: 0}
   startMoving: 1
   speed: 80
   tweenType: 16
@@ -191,3 +188,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 1.2, z: 0}
+--- !u!114 &2095227719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564228077697818611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootForce: 18
+  wickLength: 5
+  doCatchRotation: 0
+  catchRotation: {x: 0, y: 0, z: 180}
