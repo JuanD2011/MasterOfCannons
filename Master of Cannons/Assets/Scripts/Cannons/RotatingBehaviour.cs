@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RotatingCannon : MovingCannon
+public class RotatingBehaviour : MovingBehaviour
 {
     [Tooltip("Will find the shortest path to reach the angle")]
     [SerializeField] Vector3[] angles = new Vector3[2];

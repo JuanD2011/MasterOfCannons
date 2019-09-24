@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class AimingCannon : Cannon
+public class AimingBehaviour : MonoBehaviour
 {
     private float targetRotation = 0f;
 
@@ -10,21 +10,23 @@ public class AimingCannon : Cannon
 
     private bool canAim = false;
 
-    protected override void Awake()
+    private Cannon cannon = null;
+
+    private void Awake()
     {
-        base.Awake();
+        cannon = GetComponent<Cannon>();
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         m_Camera = Camera.main;
+        cannon.OnCharacterInCannon += SetCanAim;
     }
 
-    protected override void Update()
-    {
-        base.Update();
+    private void SetCanAim(bool _value) => canAim = _value;
 
+    private void Update()
+    {
         if (canAim && !MenuManager.IsPaused)
         {
             if (Input.GetMouseButton(0))
@@ -39,17 +41,5 @@ public class AimingCannon : Cannon
         direction = new Vector3(_AimVector.x, _AimVector.y, 0) - m_Camera.WorldToScreenPoint(transform.position);
         targetRotation = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(targetRotation - 90, Vector3.forward);
-    }
-
-    protected override void CatchCharacter()
-    {
-        canAim = true;
-        base.CatchCharacter();
-    }
-
-    protected override void Shoot()
-    {
-        canAim = false;
-        base.Shoot();
     }
 }

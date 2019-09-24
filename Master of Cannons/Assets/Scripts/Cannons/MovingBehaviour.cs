@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MovingCannon : MonoBehaviour
+public class MovingBehaviour : MonoBehaviour
 {
     [SerializeField]
     protected bool startMoving = false;

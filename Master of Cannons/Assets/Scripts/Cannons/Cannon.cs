@@ -13,8 +13,10 @@ public class Cannon : MonoBehaviour
 
     protected bool burningWick = false;
     protected float elapsedWickTime = 0f;
-    protected Transform reference;
+    protected Transform reference = null;
     private Character characterInCannon = null;
+
+    public event System.Action<bool> OnCharacterInCannon = null;
 
     protected virtual void Awake()
     {
@@ -56,11 +58,13 @@ public class Cannon : MonoBehaviour
             characterInCannon.SetKinematic(false);
             characterInCannon.Rigidbody.AddForce(transform.up * shootForce, ForceMode.Impulse);
             characterInCannon = null;
+            OnCharacterInCannon?.Invoke(false);
         }
     }
 
     private void CatchCharacter()
     {
+        OnCharacterInCannon?.Invoke(true);
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);
 
