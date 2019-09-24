@@ -30,6 +30,20 @@ public class MovingCannon : Cannon
         }
 
         if (startMoving) Move();
+
+        MenuManager.OnPause += SetMovement;
+    }
+
+    private void SetMovement(bool _Value)
+    {
+        if (_Value)
+        {
+            LeanTween.pauseAll();
+        }
+        else
+        {
+            LeanTween.resumeAll();
+        }
     }
 
     protected override void Update()

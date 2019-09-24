@@ -5,31 +5,6 @@ using UnityEngine;
 public static class Memento
 {
     /// <summary>
-    /// Save data by the _scriptableObject given
-    /// </summary>
-    /// <param name="_scriptableObject"></param>
-    public static void SaveData(ScriptableObject _scriptableObject)
-    {
-
-        if (!Directory.Exists(Application.persistentDataPath + "/game_save"))
-        {
-            Directory.CreateDirectory(Application.persistentDataPath + "/game_save");
-        }
-
-        if (!Directory.Exists(string.Format("{0}/game_save/{1}", Application.persistentDataPath, _scriptableObject.ToString())))
-        {
-            Directory.CreateDirectory(string.Format("{0}/game_save/{1}", Application.persistentDataPath, _scriptableObject.ToString()));
-        }
-
-        FileStream fileStream = File.Create(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _scriptableObject.ToString(), _scriptableObject.ToString()));
-        BinaryFormatter bf = new BinaryFormatter();
-        string json = JsonUtility.ToJson(_scriptableObject);
-        Debug.Log(json.ToString());
-        bf.Serialize(fileStream, json);
-        fileStream.Close();
-    }
-
-    /// <summary>
     /// Save a serializable class
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -52,26 +27,6 @@ public static class Memento
         Debug.Log(json.ToString());
         bf.Serialize(fileStream, json);
         fileStream.Close();
-    }
-
-    /// <summary>
-    /// Load data and overrides the info in it.
-    /// </summary>
-    /// <param name="_scriptableObject"></param>
-    public static void LoadData(ScriptableObject _scriptableObject)
-    {
-        if (!Directory.Exists(string.Format("{0}/game_save/{1}", Application.persistentDataPath, _scriptableObject.ToString())))
-        {
-            Directory.CreateDirectory(string.Format("{0}/game_save/{1}", Application.persistentDataPath, _scriptableObject.ToString()));
-        }
-
-        if (File.Exists(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _scriptableObject.ToString(), _scriptableObject.ToString())))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _scriptableObject.ToString(), _scriptableObject.ToString()), FileMode.Open);
-            JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file), _scriptableObject);
-            file.Close();
-        }
     }
 
     /// <summary>
@@ -103,14 +58,5 @@ public static class Memento
     public static void ClearData<T>(T _serializableClass) where T :class
     {
         File.Delete(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _serializableClass.ToString(), _serializableClass.ToString()));
-    }
-
-    /// <summary>
-    /// Delete the .txt file from the scriptable object provided
-    /// </summary>
-    /// <param name="_scriptableObject"></param>
-    public static void ClearData(ScriptableObject _scriptableObject)
-    {
-        File.Delete(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _scriptableObject.ToString(), _scriptableObject.ToString()));
     }
 }

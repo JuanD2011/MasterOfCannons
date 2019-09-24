@@ -41,7 +41,7 @@ public class Cannon : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (burningWick) elapsedWickTime += Time.deltaTime;
+        if (burningWick && !MenuManager.IsPaused) elapsedWickTime += Time.deltaTime;
 
         if (elapsedWickTime > wickLength) Shoot();
     }

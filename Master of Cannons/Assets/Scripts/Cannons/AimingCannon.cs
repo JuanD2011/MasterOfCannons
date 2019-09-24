@@ -25,7 +25,7 @@ public class AimingCannon : Cannon
     {
         base.Update();
 
-        if (canAim)
+        if (canAim && !MenuManager.IsPaused)
         {
             if (Input.GetMouseButton(0))
             {
