@@ -10,12 +10,11 @@ public class FacebookData : MonoBehaviour
     public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
 
     public void GetFriendsPlayingThisGame()
-    {        
-        friendsDataList.RemoveRange(0, friendsDataList.Count);        
+    {              
         if (!CheckLogIn()) {
             Debug.Log("You are not LOGGED IN Facebook...");
             return; }
-        
+        friendsDataList.RemoveRange(0, friendsDataList.Count);
         string query = "/me/friends";
         FB.API(query, HttpMethod.GET, async result =>
         {          
