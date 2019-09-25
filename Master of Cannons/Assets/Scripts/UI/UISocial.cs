@@ -10,7 +10,7 @@ public class UISocial : MonoBehaviour
     [SerializeField] Button facebookButt;
     TextMeshProUGUI facebookButtText;
     public static Action buttonStatusHandler;
-    public static Action<List<Dictionary<string, string>>> showFriendDataHandler;
+    public static Action<string, string, string> showFriendDataHandler;
 
     private Action multiDel;
     [SerializeField] Transform friendsContainer;
@@ -43,20 +43,18 @@ public class UISocial : MonoBehaviour
             print("Isnt Logged");
         }
     }
-    private void ShowFriendData(List<Dictionary<string, string>> friendsData)
+    int index = 0;
+    private void ShowFriendData(string name, string nickname, string coins)
     {
-        friendsContainer.gameObject.SetActive(true);
-        for (int i = 0; i < friendsData.Count; i++)
-        {
-            friendsContainer.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = friendsData[i]["fbName"];
-            friendsContainer.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = friendsData[i]["username"];
-            friendsContainer.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = friendsData[i]["coins"];
-        }
+        friendsContainer.GetChild(index).GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
+        friendsContainer.GetChild(index).GetChild(1).GetComponent<TextMeshProUGUI>().text = nickname;
+        friendsContainer.GetChild(index).GetChild(2).GetComponent<TextMeshProUGUI>().text = coins;
+        index++;
     }
 
     public void CloseSocialPanel()
     {
-        friendsContainer.gameObject.SetActive(false);
+        index = 0;
     }
 
     float coins;

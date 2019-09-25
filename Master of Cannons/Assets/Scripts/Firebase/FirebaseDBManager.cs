@@ -139,6 +139,8 @@ public class FirebaseDBManager : MonoBehaviour
 
         });
 
+        UISocial.showFriendDataHandler(iDictUser["fbName"], iDictUser["username"], iDictUser["coins"]);
+
         return iDictUser;        
     }
 
