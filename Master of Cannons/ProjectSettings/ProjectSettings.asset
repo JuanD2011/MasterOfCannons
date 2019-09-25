@@ -256,8 +256,8 @@ PlayerSettings:
   AndroidTargetArchitectures: 1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Documentos/GitHub/CannonsKeyStore/user.keystore
-  AndroidKeyaliasName: mastercann
+  AndroidKeystoreName: '{inproject}: Assets/Resources/Keystore/mastercannons.keystore'
+  AndroidKeyaliasName: mastercannons
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
