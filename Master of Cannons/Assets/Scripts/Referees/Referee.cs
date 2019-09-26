@@ -2,12 +2,6 @@
 
 public class Referee : MonoBehaviour
 {
-    [SerializeField]
-    private Transform losingVolume = null;
-
-    [SerializeField]
-    private float offset = 0f;
-
     private void Awake()
     {
         VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;       
@@ -16,8 +10,6 @@ public class Referee : MonoBehaviour
     private void Start()
     {
         VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
-        //losingColliderObj.transform.position
-        //= cannonEntry.transform.position - posDifferenceFromCannon;
     }
 
     private void ManageVolumeStatus(VolumeLevelStatusType _VolumeStatus)

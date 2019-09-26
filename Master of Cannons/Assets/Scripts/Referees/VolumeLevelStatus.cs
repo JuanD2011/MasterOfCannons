@@ -17,7 +17,7 @@ public class VolumeLevelStatus : MonoBehaviour
 
     private void OnTriggerEnter(Collider _Other)
     {
-        OnVolumeEntered?.Invoke(volumeType);
+        OnVolumeEntered(volumeType);
     }
 
     private void Reset()

@@ -20,6 +20,8 @@ public class MenuManager : MonoBehaviour
     {
         OnPause = null;
 
+        VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+
         Memento.LoadData(settings);
 
         panelAnimators = new Animator[panels.Length];
@@ -32,6 +34,25 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
+
+        VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+    }
+
+    private void ManageVolumeStatus(VolumeLevelStatusType _VolumeStatus)
+    {
+        switch (_VolumeStatus)
+        {
+            case VolumeLevelStatusType.Victory:
+                PanelAnim(2);
+                break;
+            case VolumeLevelStatusType.Defeat:
+                PanelAnim(3);
+                break;
+            case VolumeLevelStatusType.None:
+                break;
+            default:
+                break;
+        }
     }
 
     private void SetLanguage()
