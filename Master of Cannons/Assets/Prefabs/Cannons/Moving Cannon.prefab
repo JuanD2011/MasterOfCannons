@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 6946837625399168604}
   - component: {fileID: 6946837625399168605}
   - component: {fileID: 618574572}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Moving Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

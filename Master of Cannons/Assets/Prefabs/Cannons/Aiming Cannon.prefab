@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 681510735815896686}
   - component: {fileID: 2141926649479102312}
   - component: {fileID: 341924358}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Aiming Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

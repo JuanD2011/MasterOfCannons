@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 4564228077697818621}
   - component: {fileID: 3860451973644911084}
   - component: {fileID: 2095227719}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rotating Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

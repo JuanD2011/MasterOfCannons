@@ -18,16 +18,13 @@ public class CannonEditor : Editor
         catchRotation = serializedObject.FindProperty("catchRotation");
     }
 
-    protected virtual void ShowScript()
-    {
-        GUI.enabled = false;
-        EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Cannon)target), typeof(Cannon), false);
-        GUI.enabled = true;
-    }
-
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        GUI.enabled = false;
+        EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Cannon)target), typeof(Cannon), false);
+        GUI.enabled = true;
 
         shootForce.floatValue = EditorGUILayout.FloatField("Shoot force", shootForce.floatValue);
         wickLength.floatValue = EditorGUILayout.FloatField("Wick length", wickLength.floatValue);

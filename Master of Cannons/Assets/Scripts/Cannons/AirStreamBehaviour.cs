@@ -10,7 +10,7 @@ public class AirStreamBehaviour : MonoBehaviour
     [SerializeField]
     private float streamMaxForce = 0f;
 
-    private float range = 0f, distance = 0f;
+    private float range = 0f, distance = 0f, force = 0f;
 
     private bool playerInStreamZone = false;
 
@@ -76,8 +76,8 @@ public class AirStreamBehaviour : MonoBehaviour
                 break;
         }
 
-        float distance = (transform.position - playerRigidbody.transform.position).sqrMagnitude;
-        float force = distance / range * streamMaxForce;
+        distance = (transform.position - playerRigidbody.transform.position).sqrMagnitude;
+        force = distance / range * streamMaxForce;
 
         playerRigidbody.AddForce(direction * force, ForceMode.Force);
     }
