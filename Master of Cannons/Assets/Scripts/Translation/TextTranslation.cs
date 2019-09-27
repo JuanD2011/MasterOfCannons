@@ -15,14 +15,13 @@ public class TextTranslation : MonoBehaviour
 
     void Start()
     {
-        if (text != null)
-            text.text = Translation.Fields[TextID];
+        if (text != null) text.text = Translation.Fields[TextID];
+
         Translation.OnLanguageLoaded += UpdateText;
     }
 
     private void UpdateText()
     {
-        if (text != null)
-            text.text = Translation.Fields[TextID];
+        if (text != null) text.text = Translation.Fields[TextID];
     }
 }

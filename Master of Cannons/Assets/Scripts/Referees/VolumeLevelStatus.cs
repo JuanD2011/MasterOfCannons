@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum VolumeLevelStatusType
 {
@@ -13,7 +12,7 @@ public class VolumeLevelStatus : MonoBehaviour
 {
     [SerializeField] VolumeLevelStatusType volumeType = VolumeLevelStatusType.None;
 
-    public static event Action<VolumeLevelStatusType> OnVolumeEntered = null;
+    public static event Delegates.Action<VolumeLevelStatusType> OnVolumeEntered = null;
 
     private void OnTriggerEnter(Collider _Other)
     {

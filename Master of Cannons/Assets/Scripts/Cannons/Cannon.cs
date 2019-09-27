@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
@@ -17,8 +16,7 @@ public class Cannon : MonoBehaviour
     protected Transform reference = null;
     private Character characterInCannon = null;
 
-    public event Action<bool> OnCharacterInCannon = null;
-    public event Action<Cannon> OnRegisterLastCannon;
+    public event Delegates.Action<bool> OnCharacterInCannon = null;
 
     protected virtual void Awake()
     {
@@ -67,7 +65,6 @@ public class Cannon : MonoBehaviour
     private void CatchCharacter()
     {
         OnCharacterInCannon?.Invoke(true);
-        OnRegisterLastCannon?.Invoke(this);
         burningWick = true;
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);

@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour
 
     public static bool IsPaused { get; private set; } = false;
 
-    public static event System.Action<bool> OnPause = null;
+    public static event Delegates.Action<bool> OnPause = null;
 
     private void Awake()
     {
