@@ -42,7 +42,7 @@ public class FirebaseDBManager : MonoBehaviour
         dataBaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
         WriteNewUserHandler = WriteNewUser;
-        WriteFacebookUserHandler = WriteFacebookUserData;
+        WriteFacebookUserHandler = WriteNewFacebookUserData;
         WriteNewInfo = WriteNewPlayerInfo;
 
         UpdateUserName = UpdateUsername;        
@@ -109,6 +109,7 @@ public class FirebaseDBManager : MonoBehaviour
         });
         
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
+        DataManager.DM.InitializePlayerData(iDictUser);
     }
 
     public async Task<Dictionary<string, string>> GetFacebookUserData(string userID)
@@ -140,7 +141,7 @@ public class FirebaseDBManager : MonoBehaviour
         return iDictUser;        
     }
 
-    private async void WriteFacebookUserData(string facebookID, string name)
+    private async void WriteNewFacebookUserData(string facebookID, string name)
     {
         string username = string.Empty;
         string coins = string.Empty;
@@ -167,37 +168,31 @@ public class FirebaseDBManager : MonoBehaviour
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);        
     }
 
-    //private async void WriteFacebookUserData(string facebookID, string name)
-    //{
-    //    string json = await GetPlayerDataAsJSON();
-    //    await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);
-    //    await dataBaseRef.Child("facebook users").Child(facebookID).Child("name").SetValueAsync(name);
-    //}
-
-    private void WriteNewPlayerInfo(float _coins, float _xp, int _skinAvailability)
+    private void WriteNewPlayerInfo(float _coins, float prestige, int _skinAvailability)
     {
         string key = dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Key;
-        PlayerInfo playerInfo = new PlayerInfo { coins = _coins, xp = _xp, skinAvailability = _skinAvailability };
+        PlayerInfo playerInfo = new PlayerInfo { coins = _coins, prestige = prestige, skinAvailability = _skinAvailability };
         Dictionary<string, System.Object> entryValues = playerInfo.ToDictionary();
 
         Dictionary<string, System.Object> childUpdates = new Dictionary<string, object>();
         childUpdates[string.Format("/users/{0}/{1}", FirebaseAuthManager.myUser.UserId, key)] = entryValues;
 
         dataBaseRef.UpdateChildrenAsync(childUpdates);
-        Debug.LogFormat("Writing New Data Succesful, Coins: {0}, Xp: {1}, SkinAvailability: {2} ", _coins, _xp, _skinAvailability);
-        UIPlayerData.showPlayerData(FirebaseAuthManager.myUser.DisplayName, _coins.ToString(), _xp.ToString());
+        Debug.LogFormat("Writing New Data Succesful, Coins: {0}, Xp: {1}, SkinAvailability: {2} ", _coins, prestige, _skinAvailability);
+        UIPlayerData.showPlayerData(FirebaseAuthManager.myUser.DisplayName, _coins.ToString(), prestige.ToString());
     }
 
     public void WriteNewCoins(float _coins)
     {
         //dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Child("coins").ValueChanged += HandleValueChanged;
         dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Child("coins").SetValueAsync(_coins);
-        if (DataManager.DM.settings.hasFacebookLinked) dataBaseRef.Child("facebook users").Child(Facebook.Unity.AccessToken.CurrentAccessToken.UserId).Child("coins").SetValueAsync(_coins);
+        if (DataManager.DM.settings.hasFacebookLinked && Facebook.Unity.AccessToken.CurrentAccessToken != null)
+            dataBaseRef.Child("facebook users").Child(Facebook.Unity.AccessToken.CurrentAccessToken.UserId).Child("coins").SetValueAsync(_coins);
     }
 
     private void HandleValueChanged(object sender, ValueChangedEventArgs e)
     {
-
+        
     }
 
     public async Task<string> GetPlayerDataAsJSON()

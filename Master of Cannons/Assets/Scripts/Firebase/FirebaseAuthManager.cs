@@ -30,7 +30,8 @@ public class FirebaseAuthManager : MonoBehaviour
         facebookLogHandler = FacebookSignIn;
         auth.StateChanged += AuthStateChanged;        
         AuthStateChanged(this, null);
-        FB.Init(InitCallBack, OnHideUnity);        
+        FB.Init(InitCallBack, OnHideUnity);                
+
     }
 
     void InitCallBack()
@@ -100,7 +101,7 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId};                
-                PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, xp = 10 };
+                PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
                 FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
             }
 

@@ -62,8 +62,8 @@ public class UISocial : MonoBehaviour
     public void UpdateCoins(float _coins)
     {
         coins += _coins;
-        FirebaseDBManager.DB.WriteNewCoins(coins);
         UIPlayerData.showCoins(coins.ToString());
+        FirebaseDBManager.DB.WriteNewCoins(coins);
     }
 
     private void SignOutFacebook()
