@@ -1,37 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LightRenderTexture : MonoBehaviour
 {
-    [SerializeField] Transform character;
-    [SerializeField] float horizontalAngle;
-    [SerializeField] float verticalAngle;
+    [SerializeField] Transform character = null;
+    [SerializeField] float horizontalAngle = 0f;
+    [SerializeField] float verticalAngle = 0f;
 
-    float maxHorizontalAngle;
+    float maxHorizontalAngle = 0f;
+
+    float playerXDirection = 0f, playerYDirection = 0f;
+
+    float sin = 0f, alpha = 0f;
+    float cos = 0f, theta = 0f;
 
     private void Start()
     {
-        maxHorizontalAngle = 180 - horizontalAngle;
+        maxHorizontalAngle = 180f - horizontalAngle;
     }
-
 
     void Update()
     {
-        float playerXDirection = -character.transform.up.x;
-        float playerHypotenuse = character.transform.up.magnitude;
-        float playerYDirection = character.transform.up.y;
+        playerXDirection = -character.transform.up.x;
+        playerYDirection = character.transform.up.y;
 
-        float sin = playerYDirection / playerHypotenuse;
-        float alpha = Mathf.Asin(sin) * Mathf.Rad2Deg;
+        sin = playerYDirection / 1f;
+        alpha = Mathf.Asin(sin) * Mathf.Rad2Deg;
         alpha = Mathf.Clamp(alpha, -verticalAngle, verticalAngle);
 
-        float cos = playerXDirection / playerHypotenuse;
-        float theta = Mathf.Acos(cos) * Mathf.Rad2Deg;
+        cos = playerXDirection / 1f;
+        theta = Mathf.Acos(cos) * Mathf.Rad2Deg;
         theta = Mathf.Clamp(theta, horizontalAngle, maxHorizontalAngle);
 
         transform.localRotation = Quaternion.Euler(alpha, theta, 0);
-
-        Debug.LogFormat(" Theta: {0} \n Alpha: {1}", theta, alpha);
+        //Debug.LogFormat(" Theta: {0} \n Alpha: {1}", theta, alpha);
     }
 }
