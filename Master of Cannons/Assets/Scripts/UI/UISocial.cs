@@ -15,16 +15,22 @@ public class UISocial : MonoBehaviour
     private Action multiDel;
     [SerializeField] Transform friendsContainer;
 
+
+    float coins;
+    int index = 0;
+
     IEnumerator Start()
     {
         showFriendDataHandler = ShowFriendData;
         buttonStatusHandler = ChangeButtonStatus;  
         facebookButtText = facebookButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         yield return new WaitUntil(() => FirebaseAuthManager.CheckDependenciesHandler() && FirebaseAuthManager.facebookLogHandler != null);
+
         multiDel = buttonStatusHandler +  FirebaseAuthManager.facebookLogHandler;
         facebookButt.onClick.AddListener(()=> multiDel.Invoke());
-        //yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);
-        yield return new WaitForSeconds(2f); //ESTO ES UN MACHETAZO TEMPORAL...
+
+        yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);
+        //yield return new WaitForSeconds(2f); //ESTO ES UN MACHETAZO TEMPORAL...
         buttonStatusHandler();
     }
     
@@ -43,21 +49,16 @@ public class UISocial : MonoBehaviour
             print("Isnt Logged");
         }
     }
-    int index = 0;
     private void ShowFriendData(string name, string nickname, string coins)
-    {
+    {        
         friendsContainer.GetChild(index).GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
         friendsContainer.GetChild(index).GetChild(1).GetComponent<TextMeshProUGUI>().text = nickname;
         friendsContainer.GetChild(index).GetChild(2).GetComponent<TextMeshProUGUI>().text = coins;
         index++;
     }
 
-    public void CloseSocialPanel()
-    {
-        index = 0;
-    }
+    public void CloseSocialPanel() => index = 0;
 
-    float coins;
     public void UpdateCoins(float _coins)
     {
         coins += _coins;

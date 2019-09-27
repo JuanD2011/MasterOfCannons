@@ -16,13 +16,13 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action facebookLogHandler;
     public static Action signOutHandler;
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
-
     private bool isInitialized = false;
     private bool userExist = false;
 
     private IEnumerator Start()
-    {        
+    {          
         yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
+
         auth = FirebaseAuth.DefaultInstance;
         Memento.LoadData(DataManager.DM.settings);
         if(DataManager.DM.settings.defaultScene == 0) AnonymousSignIn();  
@@ -95,6 +95,7 @@ public class FirebaseAuthManager : MonoBehaviour
             myUser = task.Result;
             await CheckUserExistance();
 
+
             if (!userExist)
             {
                 Debug.Log("Add New Player To Database booy...");
@@ -115,6 +116,7 @@ public class FirebaseAuthManager : MonoBehaviour
             print("Already has logged in");
             return;
         }
+
         Debug.Log("Sign In Into Facebook Account...");
         List<string> permissions = new List<string>() { "public_profile", "email", "user_friends" };
         FB.LogInWithReadPermissions(permissions, (result) => {

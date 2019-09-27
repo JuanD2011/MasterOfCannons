@@ -15,9 +15,4 @@ public class DataManager : MonoBehaviour
         Memento.LoadData(settings);
     }
 
-    private void Start()
-    {
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(settings.defaultScene);
-    }
-
 }

@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
+
     public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()

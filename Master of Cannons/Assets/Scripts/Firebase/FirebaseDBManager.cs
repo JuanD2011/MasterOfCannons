@@ -3,8 +3,6 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine;
 using Delegates;
-using Firebase.Auth;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -109,7 +107,7 @@ public class FirebaseDBManager : MonoBehaviour
             }
 
         });
-      
+        
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
     }
 
@@ -117,7 +115,6 @@ public class FirebaseDBManager : MonoBehaviour
     {
         if (FirebaseAuthManager.myUser == null) return null;
 
-        string userId = FirebaseAuthManager.myUser.UserId;
         Dictionary<string, string> iDictUser = new Dictionary<string, string>();
         await dataBaseRef.Child("facebook users").Child(userID).GetValueAsync().ContinueWith(task => {
 
@@ -140,7 +137,6 @@ public class FirebaseDBManager : MonoBehaviour
         });
 
         UISocial.showFriendDataHandler(iDictUser["fbName"], iDictUser["username"], iDictUser["coins"]);
-
         return iDictUser;        
     }
 

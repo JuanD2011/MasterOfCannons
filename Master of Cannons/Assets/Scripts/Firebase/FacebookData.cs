@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Facebook.Unity;
-using Delegates;
 using System.Threading.Tasks;
 
 public class FacebookData : MonoBehaviour
@@ -14,19 +12,20 @@ public class FacebookData : MonoBehaviour
         if (!CheckLogIn()) {
             Debug.Log("You are not LOGGED IN Facebook...");
             return; }
-        friendsDataList.RemoveRange(0, friendsDataList.Count);
+
+        //friendsDataList.RemoveRange(0, friendsDataList.Count);
         string query = "/me/friends";
-        FB.API(query, HttpMethod.GET, result =>
+        FB.API(query, HttpMethod.GET, async result =>
         {          
-            var dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
-            var friendsList = (List<object>)dictionary["data"];
+            Dictionary<string, object> dictionary = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
+            List<object> friendsList = (List<object>)dictionary["data"];
+
             foreach (var dict in friendsList) {
 
-                FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
+                await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
                 Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
             }
 
-            //await Task.Delay(4000);
             //UISocial.showFriendDataHandler(friendsDataList);
         });
        
@@ -36,7 +35,6 @@ public class FacebookData : MonoBehaviour
     {
         string name = string.Empty;
         FB.API("me?fields=name", HttpMethod.GET, result => {
-
             name = result.ResultDictionary["name"].ToString();
             Debug.Log("My Facebook Name Is : " + name);
         });
