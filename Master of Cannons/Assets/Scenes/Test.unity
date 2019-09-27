@@ -841,8 +841,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 1649016048}
-  horizontalAngle: 0
-  verticalAngle: 0
+  horizontalAngle: 30
+  verticalAngle: 40
 --- !u!1 &1649016045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,7 +1412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 341924358, guid: ef034b2263cabf7429828a423e531b79, type: 3}
       propertyPath: wickLength
-      value: 500
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 341924358, guid: ef034b2263cabf7429828a423e531b79, type: 3}
       propertyPath: m_Enabled
