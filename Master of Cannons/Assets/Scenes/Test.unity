@@ -705,6 +705,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &701243755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 701243756}
+  m_Layer: 0
+  m_Name: Pivot Render Texture Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &701243756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701243755}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -25.57, y: 1.06, z: -5.42}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1382544895}
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1382544893
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,8 +746,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1382544895}
   - component: {fileID: 1382544894}
+  - component: {fileID: 1382544896}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: Render Texture Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -789,13 +821,28 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382544893}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2075741422}
+  m_Father: {fileID: 701243756}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1382544896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382544893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35f5cf097a67e1e4f9933f55f214075d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 1649016048}
+  horizontalAngle: 0
+  verticalAngle: 0
 --- !u!1 &1649016045
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,7 +917,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649016045}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.16, y: 0.894, z: 0.06}
+  m_LocalPosition: {x: -1.11, y: 0.894, z: 0.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1218,8 +1265,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -25.65, y: -0.01, z: 1.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1382544895}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1366,7 +1412,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 341924358, guid: ef034b2263cabf7429828a423e531b79, type: 3}
       propertyPath: wickLength
-      value: 10
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 341924358, guid: ef034b2263cabf7429828a423e531b79, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2141926649479102312, guid: ef034b2263cabf7429828a423e531b79,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef034b2263cabf7429828a423e531b79, type: 3}
@@ -1381,6 +1436,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AirStream Cannon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8345005108301884032, guid: f3a076fafe815f842998e8d45f4014cd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8345005108301884047, guid: f3a076fafe815f842998e8d45f4014cd,
         type: 3}
@@ -1619,6 +1679,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Moving Cannon
+      objectReference: {fileID: 0}
+    - target: {fileID: 6946837625399168602, guid: 19c5f2b6e3ee70149ba99a355155066c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6946837625399168607, guid: 19c5f2b6e3ee70149ba99a355155066c,
         type: 3}
