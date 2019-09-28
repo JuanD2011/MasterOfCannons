@@ -23,6 +23,7 @@ public class Character : MonoBehaviour
         transform.SetParent(_reference.transform);
         //Rigidbody.velocity = Vector3.zero;
         //transform.rotation = Quaternion.identity;
+        transform.localRotation = Quaternion.identity;
         SetKinematic(true);
     }
 
