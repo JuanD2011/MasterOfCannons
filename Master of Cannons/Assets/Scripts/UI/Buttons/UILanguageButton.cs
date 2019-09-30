@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageButton : UIButtonBase
+public class UILanguageButton : UIButtonBase
 {
     [SerializeField] Settings settings = null;
     [SerializeField] Image flagImage = null;
