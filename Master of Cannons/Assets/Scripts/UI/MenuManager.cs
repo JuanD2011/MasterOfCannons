@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour
     {
         OnPause = null;
 
-        VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+        VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;
 
         Memento.LoadData(settings);
 

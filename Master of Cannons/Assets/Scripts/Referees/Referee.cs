@@ -2,9 +2,12 @@
 
 public class Referee : MonoBehaviour
 {
+    public static event Delegates.Action OnGameOver = null;
+
     private void Awake()
     {
-        VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;       
+        OnGameOver = null;
+        VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;
     }
 
     private void Start()
@@ -12,9 +15,9 @@ public class Referee : MonoBehaviour
         VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
     }
 
-    private void ManageVolumeStatus(VolumeLevelStatusType _VolumeStatus)
+    private void ManageVolumeStatus(VolumeLevelStatusType _VolumeLevelStatus)
     {
-        switch (_VolumeStatus)
+        switch (_VolumeLevelStatus)
         {
             case VolumeLevelStatusType.Victory:
                 Debug.Log("Victory");
@@ -27,5 +30,6 @@ public class Referee : MonoBehaviour
             default:
                 break;
         }
+        OnGameOver();
     }
 }

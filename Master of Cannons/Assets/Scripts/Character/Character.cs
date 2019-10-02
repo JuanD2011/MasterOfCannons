@@ -10,6 +10,12 @@ public class Character : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        MenuManager.OnPause += Freeze;
+        Referee.OnGameOver += Freeze;
+    }
+
     private void Update()
     {
         //if (Rigidbody.velocity.y < 0)
@@ -28,4 +34,20 @@ public class Character : MonoBehaviour
     }
 
     public void SetKinematic(bool _value) => Rigidbody.isKinematic = _value;
+
+    private void Freeze()
+    {
+        Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+    }
+    private void Freeze(bool _Value)
+    {
+        if (_Value)
+        {
+            Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        else
+        {
+            Rigidbody.constraints = RigidbodyConstraints.None;
+        }
+    }
 }

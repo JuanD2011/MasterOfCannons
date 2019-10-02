@@ -1,11 +1,6 @@
 ﻿using UnityEngine;
 
-public enum VolumeLevelStatusType
-{
-    Victory,
-    Defeat,
-    None
-};
+
 
 [RequireComponent(typeof(BoxCollider))]
 public class VolumeLevelStatus : MonoBehaviour
