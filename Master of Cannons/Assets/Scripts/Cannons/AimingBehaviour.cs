@@ -27,7 +27,7 @@ public class AimingBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (canAim && !MenuManager.IsPaused)
+        if (canAim && !MenuGameManager.IsPaused)
         {
             if (Input.GetMouseButton(0))
             {

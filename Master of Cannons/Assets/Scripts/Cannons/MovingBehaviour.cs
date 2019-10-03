@@ -29,7 +29,7 @@ public class MovingBehaviour : MonoBehaviour
 
         if (startMoving) Move();
 
-        MenuManager.OnPause += SetMovement;
+        MenuGameManager.OnPause += SetMovement;
     }
 
     private void SetMovement(bool _Value)

@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 
-public class UIRestart : UIButtonBase
+public class UIRestartButton : UIButtonBase
 {
     public override void OnButtonClicked()
     {

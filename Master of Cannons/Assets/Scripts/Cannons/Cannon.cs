@@ -43,7 +43,7 @@ public class Cannon : MonoBehaviour
 
     private void Update()
     {
-        if (burningWick && !MenuManager.IsPaused) elapsedWickTime += Time.deltaTime;
+        if (burningWick && !MenuGameManager.IsPaused) elapsedWickTime += Time.deltaTime;
 
         if (elapsedWickTime > wickLength) Shoot();
     }

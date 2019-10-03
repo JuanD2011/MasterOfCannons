@@ -12,7 +12,7 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
-        MenuManager.OnPause += Freeze;
+        MenuGameManager.OnPause += Freeze;
         Referee.OnGameOver += Freeze;
     }
 
