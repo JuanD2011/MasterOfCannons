@@ -7,6 +7,11 @@ public class VolumeLevelStatus : MonoBehaviour
 
     public static event Delegates.Action<VolumeLevelStatusType> OnVolumeEntered = null;
 
+    private void Awake()
+    {
+        OnVolumeEntered = null;
+    }
+
     private void OnTriggerEnter(Collider _Other)
     {
         OnVolumeEntered(volumeType);

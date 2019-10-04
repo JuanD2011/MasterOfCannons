@@ -7,7 +7,6 @@ public class Referee : MonoBehaviour
     private void Awake()
     {
         OnGameOver = null;
-        VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;
     }
 
     private void Start()

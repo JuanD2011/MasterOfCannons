@@ -10,20 +10,19 @@ public class MenuManager : MonoBehaviour
 
     protected Animator[] panelAnimators = new Animator[0];
 
-    protected LevelManager m_LevelManager = null;
-
-    private int levelToLoad = 0;
-
     private int currentPanelIndex = 0;
+
+    public static bool canSelectLevel = false;
 
     private readonly string panelFadeIn = "MP Fade-in";
     private readonly string panelFadeOut = "MP Fade-out";
     private readonly string panelFadeInStart = "MP Fade-in Start";
 
+    private readonly string panelModalIn = "MP Modal In";
+    private readonly string panelModalOut = "MP Modal Out";
+
     protected virtual void Awake()
     {
-        m_LevelManager = GetComponent<LevelManager>();
-
         Memento.LoadData(settings);
 
         InitializePanelAnimators();
@@ -33,10 +32,20 @@ public class MenuManager : MonoBehaviour
     protected virtual void Start()
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
-        Level.OnLoadLevel += AssignLevelToLoad;
+        LevelManager.OnLoadLevel += ManageLevelPlayerAction;
     }
 
-    private void AssignLevelToLoad(int _LevelBuildIndex) => levelToLoad = _LevelBuildIndex;
+    private void ManageLevelPlayerAction(bool _CanPlay)
+    {
+        if (_CanPlay)
+        {
+            PanelAnim(1);
+        }
+        else
+        {
+            //TODO show message that the player has not enough stars to play
+        }
+    }
 
     protected void InitializePanelAnimators()
     {
@@ -48,14 +57,6 @@ public class MenuManager : MonoBehaviour
     {
         Translation.currentLanguageId = settings.languageID;
         Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
-    }
-
-    /// <summary>
-    /// Start loading the level.
-    /// </summary>
-    public void StartLoadingLevel()
-    {
-        StartCoroutine(m_LevelManager.LoadAsynchronously(levelToLoad));
     }
 
     /// <summary>
@@ -71,6 +72,28 @@ public class MenuManager : MonoBehaviour
             panelAnimators[currentPanelIndex].Play(panelFadeIn);
         }
     }
+
+    /// <summary>
+    /// Set current panel animation depending on the bool
+    /// </summary>
+    /// <param name="_IsOn"></param>
+    public void ModalAnim(bool _IsOn)
+    {
+        if (_IsOn == true)
+        {
+            panelAnimators[currentPanelIndex].Play(panelModalOut);
+        }
+        else
+        {
+            panelAnimators[currentPanelIndex].Play(panelModalIn);
+        }
+    }
+
+    /// <summary>
+    /// Equals can select level to the _value
+    /// </summary>
+    /// <param name="_Value"></param>
+    public void SelectingLevels(bool _Value) => canSelectLevel = _Value;
 
     /// <summary>
     /// Save settings

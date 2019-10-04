@@ -8,8 +8,6 @@
     {
         OnPause = null;
 
-        VolumeLevelStatus.OnVolumeEntered -= ManageVolumeStatus;
-
         InitializePanelAnimators();
     }
 
@@ -24,10 +22,10 @@
         switch (_VolumeStatus)
         {
             case VolumeLevelStatusType.Victory:
-                PanelAnim(2);
+                PanelAnim(3);
                 break;
             case VolumeLevelStatusType.Defeat:
-                PanelAnim(3);
+                PanelAnim(4);
                 break;
             case VolumeLevelStatusType.None:
                 break;
