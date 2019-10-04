@@ -17,11 +17,11 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Character
+  - Cannon
+  - Referee
+  - Fake Renderer
+  - Collectible
   - 
   - 
   - 
