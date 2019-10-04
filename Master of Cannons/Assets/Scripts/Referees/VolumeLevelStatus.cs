@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-
-
 [RequireComponent(typeof(BoxCollider))]
 public class VolumeLevelStatus : MonoBehaviour
 {

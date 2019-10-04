@@ -10,6 +10,10 @@ public class MenuManager : MonoBehaviour
 
     protected Animator[] panelAnimators = new Animator[0];
 
+    protected LevelManager m_LevelManager = null;
+
+    private int levelToLoad = 0;
+
     private int currentPanelIndex = 0;
 
     private readonly string panelFadeIn = "MP Fade-in";
@@ -18,6 +22,8 @@ public class MenuManager : MonoBehaviour
 
     protected virtual void Awake()
     {
+        m_LevelManager = GetComponent<LevelManager>();
+
         Memento.LoadData(settings);
 
         InitializePanelAnimators();
@@ -27,7 +33,10 @@ public class MenuManager : MonoBehaviour
     protected virtual void Start()
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
+        Level.OnLoadLevel += AssignLevelToLoad;
     }
+
+    private void AssignLevelToLoad(int _LevelBuildIndex) => levelToLoad = _LevelBuildIndex;
 
     protected void InitializePanelAnimators()
     {
@@ -39,6 +48,14 @@ public class MenuManager : MonoBehaviour
     {
         Translation.currentLanguageId = settings.languageID;
         Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
+    }
+
+    /// <summary>
+    /// Start loading the level.
+    /// </summary>
+    public void StartLoadingLevel()
+    {
+        StartCoroutine(m_LevelManager.LoadAsynchronously(levelToLoad));
     }
 
     /// <summary>
