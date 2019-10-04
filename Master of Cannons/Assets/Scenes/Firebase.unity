@@ -97,7 +97,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -636,6 +636,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
   clearData: 0
+  coins: 0
+  prestige: 0
+  skinAvailability: 0
+  coinsStr: coins
+  prestigeStr: prestige
+  skinAvailabilityStr: skinAvailability
 --- !u!1 &168621132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2126,7 +2132,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 539178429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e98c714267518e941bad7402ecbf999b, type: 3}
+  m_Script: {fileID: 11500000, guid: 897472632bdb26645b43b52e25fa5df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   username: {fileID: 1511288234}
@@ -2375,7 +2381,7 @@ GameObject:
   - component: {fileID: 670137375}
   - component: {fileID: 670137374}
   m_Layer: 5
-  m_Name: UserCoins (TMP)
+  m_Name: UserXp (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2666,7 +2672,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 728309100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 339928dd2c661374e88b9b9ecf4a5610, type: 3}
+  m_Script: {fileID: 11500000, guid: 90eef7424e3a05b4785001ef31acfbab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   facebookButt: {fileID: 1118091322}
@@ -5650,11 +5656,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1014989467}
     m_Modifications:
-    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
-        type: 3}
-      propertyPath: m_Name
-      value: Back (Button)
-      objectReference: {fileID: 0}
     - target: {fileID: 6742371463013265149, guid: 8d730b068cfb7c040b098104f66161df,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5759,6 +5760,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
+        type: 3}
+      propertyPath: m_Name
+      value: Back (Button)
       objectReference: {fileID: 0}
     - target: {fileID: 6742371463013265122, guid: 8d730b068cfb7c040b098104f66161df,
         type: 3}
@@ -6533,6 +6539,46 @@ PrefabInstance:
       propertyPath: panels.Array.data[2]
       value: 
       objectReference: {fileID: 340593946}
+    - target: {fileID: 8721571412918878202, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -149
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269951327618829240, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269951328765459540, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115892706249992901, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115892706249992901, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115892706249992901, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115892707043532639, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115892707043532639, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106fb313b250ddf43a17cadc3029f271, type: 3}
 --- !u!224 &595076174705938066 stripped

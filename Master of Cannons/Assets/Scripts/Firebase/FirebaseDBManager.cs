@@ -109,7 +109,7 @@ public class FirebaseDBManager : MonoBehaviour
         });
         
         ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
-        DataManager.DM.InitializePlayerData(iDictUser);
+        //DataManager.DM.InitializePlayerData(iDictUser);
     }
 
     public async Task<Dictionary<string, string>> GetFacebookUserData(string userID)
