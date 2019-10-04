@@ -16,7 +16,6 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action facebookLogHandler;
     public static Action signOutHandler;
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
-    private bool isInitialized = false;
     private bool userExist = false;
 
     private IEnumerator Start()
@@ -39,7 +38,6 @@ public class FirebaseAuthManager : MonoBehaviour
         if(FB.IsInitialized)
         {
             FB.ActivateApp();
-            isInitialized = true;
             Debug.Log("Facebook Initialized");
             if (FB.IsLoggedIn)
             {                

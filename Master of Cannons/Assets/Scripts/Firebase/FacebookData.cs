@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 
 public class FacebookData : MonoBehaviour
 {
-    public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
-
     public void GetFriendsPlayingThisGame()
     {              
         if (!CheckLogIn()) {
             Debug.Log("You are not LOGGED IN Facebook...");
             return; }
 
-        //friendsDataList.RemoveRange(0, friendsDataList.Count);
         string query = "/me/friends";
         FB.API(query, HttpMethod.GET, async result =>
         {          
@@ -26,7 +23,6 @@ public class FacebookData : MonoBehaviour
                 Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
             }
 
-            //UISocial.showFriendDataHandler(friendsDataList);
         });
        
     }
