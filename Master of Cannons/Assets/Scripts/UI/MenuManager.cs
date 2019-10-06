@@ -12,9 +12,14 @@ public class MenuManager : MonoBehaviour
 
     private int currentPanelIndex = 0;
 
+    public static bool canSelectLevel = false;
+
     private readonly string panelFadeIn = "MP Fade-in";
     private readonly string panelFadeOut = "MP Fade-out";
     private readonly string panelFadeInStart = "MP Fade-in Start";
+
+    private readonly string panelModalIn = "MP Modal In";
+    private readonly string panelModalOut = "MP Modal Out";
 
     protected virtual void Awake()
     {
@@ -27,6 +32,19 @@ public class MenuManager : MonoBehaviour
     protected virtual void Start()
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
+        LevelManager.OnLoadLevel += ManageLevelPlayerAction;
+    }
+
+    private void ManageLevelPlayerAction(bool _CanPlay)
+    {
+        if (_CanPlay)
+        {
+            PanelAnim(1);
+        }
+        else
+        {
+            //TODO show message that the player has not enough stars to play
+        }
     }
 
     protected void InitializePanelAnimators()
@@ -54,6 +72,28 @@ public class MenuManager : MonoBehaviour
             panelAnimators[currentPanelIndex].Play(panelFadeIn);
         }
     }
+
+    /// <summary>
+    /// Set current panel animation depending on the bool
+    /// </summary>
+    /// <param name="_IsOn"></param>
+    public void ModalAnim(bool _IsOn)
+    {
+        if (_IsOn == true)
+        {
+            panelAnimators[currentPanelIndex].Play(panelModalOut);
+        }
+        else
+        {
+            panelAnimators[currentPanelIndex].Play(panelModalIn);
+        }
+    }
+
+    /// <summary>
+    /// Equals can select level to the _value
+    /// </summary>
+    /// <param name="_Value"></param>
+    public void SelectingLevels(bool _Value) => canSelectLevel = _Value;
 
     /// <summary>
     /// Save settings

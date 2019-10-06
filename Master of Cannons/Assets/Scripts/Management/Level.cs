@@ -9,12 +9,11 @@ public class Level : MonoBehaviour
     [SerializeField]
     private int starsNedeed = 0;
 
-    public static event Delegates.Action<int> OnLoadLevel = null;
+    public static event Delegates.Action<int, int> OnCanPlayLevel = null;
 
     private void OnMouseDown()
     {
-        if (starsNedeed < 0) return;//TODO compare player stars and stars needed
-
-        OnLoadLevel(levelBuildIndex);
+        if (!MenuManager.canSelectLevel) return;
+        OnCanPlayLevel(starsNedeed, levelBuildIndex);
     }
 }

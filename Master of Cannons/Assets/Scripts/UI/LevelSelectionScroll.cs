@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(ScrollRect))]
 public class LevelSelectionScroll : MonoBehaviour
 {
     [SerializeField] Transform worldLevels = null;
@@ -30,5 +31,10 @@ public class LevelSelectionScroll : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(new Vector3(leftLimit, 0f, 0f), new Vector3(rightLimit, 0f, 0f));
+    }
+
+    private void Reset()
+    {
+        GetComponent<ScrollRect>().vertical = false;
     }
 }
