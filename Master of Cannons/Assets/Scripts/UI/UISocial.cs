@@ -8,35 +8,65 @@ using Delegates;
 public class UISocial : MonoBehaviour
 {
     [SerializeField] Button facebookButt = null;
+    [SerializeField] Button playGamesButt = null;
+
     TextMeshProUGUI facebookButtText;
-    public static Action buttonStatusHandler;
+    TextMeshProUGUI playGamesButtText;
+
+    public static Action fbButtonStatus;
+    public static Action playGamesButtonStatus;
     public static Action<string, string, string> showFriendDataHandler;
 
-    private Action multiDel;
+    private Action onClickFBButton, onClickPlayGamesButton;
     [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
     IEnumerator Start()
     {
         showFriendDataHandler = ShowFriendData;
-        buttonStatusHandler = ChangeButtonStatus;  
+        playGamesButtonStatus = ChangePlayGamesStatus;
+        fbButtonStatus = ChangeFBButtonStatus;
         facebookButtText = facebookButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        playGamesButtText = playGamesButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
         yield return new WaitUntil(() => FirebaseAuthManager.CheckDependenciesHandler() && FirebaseAuthManager.facebookLogHandler != null);
 
-        multiDel = buttonStatusHandler +  FirebaseAuthManager.facebookLogHandler;
-        facebookButt.onClick.AddListener(()=> multiDel.Invoke());
+        onClickFBButton = fbButtonStatus +  FirebaseAuthManager.facebookLogHandler;
+        facebookButt.onClick.AddListener(()=> onClickFBButton.Invoke());
+        
+        onClickPlayGamesButton = playGamesButtonStatus + FirebaseAuthManager.playGamesLogHandler;
+        playGamesButt.onClick.AddListener(() => onClickPlayGamesButton.Invoke());
 
-        yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);
+        yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);        
         //yield return new WaitForSeconds(2f); //ESTO ES UN MACHETAZO TEMPORAL...
-        buttonStatusHandler();
+        fbButtonStatus.Invoke();
+
+        //yield return new WaitWhile(() => GooglePlayGames.PlayGamesPlatform.Instance == null);        
+        //playGamesButtonStatus.Invoke();
     }
     
-    private void ChangeButtonStatus()
+    private void ChangePlayGamesStatus()
     {
-        print("Change button status....");
+        FirebaseAuthManager.playGamesLogHandler.Invoke();
+        if(Social.localUser.authenticated)
+        {
+            playGamesButtText.text = "Sign Out";
+            facebookButt.onClick.RemoveAllListeners();
+            facebookButt.onClick.AddListener(SignOutPlayGames);
+        } 
+    }
+    private void SignOutPlayGames()
+    {
+        playGamesButtText.text = "Play Games Sign IN";
+        FirebaseAuthManager.signOutPlayGamesHandler.Invoke();
+        playGamesButt.onClick.AddListener(() => onClickPlayGamesButton());
+    }
+    private void ChangeFBButtonStatus()
+    {
+        print("Change Facebook button status....");
         if(FacebookData.CheckLogIn())
         {
-            print("Has logged... change button");
+            print("Has logged... change Facebook button");
             facebookButtText.text = "Sign Out";
             facebookButt.onClick.RemoveAllListeners();
             facebookButt.onClick.AddListener(SignOutFacebook);
@@ -46,6 +76,13 @@ public class UISocial : MonoBehaviour
             print("Isnt Logged");
         }
     }
+    private void SignOutFacebook()
+    {
+        facebookButtText.text = "FB Sign In";
+        FirebaseAuthManager.signOutFBHandler.Invoke();
+        facebookButt.onClick.AddListener(() => onClickFBButton());
+    }
+
     private void ShowFriendData(string name, string nickname, string coins)
     {        
         friendsContainer.GetChild(index).GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
@@ -62,12 +99,4 @@ public class UISocial : MonoBehaviour
         UIPlayerData.showCoins(DataManager.DM.playerData.coins.ToString());
         FirebaseDBManager.DB.WriteNewCoins(DataManager.DM.playerData.coins);
     }
-
-    private void SignOutFacebook()
-    {
-        facebookButtText.text = "FB Sign In";
-        FirebaseAuthManager.signOutHandler.Invoke();
-        facebookButt.onClick.AddListener(()=> multiDel());
-    }
-
 }

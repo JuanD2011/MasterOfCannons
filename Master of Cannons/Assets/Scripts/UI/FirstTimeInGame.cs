@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class FirstTimeInGame : MonoBehaviour
 {
-    [SerializeField] TMP_InputField nameInput;
-    [SerializeField] GameObject enterNamePanel;
-    [SerializeField] UnityEngine.UI.Button confirmNameButt;
+    [SerializeField] TMP_InputField nameInput = null;
+    [SerializeField] GameObject enterNamePanel = null;
+    [SerializeField] UnityEngine.UI.Button confirmNameButt = null;
 
     private void Start()
     {

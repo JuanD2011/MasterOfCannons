@@ -5,7 +5,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager DM = null;
     public Settings settings;
-    [SerializeField] bool clearSettingsData;
+    [SerializeField] bool clearSettingsData = false;
 
     public PlayerData playerData = null;
     public Dictionary<string, string> playerDataDict;

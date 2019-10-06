@@ -7,6 +7,8 @@ using Firebase.Database;
 using System.Threading.Tasks;
 using Facebook.Unity;
 using Delegates;
+using GooglePlayGames.BasicApi;
+using GooglePlayGames;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -14,9 +16,14 @@ public class FirebaseAuthManager : MonoBehaviour
     public static FirebaseUser myUser;
     public static Task updateProfileTask;
     public static Action facebookLogHandler;
-    public static Action signOutHandler;
+    public static Action playGamesLogHandler;
+    public static Action signOutFBHandler;
+    public static Action signOutPlayGamesHandler;
+
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
     private bool userExist = false;
+
+    public static Action<AccessToken> facebookAuthenticationNoLinked;
 
     private IEnumerator Start()
     {          
@@ -25,12 +32,29 @@ public class FirebaseAuthManager : MonoBehaviour
         auth = FirebaseAuth.DefaultInstance;
         Memento.LoadData(DataManager.DM.settings);
         if(DataManager.DM.settings.defaultScene == 0) AnonymousSignIn();  
-        signOutHandler = delegate () { FB.LogOut(); };
+        signOutFBHandler = delegate() { FB.LogOut(); };
+        signOutPlayGamesHandler = delegate() { PlayGamesPlatform.Instance.SignOut(); };
+
         facebookLogHandler = FacebookSignIn;
         auth.StateChanged += AuthStateChanged;        
         AuthStateChanged(this, null);
-        FB.Init(InitCallBack, OnHideUnity);                
+        FB.Init(InitCallBack, OnHideUnity);
+        facebookAuthenticationNoLinked = FacebookAuthentication;
 
+        //playGamesLogHandler = PlayGamesSignIn;
+        //InitializePlayGames();
+
+    }
+
+    void InitializePlayGames()
+    {
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        .RequestServerAuthCode(false)//Force refresh
+        .Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.Activate();
+        Debug.LogFormat("Play Games Configuration initialized");
     }
 
     void InitCallBack()
@@ -41,7 +65,7 @@ public class FirebaseAuthManager : MonoBehaviour
             Debug.Log("Facebook Initialized");
             if (FB.IsLoggedIn)
             {                
-                UISocial.buttonStatusHandler?.Invoke();
+                UISocial.fbButtonStatus?.Invoke();
                 print("Already has logged in");
                 return;
             }
@@ -108,6 +132,8 @@ public class FirebaseAuthManager : MonoBehaviour
         
     }
 
+    #region Facebook Authentication
+
     public void FacebookSignIn()
     {
         if (FB.IsLoggedIn)
@@ -125,7 +151,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 if (!DataManager.DM.settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
                 //else FacebookAuthentication(accesToken);
                 print("Login Facebook Succesfully");
-                UISocial.buttonStatusHandler.Invoke();
+                UISocial.fbButtonStatus.Invoke();
 
             }
             else
@@ -163,7 +189,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
 
-        UISocial.buttonStatusHandler.Invoke();
+        UISocial.fbButtonStatus.Invoke();
         if (auxTask.IsCompleted)
         {            
             Memento.SaveData(DataManager.DM.settings);
@@ -177,6 +203,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     async void FacebookAuthentication(AccessToken accesToken)
     {
+        print("facebook authentication");
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
         await auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
 
@@ -196,8 +223,66 @@ public class FirebaseAuthManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
 
-        UISocial.buttonStatusHandler.Invoke();
+        UISocial.fbButtonStatus.Invoke();
     }
+    #endregion
+
+    #region Google Play Games
+
+    void PlayGamesSignIn()
+    {
+        Social.localUser.Authenticate((bool success) => {
+
+            if (!success)
+            {
+                Debug.LogError("Failed to Sign into Play Games Services.");
+                return;
+            }
+            else
+            {
+                Debug.Log("Signed Succesful into Play Games");
+            }
+
+            string authCode = PlayGamesPlatform.Instance.GetServerAuthCode();
+
+            if (string.IsNullOrEmpty(authCode))
+            {
+                Debug.LogError("Signed into Play Games Services but failed to get auth code.");
+                return;
+            }
+
+
+            Debug.LogFormat("Google Auth code: {0}", authCode);
+
+            Credential credential = PlayGamesAuthProvider.GetCredential(authCode);
+            LinkPlayGamesAccount(credential);
+
+        });
+    }
+
+    void LinkPlayGamesAccount(Credential credential)
+    {
+        auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith(task => {
+
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                return;
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            FirebaseUser newUser = task.Result;
+            Debug.LogFormat("GOOGLE User LINKED to FIREBASE Succesfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+
+        });
+    }
+
+    #endregion
 
     public async Task CheckUserExistance()
     {
@@ -218,8 +303,7 @@ public class FirebaseAuthManager : MonoBehaviour
     }
 
     public async static Task UpdateUserProfile(string displayName)
-    {
-       
+    {       
         UserProfile userProfile = new UserProfile { DisplayName = displayName };
         await myUser.UpdateUserProfileAsync(userProfile).ContinueWith(task => {
             updateProfileTask = task;
