@@ -1,41 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager DM = null;
     public Settings settings;
-    [SerializeField] bool clearData;
+    [SerializeField] bool clearSettingsData;
 
-    public Dictionary<string, string> playerData;
-    public float coins, prestige, skinAvailability;
-
-    public string coinsStr = "coins";
-    public string prestigeStr = "prestige";
-    public string skinAvailabilityStr = "skinAvailability";
-
+    public PlayerData playerData = null;
+    public Dictionary<string, string> playerDataDict;
+    public const string coinsStr = "coins", prestigeStr = "prestige", starsStr = "stars", skinAvailabilityStr = "skinAvailability";
 
     private void Awake()
     {
-        //if(clearData) Memento.ClearData(settings);
+        if(clearSettingsData) Memento.ClearData(settings);
         if (DM == null) DM = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        Memento.LoadData(settings);
+        Memento.LoadData(settings);        
+
     }
 
-    private IEnumerator Start()
+    public void InitializePlayerData(Dictionary<string,string> playerDataDict)
     {
-        yield return new WaitUntil(() => FirebaseAuthManager.myUser != null && FirebaseAuthManager.CheckDependenciesHandler());
-        FirebaseDBManager.DB.GetPlayerData(UIPlayerData.showPlayerData);
-    }
-
-    public void InitializePlayerData(Dictionary<string,string> playerData)
-    {
-        coins = float.Parse(playerData[coinsStr]);
-        prestige = float.Parse(playerData[prestigeStr]);
-        skinAvailability = float.Parse(playerData[skinAvailabilityStr]);
-    }
-    
+        playerData.coins = int.Parse(playerDataDict[coinsStr]);
+        playerData.prestige = float.Parse(playerDataDict[prestigeStr]);
+        playerData.stars = int.Parse(playerDataDict[starsStr]);
+        playerData.skinAvailability = int.Parse(playerDataDict[skinAvailabilityStr]);
+    }   
 }

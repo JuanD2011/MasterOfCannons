@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "362747646851",
-    "firebase_url": "https://master-of-cannons.firebaseio.com",
-    "project_id": "master-of-cannons",
-    "storage_bucket": "master-of-cannons.appspot.com"
+    "project_number": "743885855686",
+    "firebase_url": "https://master-of-cannons-ef77a.firebaseio.com",
+    "project_id": "master-of-cannons-ef77a",
+    "storage_bucket": "master-of-cannons-ef77a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:362747646851:android:03dbc3e7d228f086b31cb6",
+        "mobilesdk_app_id": "1:743885855686:android:24a8c1b51cfc63211230c7",
         "android_client_info": {
           "package_name": "com.OcasoGames.MasterOfCannons"
         }
       },
       "oauth_client": [
         {
-          "client_id": "362747646851-ugufjm96kpkoihavj147eh28pheb6rqn.apps.googleusercontent.com",
+          "client_id": "743885855686-5i8raj447eqleuo0ffoo8ir6pje3j9ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.OcasoGames.MasterOfCannons",
+            "certificate_hash": "4dfd8d1ad5b546b5eb3e87881ff346a37b46371d"
+          }
+        },
+        {
+          "client_id": "743885855686-u2h234sb3vc1krketabvtbs099u8s2gh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCAxe6nRwgqoen4A_hXj6dWjXbWopt3nYM"
+          "current_key": "AIzaSyA2PVVAkr4RniZmTagkuod5MbGVqpCZwXQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "362747646851-ugufjm96kpkoihavj147eh28pheb6rqn.apps.googleusercontent.com",
+              "client_id": "743885855686-u2h234sb3vc1krketabvtbs099u8s2gh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coins: 0
   stars: 0
+  prestige: 10
+  skinAvailability: 0

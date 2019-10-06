@@ -7,16 +7,13 @@ using Delegates;
 
 public class UISocial : MonoBehaviour
 {
-    [SerializeField] Button facebookButt;
+    [SerializeField] Button facebookButt = null;
     TextMeshProUGUI facebookButtText;
     public static Action buttonStatusHandler;
     public static Action<string, string, string> showFriendDataHandler;
 
     private Action multiDel;
-    [SerializeField] Transform friendsContainer;
-
-
-    float coins;
+    [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
     IEnumerator Start()
@@ -59,11 +56,11 @@ public class UISocial : MonoBehaviour
 
     public void CloseSocialPanel() => index = 0;
 
-    public void UpdateCoins(float _coins)
+    public void UpdateCoins(int _coins)
     {
-        coins += _coins;
-        UIPlayerData.showCoins(coins.ToString());
-        FirebaseDBManager.DB.WriteNewCoins(coins);
+        DataManager.DM.playerData.coins += _coins;
+        UIPlayerData.showCoins(DataManager.DM.playerData.coins.ToString());
+        FirebaseDBManager.DB.WriteNewCoins(DataManager.DM.playerData.coins);
     }
 
     private void SignOutFacebook()

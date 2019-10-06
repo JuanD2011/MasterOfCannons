@@ -4,9 +4,10 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerInfo
 {
-    public float coins;
+    public int coins;
     public float prestige;
-    public float skinAvailability;
+    public int skinAvailability;
+    public int stars;
 
     public Dictionary<string, Object> ToDictionary()
     {

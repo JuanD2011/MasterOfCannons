@@ -20,7 +20,7 @@ public class FirebaseDBManager : MonoBehaviour
 
     public Action<string, string> WriteFacebookUserHandler;
 
-    public Action<float, float, int> WriteNewInfo;
+    public Action<int, float, int> WriteNewInfo;
     /// <summary>
     /// Update user name (userID, new username)
     /// </summary>
@@ -34,9 +34,10 @@ public class FirebaseDBManager : MonoBehaviour
     }
 
     void Start()
-    {        
+    {
         // Set up the Editor before calling into the realtime database.
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://master-of-cannons.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://master-of-cannons-ef77a.firebaseio.com/");
+        //FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://master-of-cannons.firebaseio.com/");
 
         // Get the root reference location of the database.
         dataBaseRef = FirebaseDatabase.DefaultInstance.RootReference;
@@ -108,8 +109,8 @@ public class FirebaseDBManager : MonoBehaviour
 
         });
         
-        ShowPlayerData(FirebaseAuthManager.myUser.DisplayName, iDictUser["coins"], iDictUser["xp"]);
-        //DataManager.DM.InitializePlayerData(iDictUser);
+        ShowPlayerData?.Invoke(FirebaseAuthManager.myUser.DisplayName, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
+        DataManager.DM.InitializePlayerData(iDictUser);
     }
 
     public async Task<Dictionary<string, string>> GetFacebookUserData(string userID)
@@ -168,7 +169,7 @@ public class FirebaseDBManager : MonoBehaviour
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);        
     }
 
-    private void WriteNewPlayerInfo(float _coins, float prestige, int _skinAvailability)
+    private void WriteNewPlayerInfo(int _coins, float prestige, int _skinAvailability)
     {
         string key = dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Key;
         PlayerInfo playerInfo = new PlayerInfo { coins = _coins, prestige = prestige, skinAvailability = _skinAvailability };
@@ -182,7 +183,7 @@ public class FirebaseDBManager : MonoBehaviour
         UIPlayerData.showPlayerData(FirebaseAuthManager.myUser.DisplayName, _coins.ToString(), prestige.ToString());
     }
 
-    public void WriteNewCoins(float _coins)
+    public void WriteNewCoins(int _coins)
     {
         //dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Child("coins").ValueChanged += HandleValueChanged;
         dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).Child("coins").SetValueAsync(_coins);
