@@ -21,6 +21,8 @@ public class UISocial : MonoBehaviour
     [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
+    [SerializeField] Transform alreadyExistPanel;
+
     IEnumerator Start()
     {
         showFriendDataHandler = ShowFriendData;

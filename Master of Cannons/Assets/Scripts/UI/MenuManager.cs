@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Delegates;
 
 public class MenuManager : MonoBehaviour
 {
@@ -20,6 +21,12 @@ public class MenuManager : MonoBehaviour
 
     private readonly string panelModalIn = "MP Modal In";
     private readonly string panelModalOut = "MP Modal Out";
+
+    [SerializeField] Transform popUpWindow;
+    [SerializeField] UnityEngine.UI.Button confirmButton;
+    [SerializeField] UnityEngine.UI.Button cancelButton;
+
+    public static Action<string, Action> popUpHandler;
 
     protected virtual void Awake()
     {
@@ -101,6 +108,14 @@ public class MenuManager : MonoBehaviour
     public void SaveSettings()
     {
         Memento.SaveData(settings);
+    }
+
+    private void ConfirmationPopUp(string _text, Delegates.Action confirmAction)
+    {
+        confirmButton.onClick.RemoveAllListeners();
+        popUpWindow.GetComponent<TMPro.TextMeshProUGUI>().text = _text;
+        confirmButton.onClick.AddListener(() => confirmAction.Invoke());
+        cancelButton.onClick.AddListener(()=> popUpWindow.gameObject.SetActive(false));
     }
 
     private void OnApplicationQuit()

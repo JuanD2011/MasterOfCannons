@@ -72,8 +72,8 @@ public class FirebaseDBManager : MonoBehaviour
         Debug.Log("Writing new user in database bitch...");
         string userJson = JsonUtility.ToJson(user);
         string playerInfoJson = JsonUtility.ToJson(playerInfo);
-        dataBaseRef.Child("users").Child(user.userId).SetRawJsonValueAsync(userJson);
-        dataBaseRef.Child("player info").Child(user.userId).SetRawJsonValueAsync(playerInfoJson);
+        dataBaseRef.Child("users").Child(user.userID).SetRawJsonValueAsync(userJson);
+        dataBaseRef.Child("player info").Child(user.userID).SetRawJsonValueAsync(playerInfoJson);
     }
 
     public async Task UpdateUsername(string userId, string newUserName)
@@ -164,7 +164,7 @@ public class FirebaseDBManager : MonoBehaviour
 
         });
         
-        FacebookUser fbUser = new FacebookUser { fbName = name, username = username, coins = coins };
+        FacebookUser fbUser = new FacebookUser { fbName = name, username = username, coins = coins, userID = FirebaseAuthManager.myUser.UserId };
         string json = JsonUtility.ToJson(fbUser);
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(json);        
     }

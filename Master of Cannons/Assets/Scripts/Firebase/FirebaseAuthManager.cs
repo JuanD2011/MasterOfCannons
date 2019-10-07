@@ -118,11 +118,10 @@ public class FirebaseAuthManager : MonoBehaviour
             myUser = task.Result;
             await CheckUserExistance();
 
-
             if (!userExist)
             {
                 Debug.Log("Add New Player To Database booy...");
-                User mUser = new User { username = myUser.DisplayName, userId = myUser.UserId};                
+                User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId};                
                 PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
                 FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
             }
@@ -144,11 +143,16 @@ public class FirebaseAuthManager : MonoBehaviour
 
         Debug.Log("Sign In Into Facebook Account...");
         List<string> permissions = new List<string>() { "public_profile", "email", "user_friends" };
-        FB.LogInWithReadPermissions(permissions, (result) => {
+        FB.LogInWithReadPermissions(permissions, async result => {
             if(FB.IsLoggedIn)
             {
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
-                if (!DataManager.DM.settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
+                bool? userExists = await CheckFBUserExistance(accesToken);
+
+                if (!DataManager.DM.settings.hasFacebookLinked && !userExist) LinkFacebookAccount(accesToken);
+                if (userExists == true) {
+                    MenuManager.popUpHandler("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndLink(accesToken.UserId));
+                };
                 //else FacebookAuthentication(accesToken);
                 print("Login Facebook Succesfully");
                 UISocial.fbButtonStatus.Invoke();
@@ -285,7 +289,7 @@ public class FirebaseAuthManager : MonoBehaviour
     #endregion
 
     public async Task CheckUserExistance()
-    {
+    {        
         await FirebaseDatabase.DefaultInstance.GetReference("users").Child(myUser.UserId).GetValueAsync().ContinueWith(dbTask =>
         {
             if (dbTask.IsFaulted)
@@ -300,6 +304,53 @@ public class FirebaseAuthManager : MonoBehaviour
             userExist = dbTask.Result.Exists;
             Debug.LogFormat("Player exists? {0} ", userExist);
         });
+    }
+
+    public async Task<bool?> CheckFBUserExistance(AccessToken accesToken)
+    {
+        bool? userExists = false;
+        await FirebaseDatabase.DefaultInstance.GetReference("facebook users").Child(accesToken.UserId).GetValueAsync().ContinueWith(dbTask =>
+        {
+            if (dbTask.IsFaulted)
+            {
+                Debug.LogError("Searching UserID in data base encountered an error: " + dbTask.Exception);
+                return null;
+            }
+            else if (dbTask.IsCompleted)
+            {
+                DataSnapshot snapshot = dbTask.Result;
+                Debug.Log("Searching UserID in data base COMPLETED...");
+            }
+            userExists = dbTask.Result.Exists;
+            Debug.LogFormat("Facebook USER exists? {0} ", userExists);
+            return userExists;
+        });
+
+        return userExists;
+    }
+
+    async void UnlinkAndLink(string facebookId)
+    {
+        string userID = string.Empty;
+        await FirebaseDBManager.DB.dataBaseRef.Child("facebook users").Child(facebookId).Child("userID").GetValueAsync().ContinueWith(task => {
+
+            if(task.IsFaulted)
+            {
+                Debug.LogError("Unlink and Link Account Failed:  " + task.Exception);
+                return;
+            }
+            else if(task.IsCanceled)
+            {
+                Debug.LogError("Unlink and Link Account was canceled.");
+                return;
+            }
+
+            DataSnapshot data = task.Result;
+            userID = data.Value.ToString();
+            print("user ID is" + userID);
+        });
+        
+        
     }
 
     public async static Task UpdateUserProfile(string displayName)

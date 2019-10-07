@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
-  clearSettingsData: 0
+  clearSettingsData: 1
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
 --- !u!1 &168621132
 GameObject:
@@ -2327,7 +2327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150.4, y: -38}
+  m_AnchoredPosition: {x: -150.4, y: -373}
   m_SizeDelta: {x: 160, y: 72.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &567051812
@@ -2965,6 +2965,7 @@ MonoBehaviour:
   facebookButt: {fileID: 1118091322}
   playGamesButt: {fileID: 567051813}
   friendsContainer: {fileID: 712301896}
+  alreadyExistPanel: {fileID: 0}
 --- !u!1 &729933768
 GameObject:
   m_ObjectHideFlags: 0

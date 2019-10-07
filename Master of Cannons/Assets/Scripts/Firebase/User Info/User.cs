@@ -6,6 +6,6 @@ public class User
 {
     public string username;
     public string email;
-    public string userId;
+    public string userID;
 
 }
