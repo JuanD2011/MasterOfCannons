@@ -196,9 +196,10 @@ public class FirebaseDBManager : MonoBehaviour
         
     }
 
-    public void AccountMigration()
+    public void DeleteUser(string _userID)
     {
-
+        dataBaseRef.Child("users").Child(_userID).RemoveValueAsync();
+        dataBaseRef.Child("player info").Child(_userID).RemoveValueAsync();
     }
 
     public async Task<string> GetPlayerDataAsJSON()

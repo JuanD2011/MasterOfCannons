@@ -9,6 +9,7 @@ using Facebook.Unity;
 using Delegates;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames;
+using Firebase.Extensions;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -34,7 +35,8 @@ public class FirebaseAuthManager : MonoBehaviour
         if (DataManager.DM.settings.defaultScene == 0)
         {
 
-            AnonymousSignIn(); }
+            AnonymousSignIn();
+        }
         signOutFBHandler = delegate () { FB.LogOut(); };
         signOutPlayGamesHandler = delegate () { PlayGamesPlatform.Instance.SignOut(); };
 
@@ -165,7 +167,8 @@ public class FirebaseAuthManager : MonoBehaviour
                 if (!DataManager.DM.settings.hasFacebookLinked && fbUserExists == null) LinkFacebookAccount(accesToken);
                 if (fbUserExists == true)
                 {
-                    MenuManager.popUpHandler("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndDeleteFBAccount(accesToken));
+                    print("fb exists papi");
+                    MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndDeleteFBAccount(accesToken));
                 };
 
                 print("Login Facebook Succesfully");
@@ -184,7 +187,7 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
         Task auxTask = null;
-        await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith(task => {
+        await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWithOnMainThread(task => {
 
             if (task.IsCanceled)
             {
@@ -195,7 +198,7 @@ public class FirebaseAuthManager : MonoBehaviour
             else if (task.IsFaulted)
             {
                 auxTask = task;
-                UnlinkAndDeleteFBAccount(accesToken);
+                MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", () => UnlinkAndDeleteFBAccount(accesToken));
                 Debug.LogWarning("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
@@ -222,12 +225,14 @@ public class FirebaseAuthManager : MonoBehaviour
 
     async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
     {
-        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);     
-        string auxToken = string.Empty;
-        await auth.CurrentUser.DeleteAsync().ContinueWith(task=> { //Delete Current Account
+        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
 
+        string currentUserID = auth.CurrentUser.UserId;
+        await auth.CurrentUser.DeleteAsync().ContinueWith(task=> { //Delete Current Account
+            
             if(task.IsCompleted)
             {
+                FirebaseDBManager.DB.DeleteUser(currentUserID);
                 Debug.Log("Account Deleted Succesful");
             }
         });
@@ -250,6 +255,8 @@ public class FirebaseAuthManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
 
+        currentUserID = auth.CurrentUser.UserId;
+
         await auth.CurrentUser.DeleteAsync().ContinueWith(task => { //Delete account that has facebook linked
 
             if (task.IsFaulted)
@@ -262,7 +269,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("DELETE user was canceled...");
                 return;
             }
-
+            FirebaseDBManager.DB.DeleteUser(currentUserID);
             Debug.Log("DELETE user Succesful");
 
         });

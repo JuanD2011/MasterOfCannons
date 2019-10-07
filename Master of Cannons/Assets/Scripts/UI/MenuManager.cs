@@ -23,6 +23,7 @@ public class MenuManager : MonoBehaviour
     private readonly string panelModalOut = "MP Modal Out";
 
     [SerializeField] Transform popUpWindow;
+    [SerializeField] TMPro.TextMeshProUGUI popUpText;
     [SerializeField] UnityEngine.UI.Button confirmButton;
     [SerializeField] UnityEngine.UI.Button cancelButton;
 
@@ -116,7 +117,7 @@ public class MenuManager : MonoBehaviour
     {
         popUpWindow.gameObject.SetActive(true);
         confirmButton.onClick.RemoveAllListeners();
-        popUpWindow.GetComponent<TMPro.TextMeshProUGUI>().text = _text;
+        popUpText.text = _text;
         confirmButton.onClick.AddListener(() => {
             confirmAction.Invoke();
             popUpWindow.gameObject.SetActive(false);

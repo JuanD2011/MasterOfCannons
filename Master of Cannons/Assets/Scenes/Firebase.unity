@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
-  clearSettingsData: 1
+  clearSettingsData: 0
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
 --- !u!1 &168621132
 GameObject:
@@ -7945,6 +7945,11 @@ PrefabInstance:
       propertyPath: cancelButton
       value: 
       objectReference: {fileID: 178386731}
+    - target: {fileID: 8721571413711116842, guid: 106fb313b250ddf43a17cadc3029f271,
+        type: 3}
+      propertyPath: popUpText
+      value: 
+      objectReference: {fileID: 534302735}
     - target: {fileID: 3388490706673480693, guid: 106fb313b250ddf43a17cadc3029f271,
         type: 3}
       propertyPath: m_AnchorMax.y
