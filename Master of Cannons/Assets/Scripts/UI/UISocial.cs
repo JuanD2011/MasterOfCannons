@@ -9,6 +9,7 @@ public class UISocial : MonoBehaviour
 {
     [SerializeField] Button facebookButt = null;
     [SerializeField] Button playGamesButt = null;
+    [SerializeField] Button authSignOutButt = null;
 
     TextMeshProUGUI facebookButtText;
     TextMeshProUGUI playGamesButtText;
@@ -17,7 +18,7 @@ public class UISocial : MonoBehaviour
     public static Action playGamesButtonStatus;
     public static Action<string, string, string> showFriendDataHandler;
 
-    private Action onClickFBButton, onClickPlayGamesButton;
+    private Action onClickFBButton, onClickPlayGamesButton, onClickSignOut;
     [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
@@ -25,6 +26,7 @@ public class UISocial : MonoBehaviour
 
     IEnumerator Start()
     {
+        onClickSignOut = FirebaseSignOut;
         showFriendDataHandler = ShowFriendData;
         playGamesButtonStatus = ChangePlayGamesStatus;
         fbButtonStatus = ChangeFBButtonStatus;
@@ -39,6 +41,8 @@ public class UISocial : MonoBehaviour
         onClickPlayGamesButton = playGamesButtonStatus + FirebaseAuthManager.playGamesLogHandler;
         playGamesButt.onClick.AddListener(() => onClickPlayGamesButton.Invoke());
 
+        authSignOutButt.onClick.AddListener(() => onClickSignOut.Invoke());
+
         yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);        
         //yield return new WaitForSeconds(2f); //ESTO ES UN MACHETAZO TEMPORAL...
         fbButtonStatus.Invoke();
@@ -47,6 +51,10 @@ public class UISocial : MonoBehaviour
         //playGamesButtonStatus.Invoke();
     }
     
+    private void FirebaseSignOut()
+    {
+        FirebaseAuthManager.auth.SignOut();
+    }
     private void ChangePlayGamesStatus()
     {
         FirebaseAuthManager.playGamesLogHandler.Invoke();

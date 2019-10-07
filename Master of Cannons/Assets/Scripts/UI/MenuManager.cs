@@ -40,6 +40,8 @@ public class MenuManager : MonoBehaviour
     {
         panelAnimators[currentPanelIndex].Play(panelFadeInStart);
         LevelManager.OnLoadLevel += ManageLevelPlayerAction;
+        popUpHandler = ConfirmationPopUp;
+        popUpWindow.gameObject.SetActive(false);
     }
 
     private void ManageLevelPlayerAction(bool _CanPlay)
@@ -112,9 +114,14 @@ public class MenuManager : MonoBehaviour
 
     private void ConfirmationPopUp(string _text, Delegates.Action confirmAction)
     {
+        popUpWindow.gameObject.SetActive(true);
         confirmButton.onClick.RemoveAllListeners();
         popUpWindow.GetComponent<TMPro.TextMeshProUGUI>().text = _text;
-        confirmButton.onClick.AddListener(() => confirmAction.Invoke());
+        confirmButton.onClick.AddListener(() => {
+            confirmAction.Invoke();
+            popUpWindow.gameObject.SetActive(false);
+        });
+            
         cancelButton.onClick.AddListener(()=> popUpWindow.gameObject.SetActive(false));
     }
 

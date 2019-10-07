@@ -196,6 +196,11 @@ public class FirebaseDBManager : MonoBehaviour
         
     }
 
+    public void AccountMigration()
+    {
+
+    }
+
     public async Task<string> GetPlayerDataAsJSON()
     {
         string json = string.Empty;

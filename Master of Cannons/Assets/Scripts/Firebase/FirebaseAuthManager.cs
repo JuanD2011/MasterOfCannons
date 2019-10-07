@@ -12,7 +12,7 @@ using GooglePlayGames;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
-    FirebaseAuth auth;
+    public static FirebaseAuth auth;
     public static FirebaseUser myUser;
     public static Task updateProfileTask;
     public static Action facebookLogHandler;
@@ -26,20 +26,23 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action<AccessToken> facebookAuthenticationNoLinked;
 
     private IEnumerator Start()
-    {          
-        yield return new WaitUntil(()=> CheckDependenciesHandler.Invoke());
+    {
+        yield return new WaitUntil(() => CheckDependenciesHandler.Invoke());
 
         auth = FirebaseAuth.DefaultInstance;
         Memento.LoadData(DataManager.DM.settings);
-        if(DataManager.DM.settings.defaultScene == 0) AnonymousSignIn();  
-        signOutFBHandler = delegate() { FB.LogOut(); };
-        signOutPlayGamesHandler = delegate() { PlayGamesPlatform.Instance.SignOut(); };
+        if (DataManager.DM.settings.defaultScene == 0)
+        {
+
+            AnonymousSignIn(); }
+        signOutFBHandler = delegate () { FB.LogOut(); };
+        signOutPlayGamesHandler = delegate () { PlayGamesPlatform.Instance.SignOut(); };
 
         facebookLogHandler = FacebookSignIn;
-        auth.StateChanged += AuthStateChanged;        
+        auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
         FB.Init(InitCallBack, OnHideUnity);
-        facebookAuthenticationNoLinked = FacebookAuthentication;
+        facebookAuthenticationNoLinked = UnlinkAndDeleteFBAccount;
 
         //playGamesLogHandler = PlayGamesSignIn;
         //InitializePlayGames();
@@ -59,12 +62,12 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void InitCallBack()
     {
-        if(FB.IsInitialized)
+        if (FB.IsInitialized)
         {
             FB.ActivateApp();
             Debug.Log("Facebook Initialized");
             if (FB.IsLoggedIn)
-            {                
+            {
                 UISocial.fbButtonStatus?.Invoke();
                 print("Already has logged in");
                 return;
@@ -87,8 +90,16 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             bool signedIn = myUser != auth.CurrentUser && auth.CurrentUser != null;
             if (!signedIn && myUser != null)
-            {                
+            {            
                 Debug.Log("Signed out " + myUser.UserId);
+                
+                if (DataManager.DM.settings.hasFacebookLinked) //That means that the user changed his account
+                {
+                    Debug.Log("USER WAS UNLINKED BY ANOTHER ACCOUNT");
+                    DataManager.DM.settings.defaultScene = 0;
+                    DataManager.DM.settings.hasFacebookLinked = false;
+                    Memento.SaveData(DataManager.DM.settings);
+                }
             }
             myUser = auth.CurrentUser;
             if (signedIn)
@@ -98,7 +109,9 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    private async void AnonymousSignIn()
+
+
+    private async Task AnonymousSignIn()
     {
         Debug.Log("Sign in into anonymous account...");
 
@@ -116,19 +129,19 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             myUser = task.Result;
-            await CheckUserExistance();
+            bool userExist = await CheckUserExistance();
 
             if (!userExist)
             {
                 Debug.Log("Add New Player To Database booy...");
-                User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId};                
+                User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId };
                 PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
                 FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
             }
 
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
         });
-        
+
     }
 
     #region Facebook Authentication
@@ -144,16 +157,17 @@ public class FirebaseAuthManager : MonoBehaviour
         Debug.Log("Sign In Into Facebook Account...");
         List<string> permissions = new List<string>() { "public_profile", "email", "user_friends" };
         FB.LogInWithReadPermissions(permissions, async result => {
-            if(FB.IsLoggedIn)
+            if (FB.IsLoggedIn)
             {
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
-                bool? userExists = await CheckFBUserExistance(accesToken);
-
-                if (!DataManager.DM.settings.hasFacebookLinked && !userExist) LinkFacebookAccount(accesToken);
-                if (userExists == true) {
-                    MenuManager.popUpHandler("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndLink(accesToken.UserId));
+                bool? fbUserExists = await CheckFBUserExistance(accesToken);
+                //FacebookAuthentication(accesToken);
+                if (!DataManager.DM.settings.hasFacebookLinked && fbUserExists == null) LinkFacebookAccount(accesToken);
+                if (fbUserExists == true)
+                {
+                    MenuManager.popUpHandler("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndDeleteFBAccount(accesToken));
                 };
-                //else FacebookAuthentication(accesToken);
+
                 print("Login Facebook Succesfully");
                 UISocial.fbButtonStatus.Invoke();
 
@@ -161,14 +175,13 @@ public class FirebaseAuthManager : MonoBehaviour
             else
             {
                 Debug.Log("Login was cancelled");
-            }               
+            }
         });
-        
+
     }
 
     async void LinkFacebookAccount(AccessToken accesToken)
     {
-        print("link facebook ");
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
         Task auxTask = null;
         await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith(task => {
@@ -182,22 +195,24 @@ public class FirebaseAuthManager : MonoBehaviour
             else if (task.IsFaulted)
             {
                 auxTask = task;
-                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                UnlinkAndDeleteFBAccount(accesToken);
+                Debug.LogWarning("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
 
             auxTask = task;
-            DataManager.DM.settings.hasFacebookLinked = true;          
+            DataManager.DM.settings.hasFacebookLinked = true;
             FirebaseUser newUser = task.Result;
             Debug.LogFormat("Facebook User LINKED to FIREBASE Succesfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
+        if (auxTask.IsFaulted) return;
 
         UISocial.fbButtonStatus.Invoke();
         if (auxTask.IsCompleted)
-        {            
+        {
             Memento.SaveData(DataManager.DM.settings);
-            
+
             string facebookName = await FacebookData.GetMyName();
             FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, facebookName);
         }
@@ -205,12 +220,20 @@ public class FirebaseAuthManager : MonoBehaviour
     }
 
 
-    async void FacebookAuthentication(AccessToken accesToken)
+    async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
     {
-        print("facebook authentication");
-        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
-        await auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);     
+        string auxToken = string.Empty;
+        await auth.CurrentUser.DeleteAsync().ContinueWith(task=> { //Delete Current Account
 
+            if(task.IsCompleted)
+            {
+                Debug.Log("Account Deleted Succesful");
+            }
+        });
+
+        await auth.SignInWithCredentialAsync(credential).ContinueWith(task => //Log in into account that has facebook linked
+        {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
@@ -222,12 +245,31 @@ public class FirebaseAuthManager : MonoBehaviour
                 return;
             }
 
-            FirebaseUser newUser = task.Result;         
+            FirebaseUser newUser = task.Result;
             Debug.LogFormat("User FACEBOOK signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
 
-        UISocial.fbButtonStatus.Invoke();
+        await auth.CurrentUser.DeleteAsync().ContinueWith(task => { //Delete account that has facebook linked
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError("DELETE user was failed...");
+                return;
+            }
+            else if (task.IsCanceled)
+            {
+                Debug.Log("DELETE user was canceled...");
+                return;
+            }
+
+            Debug.Log("DELETE user Succesful");
+
+        });
+
+        //Create new account and link to facebook
+        await AnonymousSignIn();
+        LinkFacebookAccount(accesToken);
     }
     #endregion
 
@@ -288,8 +330,9 @@ public class FirebaseAuthManager : MonoBehaviour
 
     #endregion
 
-    public async Task CheckUserExistance()
-    {        
+    public async Task<bool> CheckUserExistance()
+    {
+        bool userExist = true;
         await FirebaseDatabase.DefaultInstance.GetReference("users").Child(myUser.UserId).GetValueAsync().ContinueWith(dbTask =>
         {
             if (dbTask.IsFaulted)
@@ -303,43 +346,60 @@ public class FirebaseAuthManager : MonoBehaviour
             }
             userExist = dbTask.Result.Exists;
             Debug.LogFormat("Player exists? {0} ", userExist);
+            return userExist;
         });
+
+        return userExist;
     }
 
     public async Task<bool?> CheckFBUserExistance(AccessToken accesToken)
     {
-        bool? userExists = false;
-        await FirebaseDatabase.DefaultInstance.GetReference("facebook users").Child(accesToken.UserId).GetValueAsync().ContinueWith(dbTask =>
+        bool? fbUserExists = null;
+        if (!DataManager.DM.settings.hasFacebookLinked) return fbUserExists;
+
+        await FirebaseDatabase.DefaultInstance.GetReference("facebook users").Child(accesToken.UserId).Child("userID").GetValueAsync().ContinueWith(dbTask =>
         {
             if (dbTask.IsFaulted)
             {
                 Debug.LogError("Searching UserID in data base encountered an error: " + dbTask.Exception);
+                fbUserExists = null;
                 return null;
             }
-            else if (dbTask.IsCompleted)
+            else if (dbTask.IsCanceled)
             {
-                DataSnapshot snapshot = dbTask.Result;
-                Debug.Log("Searching UserID in data base COMPLETED...");
+                Debug.Log("Searching UserID in data base was CANCELED");
             }
-            userExists = dbTask.Result.Exists;
-            Debug.LogFormat("Facebook USER exists? {0} ", userExists);
-            return userExists;
+
+            string userID = dbTask.Result.Value?.ToString();
+            Debug.LogFormat("Facebook USER exists? {0} ", dbTask.Result.Exists);
+            if (userID != auth.CurrentUser.UserId && userID != string.Empty)
+            {
+                fbUserExists = true;
+                return fbUserExists;
+            }
+            else
+            {
+                fbUserExists = false;
+                return fbUserExists;
+            }
+
         });
 
-        return userExists;
+        return fbUserExists;
     }
 
     async void UnlinkAndLink(string facebookId)
     {
         string userID = string.Empty;
-        await FirebaseDBManager.DB.dataBaseRef.Child("facebook users").Child(facebookId).Child("userID").GetValueAsync().ContinueWith(task => {
 
-            if(task.IsFaulted)
+        await FirebaseDBManager.DB.dataBaseRef.Child("facebook users").Child(facebookId).Child("userID").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
             {
                 Debug.LogError("Unlink and Link Account Failed:  " + task.Exception);
                 return;
             }
-            else if(task.IsCanceled)
+            else if (task.IsCanceled)
             {
                 Debug.LogError("Unlink and Link Account was canceled.");
                 return;
@@ -349,12 +409,12 @@ public class FirebaseAuthManager : MonoBehaviour
             userID = data.Value.ToString();
             print("user ID is" + userID);
         });
-        
-        
+
+
     }
 
     public async static Task UpdateUserProfile(string displayName)
-    {       
+    {
         UserProfile userProfile = new UserProfile { DisplayName = displayName };
         await myUser.UpdateUserProfileAsync(userProfile).ContinueWith(task => {
             updateProfileTask = task;
@@ -363,12 +423,12 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.LogError("UpdateUserProfileAsync Was Canceled");
             }
-            else if(task.IsFaulted)
+            else if (task.IsFaulted)
             {
                 Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
             }
 
-            
+
             Debug.Log("User profile updated successfully.");
 
         });
