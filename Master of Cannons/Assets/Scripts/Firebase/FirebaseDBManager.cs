@@ -195,17 +195,19 @@ public class FirebaseDBManager : MonoBehaviour
     public async void AccountMigration(string userJSON , string playerInfoJSON, string facebookUserJSON, string _userID, string facebookID)
     {
         string username = string.Empty;
+
+        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsCompleted)
+                username = task.Result.Value.ToString();
+
+        });
+
+        await UpdateUsername(_userID, username);
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(facebookUserJSON);
         await dataBaseRef.Child("player info").Child(_userID).SetRawJsonValueAsync(playerInfoJSON);
         await dataBaseRef.Child("users").Child(_userID).SetRawJsonValueAsync(userJSON);
         await dataBaseRef.Child("users").Child(_userID).Child("userID").SetValueAsync(FirebaseAuthManager.myUser.UserId);
-        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWith(task=> {
-
-            if(task.IsCompleted)
-                username = task.Result.Value.ToString();
-
-        });
-        await UpdateUsername(_userID, username);
         GetPlayerData(UIPlayerData.showPlayerData);
     }
 
