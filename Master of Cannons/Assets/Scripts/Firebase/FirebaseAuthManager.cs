@@ -22,7 +22,6 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action signOutPlayGamesHandler;
 
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
-    private bool userExist = false;
 
     public static Action<AccessToken> facebookAuthenticationNoLinked;
 
@@ -34,20 +33,19 @@ public class FirebaseAuthManager : MonoBehaviour
         Memento.LoadData(DataManager.DM.settings);
         if (DataManager.DM.settings.defaultScene == 0)
         {
-
             AnonymousSignIn();
         }
         signOutFBHandler = delegate () { FB.LogOut(); };
         signOutPlayGamesHandler = delegate () { PlayGamesPlatform.Instance.SignOut(); };
 
         facebookLogHandler = FacebookSignIn;
-        auth.StateChanged += AuthStateChanged;
+        auth.StateChanged += AuthStateChanged;        
         AuthStateChanged(this, null);
         FB.Init(InitCallBack, OnHideUnity);
         facebookAuthenticationNoLinked = UnlinkAndDeleteFBAccount;
 
-        //playGamesLogHandler = PlayGamesSignIn;
-        //InitializePlayGames();
+        playGamesLogHandler = PlayGamesSignIn;
+        InitializePlayGames();
 
     }
 
@@ -97,6 +95,11 @@ public class FirebaseAuthManager : MonoBehaviour
                 
                 if (DataManager.DM.settings.hasFacebookLinked) //That means that the user changed his account
                 {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    signOutFBHandler.Invoke();
+                    //auth.un
+                    FirebaseDBManager.DB.dataBaseRef = null;
+                    Destroy(FirebaseDBManager.DB.gameObject);
                     Debug.Log("USER WAS UNLINKED BY ANOTHER ACCOUNT");
                     DataManager.DM.settings.defaultScene = 0;
                     DataManager.DM.settings.hasFacebookLinked = false;
@@ -164,11 +167,10 @@ public class FirebaseAuthManager : MonoBehaviour
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
                 bool? fbUserExists = await CheckFBUserExistance(accesToken);
                 //FacebookAuthentication(accesToken);
-                if (!DataManager.DM.settings.hasFacebookLinked && fbUserExists == null) LinkFacebookAccount(accesToken);
+                if (!DataManager.DM.settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
                 if (fbUserExists == true)
-                {
-                    print("fb exists papi");
-                    MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndDeleteFBAccount(accesToken));
+                {                    
+                    //MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", ()=> UnlinkAndDeleteFBAccount(accesToken));
                 };
 
                 print("Login Facebook Succesfully");
@@ -183,7 +185,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     }
 
-    async void LinkFacebookAccount(AccessToken accesToken)
+    async Task LinkFacebookAccount(AccessToken accesToken)
     {
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
         Task auxTask = null;
@@ -217,7 +219,7 @@ public class FirebaseAuthManager : MonoBehaviour
             Memento.SaveData(DataManager.DM.settings);
 
             string facebookName = await FacebookData.GetMyName();
-            FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, facebookName);
+            await FirebaseDBManager.DB.WriteFacebookUserHandler.Invoke(AccessToken.CurrentAccessToken.UserId, facebookName);
         }
 
     }
@@ -225,14 +227,13 @@ public class FirebaseAuthManager : MonoBehaviour
 
     async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
     {
-        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
-
+        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);        
         string currentUserID = auth.CurrentUser.UserId;
+        FirebaseDBManager.DB.DeleteUser(currentUserID);
         await auth.CurrentUser.DeleteAsync().ContinueWith(task=> { //Delete Current Account
             
             if(task.IsCompleted)
-            {
-                FirebaseDBManager.DB.DeleteUser(currentUserID);
+            {               
                 Debug.Log("Account Deleted Succesful");
             }
         });
@@ -255,8 +256,11 @@ public class FirebaseAuthManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
 
+        string userJSON = await FirebaseDBManager.DB.GetDataAsJSON("users", auth.CurrentUser.UserId);
+        string playerInfoJSON = await FirebaseDBManager.DB.GetDataAsJSON("player info", auth.CurrentUser.UserId);
+        string facebookUserJSON = await FirebaseDBManager.DB.GetDataAsJSON("facebook users", accesToken.UserId);        
         currentUserID = auth.CurrentUser.UserId;
-
+        FirebaseDBManager.DB.DeleteUser(currentUserID);
         await auth.CurrentUser.DeleteAsync().ContinueWith(task => { //Delete account that has facebook linked
 
             if (task.IsFaulted)
@@ -269,14 +273,16 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("DELETE user was canceled...");
                 return;
             }
-            FirebaseDBManager.DB.DeleteUser(currentUserID);
+//            FirebaseDBManager.DB.DeleteUser(currentUserID);
             Debug.Log("DELETE user Succesful");
 
         });
 
         //Create new account and link to facebook
         await AnonymousSignIn();
-        LinkFacebookAccount(accesToken);
+        //await UpdateUserProfile();
+        await LinkFacebookAccount(accesToken);
+        FirebaseDBManager.DB.AccountMigration(userJSON, playerInfoJSON, facebookUserJSON, auth.CurrentUser.UserId, accesToken.UserId);
     }
     #endregion
 

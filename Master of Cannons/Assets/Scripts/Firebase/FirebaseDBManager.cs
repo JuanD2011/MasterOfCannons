@@ -18,7 +18,8 @@ public class FirebaseDBManager : MonoBehaviour
     /// </summary>    
     public Action<User, PlayerInfo> WriteNewUserHandler;
 
-    public Action<string, string> WriteFacebookUserHandler;
+    //public Action<string, string> WriteFacebookUserHandler;
+    public Func<string, string, Task> WriteFacebookUserHandler;
 
     public Action<int, float, int> WriteNewInfo;
     /// <summary>
@@ -142,7 +143,7 @@ public class FirebaseDBManager : MonoBehaviour
         return iDictUser;        
     }
 
-    private async void WriteNewFacebookUserData(string facebookID, string name)
+    private async Task WriteNewFacebookUserData(string facebookID, string name)
     {
         string username = string.Empty;
         string coins = string.Empty;
@@ -191,21 +192,39 @@ public class FirebaseDBManager : MonoBehaviour
             dataBaseRef.Child("facebook users").Child(Facebook.Unity.AccessToken.CurrentAccessToken.UserId).Child("coins").SetValueAsync(_coins);
     }
 
+    public async void AccountMigration(string userJSON , string playerInfoJSON, string facebookUserJSON, string _userID, string facebookID)
+    {
+        string username = string.Empty;
+        await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(facebookUserJSON);
+        await dataBaseRef.Child("player info").Child(_userID).SetRawJsonValueAsync(playerInfoJSON);
+        await dataBaseRef.Child("users").Child(_userID).SetRawJsonValueAsync(userJSON);
+        await dataBaseRef.Child("users").Child(_userID).Child("userID").SetValueAsync(FirebaseAuthManager.myUser.UserId);
+        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWith(task=> {
+
+            if(task.IsCompleted)
+                username = task.Result.Value.ToString();
+
+        });
+        await UpdateUsername(_userID, username);
+        GetPlayerData(UIPlayerData.showPlayerData);
+    }
+
     private void HandleValueChanged(object sender, ValueChangedEventArgs e)
     {
         
     }
 
-    public void DeleteUser(string _userID)
+    public async void DeleteUser(string _userID)
     {
-        dataBaseRef.Child("users").Child(_userID).RemoveValueAsync();
-        dataBaseRef.Child("player info").Child(_userID).RemoveValueAsync();
+        //Deleting firstly "player info" NODE cuz without "users" NODE, the "player info" node can't write into database
+        await dataBaseRef.Child("player info").Child(_userID).RemoveValueAsync();
+        await dataBaseRef.Child("users").Child(_userID).RemoveValueAsync();
     }
-
-    public async Task<string> GetPlayerDataAsJSON()
+    
+    public async Task<string> GetDataAsJSON(string databaseBranch ,string _userID)
     {
         string json = string.Empty;
-        await dataBaseRef.Child("player info").Child(FirebaseAuthManager.myUser.UserId).GetValueAsync().ContinueWith(task => {
+        await dataBaseRef.Child(databaseBranch).Child(_userID).GetValueAsync().ContinueWith(task => {
 
             if (task.IsCompleted)
             {
@@ -218,6 +237,7 @@ public class FirebaseDBManager : MonoBehaviour
 
         return json;
     }
+
 }
 
 

@@ -10,6 +10,7 @@ public class UISocial : MonoBehaviour
     [SerializeField] Button facebookButt = null;
     [SerializeField] Button playGamesButt = null;
     [SerializeField] Button authSignOutButt = null;
+    [SerializeField] Button deleteUserButt = null;
 
     TextMeshProUGUI facebookButtText;
     TextMeshProUGUI playGamesButtText;
@@ -18,7 +19,7 @@ public class UISocial : MonoBehaviour
     public static Action playGamesButtonStatus;
     public static Action<string, string, string> showFriendDataHandler;
 
-    private Action onClickFBButton, onClickPlayGamesButton, onClickSignOut;
+    private Action onClickFBButton, onClickPlayGamesButton, onClickSignOut, onDeleteUser;
     [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
@@ -26,10 +27,13 @@ public class UISocial : MonoBehaviour
 
     IEnumerator Start()
     {
+        onDeleteUser = DeleteUser;
         onClickSignOut = FirebaseSignOut;
         showFriendDataHandler = ShowFriendData;
         playGamesButtonStatus = ChangePlayGamesStatus;
         fbButtonStatus = ChangeFBButtonStatus;
+
+
         facebookButtText = facebookButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         playGamesButtText = playGamesButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
@@ -42,6 +46,7 @@ public class UISocial : MonoBehaviour
         playGamesButt.onClick.AddListener(() => onClickPlayGamesButton.Invoke());
 
         authSignOutButt.onClick.AddListener(() => onClickSignOut.Invoke());
+        deleteUserButt.onClick.AddListener(() => onDeleteUser.Invoke());
 
         yield return new WaitWhile(() => Facebook.Unity.FB.IsInitialized);        
         //yield return new WaitForSeconds(2f); //ESTO ES UN MACHETAZO TEMPORAL...
@@ -51,6 +56,15 @@ public class UISocial : MonoBehaviour
         //playGamesButtonStatus.Invoke();
     }
     
+    private void DeleteUser()
+    {
+        FirebaseAuthManager.auth.CurrentUser.DeleteAsync().ContinueWith(task=> {
+            if (task.IsCompleted)
+            {
+                Debug.Log("USER DELETEADO PAPI");
+            }
+        });
+    }
     private void FirebaseSignOut()
     {
         FirebaseAuthManager.auth.SignOut();

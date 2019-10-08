@@ -22,10 +22,10 @@ public class MenuManager : MonoBehaviour
     private readonly string panelModalIn = "MP Modal In";
     private readonly string panelModalOut = "MP Modal Out";
 
-    [SerializeField] Transform popUpWindow;
-    [SerializeField] TMPro.TextMeshProUGUI popUpText;
-    [SerializeField] UnityEngine.UI.Button confirmButton;
-    [SerializeField] UnityEngine.UI.Button cancelButton;
+    [SerializeField] Transform popUpWindow = null;
+    [SerializeField] TMPro.TextMeshProUGUI popUpText = null;
+    [SerializeField] UnityEngine.UI.Button confirmButton = null;
+    [SerializeField] UnityEngine.UI.Button cancelButton = null;
 
     public static Action<string, Action> popUpHandler;
 
@@ -122,8 +122,12 @@ public class MenuManager : MonoBehaviour
             confirmAction.Invoke();
             popUpWindow.gameObject.SetActive(false);
         });
-            
-        cancelButton.onClick.AddListener(()=> popUpWindow.gameObject.SetActive(false));
+
+        cancelButton.onClick.AddListener(() => {
+            popUpWindow.gameObject.SetActive(false);
+            FirebaseAuthManager.signOutFBHandler.Invoke();
+            UISocial.fbButtonStatus.Invoke();
+        });
     }
 
     private void OnApplicationQuit()
