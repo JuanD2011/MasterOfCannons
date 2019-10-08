@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 
 public class FacebookData : MonoBehaviour
 {
+    public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
     public void GetFriendsPlayingThisGame()
-    {              
+    {
+        friendsDataList.RemoveRange(0, friendsDataList.Count);
+        UISocial.hideFBFriends.Invoke();
         if (!CheckLogIn()) {
             Debug.Log("You are not LOGGED IN Facebook...");
             return; }
@@ -19,12 +22,37 @@ public class FacebookData : MonoBehaviour
 
             foreach (var dict in friendsList) {
 
-                await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
-                Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
+                Dictionary<string, string> friendData = await FirebaseDBManager.DB.GetFacebookUserData(((Dictionary<string, object>)dict)["id"].ToString());
+                friendsDataList.Add(friendData);
+                //Debug.Log(((Dictionary<string, object>)dict)["id"].ToString());
             }
 
+            //await Task.Delay(1000);
+            FriendsOrderedByValue();
+            //UISocial.showFriendDataHandler(friendsDataList);
         });
        
+    }
+
+    public void FriendsOrderedByValue()
+    {
+        int friendsCount = friendsDataList.Count;
+
+        for (int i = 0; i < friendsCount - 1; i++)
+        {
+            for (int j = 0; j < friendsCount - 1 - i; j++)
+            {
+                int actualFriendCoins = int.Parse(friendsDataList[j]["coins"]);
+                int nextFriendCoins = int.Parse(friendsDataList[j + 1]["coins"]);
+                if (actualFriendCoins < nextFriendCoins)
+                {
+                    friendsDataList[j]["coins"] = nextFriendCoins.ToString();
+                    friendsDataList[j + 1]["coins"] = actualFriendCoins.ToString();
+                }
+            }
+        }
+
+        UISocial.showFriendDataHandler(friendsDataList);
     }
 
     public static async Task<string> GetMyName()

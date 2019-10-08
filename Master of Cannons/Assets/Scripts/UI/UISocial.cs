@@ -17,13 +17,14 @@ public class UISocial : MonoBehaviour
 
     public static Action fbButtonStatus;
     public static Action playGamesButtonStatus;
-    public static Action<string, string, string> showFriendDataHandler;
+    public static Action<List<Dictionary<string, string>>> showFriendDataHandler;
 
     private Action onClickFBButton, onClickPlayGamesButton, onClickSignOut, onDeleteUser;
     [SerializeField] Transform friendsContainer = null;
     int index = 0;
 
-    [SerializeField] Transform alreadyExistPanel;
+    public static Action hideFBFriends;
+
 
     IEnumerator Start()
     {
@@ -32,7 +33,7 @@ public class UISocial : MonoBehaviour
         showFriendDataHandler = ShowFriendData;
         playGamesButtonStatus = ChangePlayGamesStatus;
         fbButtonStatus = ChangeFBButtonStatus;
-
+        hideFBFriends = ()=> friendsContainer.gameObject.SetActive(false);
 
         facebookButtText = facebookButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         playGamesButtText = playGamesButt.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -107,15 +108,28 @@ public class UISocial : MonoBehaviour
         facebookButt.onClick.AddListener(() => onClickFBButton());
     }
 
-    private void ShowFriendData(string name, string nickname, string coins)
-    {        
-        friendsContainer.GetChild(index).GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
-        friendsContainer.GetChild(index).GetChild(1).GetComponent<TextMeshProUGUI>().text = nickname;
-        friendsContainer.GetChild(index).GetChild(2).GetComponent<TextMeshProUGUI>().text = coins;
-        index++;
+    private void ShowFriendData(List<Dictionary<string, string>> friendsData)
+    {
+        friendsContainer.gameObject.SetActive(true);
+        for (int i = 0; i < friendsData.Count; i++)
+        {
+            friendsContainer.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = friendsData[i]["fbName"];
+            friendsContainer.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = friendsData[i]["username"];
+            friendsContainer.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = friendsData[i]["coins"];
+        }
     }
+    //private void ShowFriendData(string name, string nickname, string coins)
+    //{        
+    //    friendsContainer.GetChild(index).GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
+    //    friendsContainer.GetChild(index).GetChild(1).GetComponent<TextMeshProUGUI>().text = nickname;
+    //    friendsContainer.GetChild(index).GetChild(2).GetComponent<TextMeshProUGUI>().text = coins;
+    //    index++;
+    //}
 
-    public void CloseSocialPanel() => index = 0;
+    public void CloseSocialPanel()
+    {
+        hideFBFriends.Invoke();
+    }
 
     public void UpdateCoins(int _coins)
     {

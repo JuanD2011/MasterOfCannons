@@ -131,7 +131,7 @@ public class FirebaseDBManager : MonoBehaviour
                 foreach (DataSnapshot data in snapshot.Children)
                 {
                     iDictUser.Add(data.Key, data.Value.ToString());
-                    print(data);
+                    //Debug.Log(data);
                 }
 
                 Debug.Log("Get Player Data Succesful");
@@ -139,7 +139,7 @@ public class FirebaseDBManager : MonoBehaviour
 
         });
 
-        UISocial.showFriendDataHandler(iDictUser["fbName"], iDictUser["username"], iDictUser["coins"]);
+        //UISocial.showFriendDataHandler(iDictUser["fbName"], iDictUser["username"], iDictUser["coins"]);
         return iDictUser;        
     }
 
