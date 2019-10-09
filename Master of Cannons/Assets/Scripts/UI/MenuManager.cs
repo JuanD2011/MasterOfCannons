@@ -29,6 +29,9 @@ public class MenuManager : MonoBehaviour
 
     public static Action<string, Action> popUpHandler;
 
+    [SerializeField] Transform loadingCircle;
+    public static Action<bool> loadingCircleHandler;
+
     protected virtual void Awake()
     {
         Memento.LoadData(settings);
@@ -43,6 +46,7 @@ public class MenuManager : MonoBehaviour
         LevelManager.OnLoadLevel += ManageLevelPlayerAction;
         popUpHandler = ConfirmationPopUp;
         popUpWindow.gameObject.SetActive(false);
+        loadingCircleHandler = (activate) => loadingCircle.gameObject.SetActive(activate);
     }
 
     private void ManageLevelPlayerAction(bool _CanPlay)
@@ -130,6 +134,8 @@ public class MenuManager : MonoBehaviour
         });
     }
 
+    private void OnLoadingCircle(bool activate) => loadingCircle.gameObject.SetActive(activate);
+    
     private void OnApplicationQuit()
     {
         if (settings == null) return;

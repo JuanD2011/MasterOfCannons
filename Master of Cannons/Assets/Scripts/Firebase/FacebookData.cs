@@ -8,6 +8,7 @@ public class FacebookData : MonoBehaviour
     public List<Dictionary<string, string>> friendsDataList = new List<Dictionary<string, string>>();
     public void GetFriendsPlayingThisGame()
     {
+        MenuManager.loadingCircleHandler.Invoke(true);
         friendsDataList.RemoveRange(0, friendsDataList.Count);
         UISocial.hideFBFriends.Invoke();
         if (!CheckLogIn()) {
@@ -52,6 +53,7 @@ public class FacebookData : MonoBehaviour
             }
         }
 
+        MenuManager.loadingCircleHandler.Invoke(false);
         UISocial.showFriendDataHandler(friendsDataList);
     }
 

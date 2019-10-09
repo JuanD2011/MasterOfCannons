@@ -5,6 +5,7 @@ using UnityEngine;
 using Delegates;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase.Extensions;
 
 
 public class FirebaseDBManager : MonoBehaviour
@@ -84,10 +85,10 @@ public class FirebaseDBManager : MonoBehaviour
         await dataBaseRef.Child("users").Child(userId).Child("username").SetValueAsync(newUserName);
     }
 
-    public async void GetPlayerData(Action<string, string, string> ShowPlayerData)
+    public async Task GetPlayerData(Action<string, string, string> ShowPlayerData)
     {
         if (FirebaseAuthManager.myUser == null) return;
-
+        string username = string.Empty;
         string userId = FirebaseAuthManager.myUser.UserId;        
         Dictionary<string, string> iDictUser = new Dictionary<string, string>();
         await dataBaseRef.Child("player info").Child(userId).GetValueAsync().ContinueWith(task => {
@@ -110,7 +111,22 @@ public class FirebaseDBManager : MonoBehaviour
 
         });
         
-        ShowPlayerData?.Invoke(FirebaseAuthManager.myUser.DisplayName, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
+        await dataBaseRef.Child("users").Child(userId).Child("username").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Get USERNAME data error" + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+
+                Debug.Log("Get Player USERNAME Succesful");
+                username = task.Result.Value.ToString();
+            }
+
+        });
+        ShowPlayerData?.Invoke(username, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
+        //ShowPlayerData?.Invoke(FirebaseAuthManager.myUser.DisplayName, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
         DataManager.DM.InitializePlayerData(iDictUser);
     }
 
@@ -192,23 +208,25 @@ public class FirebaseDBManager : MonoBehaviour
             dataBaseRef.Child("facebook users").Child(Facebook.Unity.AccessToken.CurrentAccessToken.UserId).Child("coins").SetValueAsync(_coins);
     }
 
-    public async void AccountMigration(string userJSON , string playerInfoJSON, string facebookUserJSON, string _userID, string facebookID)
-    {
+    public async Task AccountMigration(string userJSON , string playerInfoJSON, string facebookUserJSON, string _userID, string facebookID)
+    {        
         string username = string.Empty;
-
-        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWith(task => {
-
-            if (task.IsCompleted)
-                username = task.Result.Value.ToString();
-
-        });
-
-        await UpdateUsername(_userID, username);
         await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(facebookUserJSON);
         await dataBaseRef.Child("player info").Child(_userID).SetRawJsonValueAsync(playerInfoJSON);
         await dataBaseRef.Child("users").Child(_userID).SetRawJsonValueAsync(userJSON);
         await dataBaseRef.Child("users").Child(_userID).Child("userID").SetValueAsync(FirebaseAuthManager.myUser.UserId);
-        GetPlayerData(UIPlayerData.showPlayerData);
+        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWithOnMainThread(task => {
+
+            if (task.IsCompleted)
+            {
+                username = task.Result.Value.ToString();
+                print("the username to update is" + username);
+            }
+
+        });
+
+        await UpdateUsername(_userID, username);
+        await GetPlayerData(UIPlayerData.showPlayerData);
     }
 
     private void HandleValueChanged(object sender, ValueChangedEventArgs e)

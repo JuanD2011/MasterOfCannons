@@ -166,7 +166,6 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 AccessToken accesToken = AccessToken.CurrentAccessToken;
                 bool? fbUserExists = await CheckFBUserExistance(accesToken);
-                //FacebookAuthentication(accesToken);
                 if (!DataManager.DM.settings.hasFacebookLinked) LinkFacebookAccount(accesToken);
                 if (fbUserExists == true)
                 {                    
@@ -227,10 +226,11 @@ public class FirebaseAuthManager : MonoBehaviour
 
     async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
     {
+        MenuManager.loadingCircleHandler.Invoke(true);
         Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);        
         string currentUserID = auth.CurrentUser.UserId;
         FirebaseDBManager.DB.DeleteUser(currentUserID);
-        await auth.CurrentUser.DeleteAsync().ContinueWith(task=> { //Delete Current Account
+        await auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task=> { //Delete Current Account
             
             if(task.IsCompleted)
             {               
@@ -273,7 +273,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("DELETE user was canceled...");
                 return;
             }
-//            FirebaseDBManager.DB.DeleteUser(currentUserID);
+
             Debug.Log("DELETE user Succesful");
 
         });
@@ -282,7 +282,9 @@ public class FirebaseAuthManager : MonoBehaviour
         await AnonymousSignIn();
         //await UpdateUserProfile();
         await LinkFacebookAccount(accesToken);
-        FirebaseDBManager.DB.AccountMigration(userJSON, playerInfoJSON, facebookUserJSON, auth.CurrentUser.UserId, accesToken.UserId);
+
+        await FirebaseDBManager.DB.AccountMigration(userJSON, playerInfoJSON, facebookUserJSON, auth.CurrentUser.UserId, accesToken.UserId);
+        MenuManager.loadingCircleHandler.Invoke(false);
     }
     #endregion
 
@@ -401,35 +403,10 @@ public class FirebaseAuthManager : MonoBehaviour
         return fbUserExists;
     }
 
-    async void UnlinkAndLink(string facebookId)
-    {
-        string userID = string.Empty;
-
-        await FirebaseDBManager.DB.dataBaseRef.Child("facebook users").Child(facebookId).Child("userID").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.LogError("Unlink and Link Account Failed:  " + task.Exception);
-                return;
-            }
-            else if (task.IsCanceled)
-            {
-                Debug.LogError("Unlink and Link Account was canceled.");
-                return;
-            }
-
-            DataSnapshot data = task.Result;
-            userID = data.Value.ToString();
-            print("user ID is" + userID);
-        });
-
-
-    }
-
     public async static Task UpdateUserProfile(string displayName)
     {
         UserProfile userProfile = new UserProfile { DisplayName = displayName };
-        await myUser.UpdateUserProfileAsync(userProfile).ContinueWith(task => {
+        await myUser.UpdateUserProfileAsync(userProfile).ContinueWithOnMainThread(task => {
             updateProfileTask = task;
 
             if (task.IsCanceled)
