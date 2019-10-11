@@ -4,16 +4,22 @@
 
     public static bool IsPaused { get; private set; } = false;
 
-    protected override void Awake()
+    private void Awake()
     {
         OnPause = null;
 
-        InitializePanelAnimators();
+        settingsTabManager = GetComponent<SettingsTabManager>();
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
+        LevelManager.OnLoadLevel += (LoadLevelStatusType _LoadLevelStatusType) =>
+        {
+            if (_LoadLevelStatusType == LoadLevelStatusType.Successful)
+            {
+                settingsTabManager.PanelAnim(1);//Start Loading Screen
+            }
+        };
         VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
     }
 
@@ -22,10 +28,10 @@
         switch (_VolumeStatus)
         {
             case VolumeLevelStatusType.Victory:
-                PanelAnim(3);
+                settingsTabManager.PanelAnim(3);
                 break;
             case VolumeLevelStatusType.Defeat:
-                PanelAnim(4);
+                settingsTabManager.PanelAnim(4);
                 break;
             case VolumeLevelStatusType.None:
                 break;
@@ -41,6 +47,6 @@
     public void SetGamePause(bool _Value)
     {
         IsPaused = _Value;
-        OnPause?.Invoke(_Value);
+        OnPause.Invoke(_Value);
     }
 }

@@ -538,6 +538,7 @@ GameObject:
   - component: {fileID: 2963709827164362881}
   - component: {fileID: 3805059896834931014}
   - component: {fileID: 2971303195753311947}
+  - component: {fileID: 2971303195753311948}
   m_Layer: 5
   m_Name: Menu Manager
   m_TagString: Untagged
@@ -576,12 +577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5c7c2bedcc0c498fe78b88a476067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panels:
-  - {fileID: 2963709827100985832}
-  - {fileID: 1166065697835217806}
-  - {fileID: 6564353818768118437}
-  - {fileID: 3746171697904033172}
-  - {fileID: 3746171698976226484}
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
 --- !u!114 &2971303195753311947
 MonoBehaviour:
@@ -597,6 +592,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
   slider: {fileID: 1166065697185215808}
+--- !u!114 &2971303195753311948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2963709827164362882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdfc18fb21d9ba245ab357dc5526e929, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panels:
+  - {fileID: 2963709827100985832}
+  - {fileID: 1166065697835217806}
+  - {fileID: 6564353818768118437}
+  - {fileID: 3746171697904033172}
+  - {fileID: 3746171698976226484}
 --- !u!1 &2963709827418546893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,11 +1595,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2963709827100985831}
     m_Modifications:
-    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
-        type: 3}
-      propertyPath: m_Name
-      value: Options
-      objectReference: {fileID: 0}
     - target: {fileID: 6742371463013265149, guid: 8d730b068cfb7c040b098104f66161df,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1692,6 +1700,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
+        type: 3}
+      propertyPath: m_Name
+      value: Options
+      objectReference: {fileID: 0}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -1719,7 +1732,7 @@ PrefabInstance:
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 3805059896834931014}
+      objectReference: {fileID: 2971303195753311948}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: PanelAnim
@@ -1902,11 +1915,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6564353818369220304}
     m_Modifications:
-    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
-        type: 3}
-      propertyPath: m_Name
-      value: Back
-      objectReference: {fileID: 0}
     - target: {fileID: 6742371463013265149, guid: 8d730b068cfb7c040b098104f66161df,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2012,6 +2020,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
+        type: 3}
+      propertyPath: m_Name
+      value: Back
+      objectReference: {fileID: 0}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -2031,7 +2044,7 @@ PrefabInstance:
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 3805059896834931014}
+      objectReference: {fileID: 2971303195753311948}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: PanelAnim
@@ -2063,11 +2076,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6564353818369220304}
     m_Modifications:
-    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
-        type: 3}
-      propertyPath: m_Name
-      value: Restart
-      objectReference: {fileID: 0}
     - target: {fileID: 6742371463013265149, guid: 8d730b068cfb7c040b098104f66161df,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2173,10 +2181,19 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6742371463013265148, guid: 8d730b068cfb7c040b098104f66161df,
+        type: 3}
+      propertyPath: m_Name
+      value: Restart
+      objectReference: {fileID: 0}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2971303195753311947}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RestartLevel
@@ -2188,7 +2205,7 @@ PrefabInstance:
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 3805059896834931014}
+      objectReference: {fileID: 2971303195753311948}
     - target: {fileID: 1066751033, guid: 8d730b068cfb7c040b098104f66161df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: PanelAnim

@@ -15,7 +15,7 @@ public class LevelGameManager : LevelManager
 
     public void RestartLevel()
     {
-        OnLoadLevel(true);
+        OnLoadLevel(LoadLevelStatusType.Successful);
         StartCoroutine(LoadAsynchronously(SceneManager.GetActiveScene().buildIndex));
     }
 }

@@ -5,6 +5,7 @@ public class Character : MonoBehaviour
 {
 
     public Rigidbody Rigidbody { get; private set; }
+    public Vector3 velocityUpdated { get; private set; }
 
     private void Awake()
     {
@@ -19,6 +20,8 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+        velocityUpdated = Rigidbody.velocity;
+
         //if (Rigidbody.velocity.y < 0)
         //{
         //    Rigidbody.velocity += Physics.gravity * Time.deltaTime;
