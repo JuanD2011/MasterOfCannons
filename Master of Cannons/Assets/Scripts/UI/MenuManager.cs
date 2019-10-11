@@ -3,90 +3,42 @@
 public class MenuManager : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject[] panels = new GameObject[0];
-
-    [SerializeField]
     private Settings settings = null;
-
-    protected Animator[] panelAnimators = new Animator[0];
-
-    private int currentPanelIndex = 0;
 
     public static bool canSelectLevel = false;
 
-    private readonly string panelFadeIn = "MP Fade-in";
-    private readonly string panelFadeOut = "MP Fade-out";
-    private readonly string panelFadeInStart = "MP Fade-in Start";
+    protected SettingsTabManager settingsTabManager = null;
 
-    private readonly string panelModalIn = "MP Modal In";
-    private readonly string panelModalOut = "MP Modal Out";
-
-    protected virtual void Awake()
+    private void Awake()
     {
+        settingsTabManager = GetComponent<SettingsTabManager>();
+
         Memento.LoadData(settings);
 
-        InitializePanelAnimators();
         SetLanguage();
     }
 
-    protected virtual void Start()
+    private void Start()
     {
-        panelAnimators[currentPanelIndex].Play(panelFadeInStart);
         LevelManager.OnLoadLevel += ManageLevelPlayerAction;
     }
 
-    private void ManageLevelPlayerAction(bool _CanPlay)
+    private void ManageLevelPlayerAction(LoadLevelStatusType _LoadLevelStatusType)
     {
-        if (_CanPlay)
+        if (_LoadLevelStatusType == LoadLevelStatusType.Successful)
         {
-            PanelAnim(1);
+            settingsTabManager.PanelAnim(1);
         }
-        else
+        else if (_LoadLevelStatusType == LoadLevelStatusType.InsufficientStars)
         {
             //TODO show message that the player has not enough stars to play
         }
-    }
-
-    protected void InitializePanelAnimators()
-    {
-        panelAnimators = new Animator[panels.Length];
-        for (int i = 0; i < panelAnimators.Length; i++) panelAnimators[i] = panels[i].GetComponent<Animator>();
     }
 
     private void SetLanguage()
     {
         Translation.currentLanguageId = settings.languageID;
         Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
-    }
-
-    /// <summary>
-    /// Fade out the current panel and fade in the panel provided by _newPanelIndex
-    /// </summary>
-    /// <param name="_newPanelIndex"></param>
-    public void PanelAnim(int _newPanelIndex)
-    {
-        if (_newPanelIndex != currentPanelIndex)
-        {
-            panelAnimators[currentPanelIndex].Play(panelFadeOut);
-            currentPanelIndex = _newPanelIndex;
-            panelAnimators[currentPanelIndex].Play(panelFadeIn);
-        }
-    }
-
-    /// <summary>
-    /// Set current panel animation depending on the bool
-    /// </summary>
-    /// <param name="_IsOn"></param>
-    public void ModalAnim(bool _IsOn)
-    {
-        if (_IsOn == true)
-        {
-            panelAnimators[currentPanelIndex].Play(panelModalOut);
-        }
-        else
-        {
-            panelAnimators[currentPanelIndex].Play(panelModalIn);
-        }
     }
 
     /// <summary>
