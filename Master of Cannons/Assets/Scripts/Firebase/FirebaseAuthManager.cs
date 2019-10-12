@@ -10,7 +10,6 @@ using Delegates;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames;
 using Firebase.Extensions;
-
 public class FirebaseAuthManager : MonoBehaviour
 {
     public static FirebaseAuth auth;
@@ -20,10 +19,10 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action playGamesLogHandler;
     public static Action signOutFBHandler;
     public static Action signOutPlayGamesHandler;
-
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
-
     public static Action<AccessToken> facebookAuthenticationNoLinked;
+
+
 
     private IEnumerator Start()
     {
@@ -223,7 +222,10 @@ public class FirebaseAuthManager : MonoBehaviour
 
     }
 
+    async void TestingFunctions()
+    {
 
+    }
     async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
     {
         MenuManager.loadingCircleHandler.Invoke(true);
