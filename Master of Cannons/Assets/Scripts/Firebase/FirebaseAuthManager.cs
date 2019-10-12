@@ -22,8 +22,6 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
     public static Action<AccessToken> facebookAuthenticationNoLinked;
 
-
-
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => CheckDependenciesHandler.Invoke());
