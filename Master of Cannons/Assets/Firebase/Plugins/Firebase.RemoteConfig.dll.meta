@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: bd18eee30834e4f71bded96fd14033a9
+guid: bd957c2d83f9492ea77f2254904699b5
 labels:
 - gvh
-- gvh_dotnet-4.5
 - gvh_version-6.6.0
 PluginImporter:
   externalObjects: {}
@@ -30,12 +29,12 @@ PluginImporter:
   - first:
       '': Web
     second:
-      enabled: 1
+      enabled: 0
       settings: {}
   - first:
       '': WebStreamed
     second:
-      enabled: 1
+      enabled: 0
       settings: {}
   - first:
       Android: Android
@@ -46,14 +45,16 @@ PluginImporter:
   - first:
       Any: 
     second:
-      enabled: 1
+      enabled: 0
       settings: {}
   - first:
       Editor: Editor
     second:
       enabled: 1
       settings:
+        CPU: AnyCPU
         DefaultValueInitialized: true
+        OS: AnyOS
   - first:
       Facebook: Win
     second:
@@ -105,13 +106,13 @@ PluginImporter:
   - first:
       Windows Store Apps: WindowsStoreApps
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
       iPhone: iOS
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CompileFlags: 
         FrameworkDependencies: 
