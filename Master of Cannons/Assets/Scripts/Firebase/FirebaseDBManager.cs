@@ -89,9 +89,9 @@ public class FirebaseDBManager : MonoBehaviour
     {
         if (FirebaseAuthManager.myUser == null) return;
         string username = string.Empty;
-        string userId = FirebaseAuthManager.myUser.UserId;        
+        string userID = FirebaseAuthManager.myUser.UserId;        
         Dictionary<string, string> iDictUser = new Dictionary<string, string>();
-        await dataBaseRef.Child("player info").Child(userId).GetValueAsync().ContinueWith(task => {
+        await dataBaseRef.Child("player info").Child(userID).GetValueAsync().ContinueWith(task => {
 
             if (task.IsFaulted)
             {
@@ -110,25 +110,33 @@ public class FirebaseDBManager : MonoBehaviour
             }
 
         });
-        
-        await dataBaseRef.Child("users").Child(userId).Child("username").GetValueAsync().ContinueWith(task => {
 
-            if (task.IsFaulted)
-            {
-                Debug.LogError("Get USERNAME data error" + task.Exception);
-            }
-            else if (task.IsCompleted)
-            {
-
-                Debug.Log("Get Player USERNAME Succesful");
-                username = task.Result.Value.ToString();
-            }
-
-        });
+        username = await GetUsername(userID);
         ShowPlayerData?.Invoke(username, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
         //ShowPlayerData?.Invoke(FirebaseAuthManager.myUser.DisplayName, iDictUser[DataManager.coinsStr], iDictUser[DataManager.prestigeStr]);
         DataManager.DM.InitializePlayerData(iDictUser);
     }
+
+    public async Task<string> GetUsername(string userID)
+    {
+        string username = string.Empty;
+        await dataBaseRef.Child("users").Child(userID).Child("username").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Get USERNAME data error" + task.Exception);
+                return;
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Get Player USERNAME Succesful" + task.Result.Value.ToString());
+                username = task.Result.Value.ToString();
+            }
+        });
+
+        return username;
+    }
+
 
     public async Task<Dictionary<string, string>> GetFacebookUserData(string userID)
     {
@@ -208,39 +216,11 @@ public class FirebaseDBManager : MonoBehaviour
             dataBaseRef.Child("facebook users").Child(Facebook.Unity.AccessToken.CurrentAccessToken.UserId).Child("coins").SetValueAsync(_coins);
     }
 
-    public async Task AccountMigration(string userJSON , string playerInfoJSON, string facebookUserJSON, string _userID, string facebookID)
-    {        
-        string username = string.Empty;
-        await dataBaseRef.Child("facebook users").Child(facebookID).SetRawJsonValueAsync(facebookUserJSON);
-        await dataBaseRef.Child("player info").Child(_userID).SetRawJsonValueAsync(playerInfoJSON);
-        await dataBaseRef.Child("users").Child(_userID).SetRawJsonValueAsync(userJSON);
-        await dataBaseRef.Child("users").Child(_userID).Child("userID").SetValueAsync(FirebaseAuthManager.myUser.UserId);
-        await dataBaseRef.Child("users").Child(_userID).Child("username").GetValueAsync().ContinueWithOnMainThread(task => {
-
-            if (task.IsCompleted)
-            {
-                username = task.Result.Value.ToString();
-                print("the username to update is" + username);
-            }
-
-        });
-
-        await UpdateUsername(_userID, username);
-        await GetPlayerData(UIPlayerData.showPlayerData);
-    }
-
     private void HandleValueChanged(object sender, ValueChangedEventArgs e)
     {
         
     }
 
-    public async void DeleteUser(string _userID)
-    {
-        //Deleting firstly "player info" NODE cuz without "users" NODE, the "player info" node can't write into database
-        await dataBaseRef.Child("player info").Child(_userID).RemoveValueAsync();
-        await dataBaseRef.Child("users").Child(_userID).RemoveValueAsync();
-    }
-    
     public async Task<string> GetDataAsJSON(string databaseBranch ,string _userID)
     {
         string json = string.Empty;

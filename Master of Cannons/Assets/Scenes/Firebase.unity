@@ -949,7 +949,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
-  clearSettingsData: 0
+  clearSettingsData: 1
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
 --- !u!1 &168621132
 GameObject:
@@ -5538,7 +5538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1158579610
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5556,7 +5556,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 16, y: -446}
+  m_AnchoredPosition: {x: 5, y: -425}
   m_SizeDelta: {x: 160, y: 72.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1158579611

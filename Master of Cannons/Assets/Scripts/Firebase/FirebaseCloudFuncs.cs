@@ -3,12 +3,15 @@ using Firebase.Functions;
 using Firebase.Extensions;
 using System.Collections.Generic;
 using Firebase;
-using System.Collections;
+using Newtonsoft.Json;
+using Delegates;
 
 public class FirebaseCloudFuncs : MonoBehaviour
 {
     FirebaseFunctions functions;
     DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
+
+    public static Delegates.Action<string, string, string, Action> accountMigrationHandler;
     protected virtual void Start()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
@@ -20,35 +23,29 @@ public class FirebaseCloudFuncs : MonoBehaviour
             }
             else
             {
-                Debug.LogError(
-                  "Could not resolve all Firebase dependencies: " + dependencyStatus);
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
             }
         });
+
+        accountMigrationHandler = AccountMigration;
     }
 
     protected virtual void InitializeFirebase()
     {
         functions = FirebaseFunctions.DefaultInstance;
-
-        //To use a local emulator, uncomment this line:
-        //functions.UseFunctionsEmulator("http://localhost:5005");
-        //Or from an Android emulator:
-        //functions.UseFunctionsEmulator("http://10.0.2.2:5005");
     }
 
-    public void Llame()
+    public async void AccountMigration(string oldID, string newUserID, string facebookID, Delegates.Action fbLinkCallback)
     {
-        StartCoroutine(AccountMigration());
-    }
-
-    public IEnumerator AccountMigration()
-    {
-        HttpsCallableReference func = functions.GetHttpsCallable("accountMigrate");
+        HttpsCallableReference func = functions.GetHttpsCallable("accountMigration");
         Dictionary<string, object> data = new Dictionary<string, object>();
-        data["userID"] = FirebaseAuthManager.myUser.UserId;
-        var task = func.CallAsync(data).ContinueWithOnMainThread(calltask =>
-        {
+        data["oldID"] = oldID;
+        data["newUserID"] = newUserID;
+        data["facebookID"] = facebookID;
 
+        Dictionary<string, string> dataDict = new Dictionary<string, string>();
+        await func.CallAsync(data).ContinueWithOnMainThread(calltask =>
+        {
             if (calltask.IsFaulted)
             {
                 Debug.LogWarning("Cloud Function That migrated account Failed" + calltask.Exception);
@@ -61,9 +58,13 @@ public class FirebaseCloudFuncs : MonoBehaviour
                 return;
             }
 
+            var resultJSON = calltask.Result.Data.ToString();
+            print("The Data in JSON is:  " + resultJSON);
+            dataDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(resultJSON);
+            DataManager.DM.InitializePlayerData(dataDict);
+            UIPlayerData.showPlayerData.Invoke(dataDict["username"], dataDict[DataManager.coinsStr], dataDict[DataManager.prestigeStr]);
+            fbLinkCallback.Invoke();
             Debug.Log("Task was completed");
-        });
-        yield return new WaitUntil(() => task.IsCompleted);
+        });      
     }
-
 }
