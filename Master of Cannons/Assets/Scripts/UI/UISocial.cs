@@ -68,7 +68,7 @@ public class UISocial : MonoBehaviour
     }
     private void FirebaseSignOut()
     {
-        FirebaseAuthManager.auth.SignOut();
+        FirebaseAuthManager.auth.CurrentUser.DeleteAsync();
     }
     private void ChangePlayGamesStatus()
     {
@@ -129,12 +129,5 @@ public class UISocial : MonoBehaviour
     public void CloseSocialPanel()
     {
         hideFBFriends.Invoke();
-    }
-
-    public void UpdateCoins(int _coins)
-    {
-        DataManager.DM.playerData.coins += _coins;
-        UIPlayerData.showCoins(DataManager.DM.playerData.coins.ToString());
-        FirebaseDBManager.DB.WriteNewCoins(DataManager.DM.playerData.coins);
     }
 }

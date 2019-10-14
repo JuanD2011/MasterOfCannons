@@ -136,7 +136,12 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId };
                 PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
-                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
+                //DailyGifts dailyGifts = new DailyGifts
+                //{
+                //    timeCardChestWasOpened = (Dictionary<string,object>)ServerValue.Timestamp,
+                //    timeCoinChestWasOpened = (Dictionary<string, object>)ServerValue.Timestamp
+                //};
+                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo, null);
             }
 
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
@@ -245,7 +250,12 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId };
                 PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
-                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
+                DailyGifts dailyGifts = new DailyGifts
+                {
+                    //timeCardChestWasOpened = FirebaseDBManager.DB.TimeStamp,
+                    //timeCoinChestWasOpened = FirebaseDBManager.DB.TimeStamp,
+                };
+                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo, dailyGifts);
             }
 
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
@@ -268,8 +278,10 @@ public class FirebaseAuthManager : MonoBehaviour
                         return;
                     }
                     else if (callTask.IsCompleted) Debug.Log("Account Migrate SuccesFul");
+                    DataManager.DM.settings.hasFacebookLinked = true;
                     MenuManager.loadingCircleHandler.Invoke(false);
                 });
+                Memento.LoadData(DataManager.DM.settings);
                 });
         });
     }  
