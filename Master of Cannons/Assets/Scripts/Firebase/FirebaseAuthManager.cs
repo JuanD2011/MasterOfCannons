@@ -10,7 +10,6 @@ using Delegates;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames;
 using Firebase.Extensions;
-
 public class FirebaseAuthManager : MonoBehaviour
 {
     public static FirebaseAuth auth;
@@ -20,10 +19,7 @@ public class FirebaseAuthManager : MonoBehaviour
     public static Action playGamesLogHandler;
     public static Action signOutFBHandler;
     public static Action signOutPlayGamesHandler;
-
     public static Func<bool> CheckDependenciesHandler = () => { return FirebaseApp.CheckDependencies() == DependencyStatus.Available; };
-
-    public static Action<AccessToken> facebookAuthenticationNoLinked;
 
     private IEnumerator Start()
     {
@@ -42,7 +38,6 @@ public class FirebaseAuthManager : MonoBehaviour
         auth.StateChanged += AuthStateChanged;        
         AuthStateChanged(this, null);
         FB.Init(InitCallBack, OnHideUnity);
-        facebookAuthenticationNoLinked = UnlinkAndDeleteFBAccount;
 
         playGamesLogHandler = PlayGamesSignIn;
         InitializePlayGames();
@@ -141,7 +136,12 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Add New Player To Database booy...");
                 User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId };
                 PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
-                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo);
+                //DailyGifts dailyGifts = new DailyGifts
+                //{
+                //    timeCardChestWasOpened = (Dictionary<string,object>)ServerValue.Timestamp,
+                //    timeCoinChestWasOpened = (Dictionary<string, object>)ServerValue.Timestamp
+                //};
+                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo, null);
             }
 
             Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
@@ -199,7 +199,7 @@ public class FirebaseAuthManager : MonoBehaviour
             else if (task.IsFaulted)
             {
                 auxTask = task;
-                MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", () => UnlinkAndDeleteFBAccount(accesToken));
+                MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", () => CreateAccountToLinkWithFB(accesToken));
                 Debug.LogWarning("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
@@ -223,69 +223,69 @@ public class FirebaseAuthManager : MonoBehaviour
 
     }
 
-
-    async void UnlinkAndDeleteFBAccount(AccessToken accesToken)
+    async void CreateAccountToLinkWithFB(AccessToken accesToken)
     {
+        string oldID = myUser.UserId;
+        auth.SignOut();
         MenuManager.loadingCircleHandler.Invoke(true);
-        Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);        
-        string currentUserID = auth.CurrentUser.UserId;
-        FirebaseDBManager.DB.DeleteUser(currentUserID);
-        await auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task=> { //Delete Current Account
-            
-            if(task.IsCompleted)
-            {               
-                Debug.Log("Account Deleted Succesful");
-            }
-        });
+        await auth.SignInAnonymouslyAsync().ContinueWithOnMainThread(async task =>{
 
-        await auth.SignInWithCredentialAsync(credential).ContinueWith(task => //Log in into account that has facebook linked
-        {
+            if(task.IsFaulted)
+            {
+                Debug.LogWarning("Create New Account To Link... FAILED" + task.Exception);
+                return;
+            }
+
             if (task.IsCanceled)
             {
-                Debug.LogError("SignInWithCredentialAsync was canceled.");
-                return;
-            }
-            else if (task.IsFaulted)
-            {
-                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                Debug.LogWarning("Create New Account To Link... CANCELED");
                 return;
             }
 
-            FirebaseUser newUser = task.Result;
-            Debug.LogFormat("User FACEBOOK signed in successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
+            myUser = task.Result;
+            bool userExist = await CheckUserExistance();
+
+            if (!userExist)
+            {
+                Debug.Log("Add New Player To Database booy...");
+                User mUser = new User { username = myUser.DisplayName, userID = myUser.UserId };
+                PlayerInfo playerInfo = new PlayerInfo { coins = 0, skinAvailability = 0, prestige = 10 };
+                DailyGifts dailyGifts = new DailyGifts
+                {
+                    //timeCardChestWasOpened = FirebaseDBManager.DB.TimeStamp,
+                    //timeCoinChestWasOpened = FirebaseDBManager.DB.TimeStamp,
+                };
+                FirebaseDBManager.DB.WriteNewUserHandler(mUser, playerInfo, dailyGifts);
+            }
+
+            Debug.LogFormat("User signed in successfully: {0} ({1})", myUser.DisplayName, myUser.UserId);
+
+            Debug.Log("New Account Creation Was Succesful");
+            FirebaseCloudFuncs.accountMigrationHandler.Invoke(oldID, myUser.UserId, accesToken.UserId, async ()=> {
+
+                Credential credential = FacebookAuthProvider.GetCredential(accesToken.TokenString);
+                await auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWithOnMainThread(callTask => {
+
+                    if (callTask.IsCanceled)
+                    {
+                        Debug.LogError("SignInWithCredentialAsync was canceled.");
+                        return;
+                    }
+                    else if (callTask.IsFaulted)
+                    {
+                        MenuManager.popUpHandler.Invoke("This account is linked to another account, do you want to link it to this account?", () => CreateAccountToLinkWithFB(accesToken));
+                        Debug.LogWarning("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                        return;
+                    }
+                    else if (callTask.IsCompleted) Debug.Log("Account Migrate SuccesFul");
+                    DataManager.DM.settings.hasFacebookLinked = true;
+                    MenuManager.loadingCircleHandler.Invoke(false);
+                });
+                Memento.LoadData(DataManager.DM.settings);
+                });
         });
+    }  
 
-        string userJSON = await FirebaseDBManager.DB.GetDataAsJSON("users", auth.CurrentUser.UserId);
-        string playerInfoJSON = await FirebaseDBManager.DB.GetDataAsJSON("player info", auth.CurrentUser.UserId);
-        string facebookUserJSON = await FirebaseDBManager.DB.GetDataAsJSON("facebook users", accesToken.UserId);        
-        currentUserID = auth.CurrentUser.UserId;
-        FirebaseDBManager.DB.DeleteUser(currentUserID);
-        await auth.CurrentUser.DeleteAsync().ContinueWith(task => { //Delete account that has facebook linked
-
-            if (task.IsFaulted)
-            {
-                Debug.LogError("DELETE user was failed...");
-                return;
-            }
-            else if (task.IsCanceled)
-            {
-                Debug.Log("DELETE user was canceled...");
-                return;
-            }
-
-            Debug.Log("DELETE user Succesful");
-
-        });
-
-        //Create new account and link to facebook
-        await AnonymousSignIn();
-        //await UpdateUserProfile();
-        await LinkFacebookAccount(accesToken);
-
-        await FirebaseDBManager.DB.AccountMigration(userJSON, playerInfoJSON, facebookUserJSON, auth.CurrentUser.UserId, accesToken.UserId);
-        MenuManager.loadingCircleHandler.Invoke(false);
-    }
     #endregion
 
     #region Google Play Games

@@ -10,7 +10,7 @@ public class DataManager : MonoBehaviour
     public PlayerData playerData = null;
     public Dictionary<string, string> playerDataDict;
     public const string coinsStr = "coins", prestigeStr = "prestige", starsStr = "stars", skinAvailabilityStr = "skinAvailability";
-
+    public const string timeChestWasOpenedStr = "timeChestWasOpened";
     private void Awake()
     {
         if(clearSettingsData) Memento.ClearData(settings);
