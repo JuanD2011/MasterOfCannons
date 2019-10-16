@@ -9,8 +9,9 @@ public class UILanguageButton : UIButtonBase
     [SerializeField] TextMeshProUGUI acronymText = null;
     [SerializeField] Sprite[] flags = new Sprite[6];
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         SetAcronymAndFlagImage();
     }
 

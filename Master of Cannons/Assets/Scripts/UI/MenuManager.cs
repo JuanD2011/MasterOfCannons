@@ -27,6 +27,8 @@ public class MenuManager : MonoBehaviour
 
     private void CheckIfIsInLevelSelection()
     {
+        if (!LevelGameManager.LevelSelection) return;
+
         settingsTabManager.PanelAnim(4);//Initialize level selection panel
         SelectingLevels(true);
     }

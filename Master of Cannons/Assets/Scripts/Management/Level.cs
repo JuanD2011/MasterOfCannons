@@ -9,6 +9,8 @@ public class Level : MonoBehaviour
     [SerializeField]
     private int starsNedeed = 0;
 
+    public int StarsNedeed { get => starsNedeed; private set => starsNedeed = value; }
+
     public static event Delegates.Action<int, int> OnLevelSelected = null;
 
     private void Awake()
@@ -19,6 +21,6 @@ public class Level : MonoBehaviour
     private void OnMouseDown()
     {
         if (!MenuManager.canSelectLevel) return;
-        OnLevelSelected(starsNedeed, levelBuildIndex);
+        OnLevelSelected(StarsNedeed, levelBuildIndex);
     }
 }

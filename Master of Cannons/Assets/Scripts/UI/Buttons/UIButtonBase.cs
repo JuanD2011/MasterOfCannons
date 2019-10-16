@@ -11,7 +11,8 @@ public abstract class UIButtonBase : MonoBehaviour
         m_Button = GetComponent<Button>();
     }
 
-    private void Start()
+    protected virtual
+        void Start()
     {
         m_Button.onClick.AddListener(() => OnButtonClicked());
     }
