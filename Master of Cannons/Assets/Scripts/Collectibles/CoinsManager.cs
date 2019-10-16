@@ -21,7 +21,10 @@ public class CoinsManager : MonoBehaviour
         Referee.OnGameOver += UpdateCoins;
     }
 
-    private void UpdateCoins() => playerData.AddCoins(CollectedCoins);
+    /// <summary>
+    /// Add current coins to scriptable object
+    /// </summary>
+    public void UpdateCoins() => playerData.AddCoins(CollectedCoins);
 
     private void CoinOnCollected(CollectibleType _CollectibleType)
     {

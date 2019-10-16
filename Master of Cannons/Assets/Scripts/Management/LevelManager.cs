@@ -15,7 +15,6 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         OnLoadLevel = null;
-        Level.OnLevelSelected -= IsLevelPlayable;
     }
 
     private void Start()

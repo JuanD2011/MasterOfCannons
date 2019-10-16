@@ -16,11 +16,19 @@ public class MenuManager : MonoBehaviour
         Memento.LoadData(settings);
 
         SetLanguage();
+
+        CheckIfIsInLevelSelection();
     }
 
     private void Start()
     {
         LevelManager.OnLoadLevel += ManageLevelPlayerAction;
+    }
+
+    private void CheckIfIsInLevelSelection()
+    {
+        settingsTabManager.PanelAnim(4);//Initialize level selection panel
+        SelectingLevels(true);
     }
 
     private void ManageLevelPlayerAction(LoadLevelStatusType _LoadLevelStatusType)

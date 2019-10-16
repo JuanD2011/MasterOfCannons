@@ -9,6 +9,5 @@ public class PlayerData : ScriptableObject
     public void AddCoins(int _Coins)
     {
         coins += _Coins;
-        Debug.Log(coins);
     }
 }

@@ -11,6 +11,11 @@ public class Level : MonoBehaviour
 
     public static event Delegates.Action<int, int> OnLevelSelected = null;
 
+    private void Awake()
+    {
+        OnLevelSelected = null;
+    }
+
     private void OnMouseDown()
     {
         if (!MenuManager.canSelectLevel) return;
