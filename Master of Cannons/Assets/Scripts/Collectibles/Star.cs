@@ -2,13 +2,15 @@
 
 public class Star : Collectible
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         collectibleType = CollectibleType.Star;
     }
 
     protected override void Collect()
     {
+        base.Collect();
         Debug.Log("Star");
     }
 }
