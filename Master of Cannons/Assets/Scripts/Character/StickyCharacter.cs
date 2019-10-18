@@ -5,9 +5,16 @@ public class StickyCharacter : Character
     float minDistanceToStick = 0.8f;
     float maxDistanceToStick = 1.2f;
     float lerpTime = 0.3f;
+
+    protected override void Start()
+    {
+        base.Start();
+        //hasSpecial = true;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (hasSpecial && collision.gameObject.layer == 10)
         {
             //Transform cannonReference = collision.transform.root.GetChild(0);  
 

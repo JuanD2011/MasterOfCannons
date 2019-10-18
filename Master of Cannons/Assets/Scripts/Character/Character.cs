@@ -3,15 +3,22 @@
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
+    private float specialProgress = 0f;
+    protected float specialTime = 4f;
+    private bool canActivateSpecial = false;
+    protected bool hasSpecial = false;
+
     public Rigidbody Rigidbody { get; private set; }
     public Vector3 velocityUpdated { get; private set; }
+    public bool CanActivateSpecial { get => canActivateSpecial; }
 
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody>();
+        hasSpecial = false;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         MenuGameManager.OnPause += Freeze;
         Referee.OnGameOver += Freeze;
