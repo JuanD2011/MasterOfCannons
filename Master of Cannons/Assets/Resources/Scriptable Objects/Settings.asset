@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609c21be07d45e54c8da4b28d5a952ee, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  isMusicActive: 0
-  isSFXActive: 0
+  isMusicActive: 1
+  isSFXActive: 1
   musicSlider: 0
   sFXSlider: 0
+  languageID: 0
+  hasFacebookLinked: 0
+  scrollPosition: 0.3678928

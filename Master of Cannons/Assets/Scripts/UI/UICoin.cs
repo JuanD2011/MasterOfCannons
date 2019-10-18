@@ -12,12 +12,15 @@ public class UICoin : MonoBehaviour
 
     private void Start()
     {
-        UpdateText();
-        CoinsManager.OnCoinAdded += UpdateText;
+        UpdateText(CollectibleType.Coin);
+        CollectibleManager.OnCollectibleAdded += UpdateText;
     }
 
-    private void UpdateText()
+    private void UpdateText(CollectibleType _CollectibleType)
     {
-        m_Text.text = CoinsManager.CollectedCoins.ToString();
+        if (_CollectibleType == CollectibleType.Coin)
+        {
+            m_Text.text = CollectibleManager.CollectedCoins.ToString();
+        }
     }
 }

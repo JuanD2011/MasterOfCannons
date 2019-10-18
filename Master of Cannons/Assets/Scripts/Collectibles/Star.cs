@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class Star : Collectible
+﻿public class Star : Collectible
 {
     protected override void Awake()
     {
@@ -11,6 +9,5 @@ public class Star : Collectible
     protected override void Collect()
     {
         base.Collect();
-        Debug.Log("Star");
     }
 }

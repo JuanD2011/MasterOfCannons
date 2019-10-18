@@ -34,4 +34,13 @@ public class LevelGameManager : LevelManager
         OnLoadLevel(LoadLevelStatusType.Successful);
         StartCoroutine(LoadAsynchronously(0));
     }
+
+    /// <summary>
+    /// Load next level 
+    /// </summary>
+    public void NextLevel()
+    {
+        OnLoadLevel(LoadLevelStatusType.Successful);
+        StartCoroutine(LoadAsynchronously(SceneManager.GetActiveScene().buildIndex + 1));
+    }
 }
