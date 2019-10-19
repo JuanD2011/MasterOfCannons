@@ -28,6 +28,7 @@ public class Cannon : MonoBehaviour
         GetReference();
 
         PlayerInputHandler.OnShootAction += Shoot;
+        wickLength *= GlobalMultipliers.WickLenght;
     }
 
     private void GetReference()
