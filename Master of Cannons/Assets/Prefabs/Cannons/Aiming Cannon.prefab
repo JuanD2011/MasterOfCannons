@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 681510734804645005}
   - component: {fileID: 681510734804645002}
   - component: {fileID: 681510734804645003}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,6 +195,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootForce: 18
-  wickLength: 5
-  doCatchRotation: 0
+  wickLength: 500
+  doCatchRotation: 1
   catchRotation: {x: 0, y: 0, z: 180}

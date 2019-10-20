@@ -7,12 +7,14 @@ public abstract class Collectible : MonoBehaviour
 
     public static event Delegates.Action<CollectibleType> OnCollected = null;
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void Awake()
     {
-        Collect();
+        OnCollected = null;
     }
 
-    protected virtual void Collect() { OnCollected(collectibleType); }
+    private void OnTriggerEnter(Collider other) => Collect();
+
+    protected virtual void Collect() => OnCollected(collectibleType);
 
     private void Reset()
     {

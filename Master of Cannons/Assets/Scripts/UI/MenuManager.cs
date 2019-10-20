@@ -30,6 +30,8 @@ public class MenuManager : MonoBehaviour
         Memento.LoadData(settings);
 
         SetLanguage();
+
+        CheckIfIsInLevelSelection();
     }
 
     private void Start()
@@ -38,6 +40,14 @@ public class MenuManager : MonoBehaviour
         popUpHandler = ConfirmationPopUp;
         popUpWindow.gameObject.SetActive(false);
         loadingCircleHandler = (activate) => loadingCircle.gameObject.SetActive(activate);
+    }
+
+    private void CheckIfIsInLevelSelection()
+    {
+        if (!LevelGameManager.LevelSelection) return;
+
+        settingsTabManager.PanelAnim(4);//Initialize level selection panel
+        SelectingLevels(true);
     }
 
     private void ManageLevelPlayerAction(LoadLevelStatusType _LoadLevelStatusType)

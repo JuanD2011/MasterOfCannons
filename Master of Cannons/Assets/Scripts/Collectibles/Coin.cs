@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-
-public class Coin : Collectible
+﻿public class Coin : Collectible
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         collectibleType = CollectibleType.Coin;
     }
 
     protected override void Collect()
     {
-        Debug.Log("Coinn");
+        base.Collect();
+        gameObject.SetActive(false);
     }
 }
