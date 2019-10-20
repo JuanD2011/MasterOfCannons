@@ -651,7 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}
-  clearSettingsData: 1
+  clearSettingsData: 0
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
 --- !u!4 &429439046
 Transform:
