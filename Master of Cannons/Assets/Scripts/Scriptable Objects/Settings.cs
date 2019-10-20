@@ -17,8 +17,6 @@ public class Settings : ScriptableObject
     public bool hasFacebookLinked;
     public int defaultScene = 0;
 
-    public bool hasFacebookLinked = false;
-
     [Header("Level selection")]
     public float scrollPosition = 0f;
 
