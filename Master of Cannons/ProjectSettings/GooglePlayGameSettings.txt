@@ -1,8 +1,9 @@
 lastUpgrade=00964
 proj.pluginVersion=0.9.64
-proj.AppId=508252051864
+proj.AppId=743885855686
 proj.classDir=Assets
 proj.ConstantsClassName=GPGSIds
-and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--%0d%0aGoogle+Play+game+services+IDs.%0d%0aSave+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.%0d%0a--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--+app_id+--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e508252051864%3c%2fstring%3e%0d%0a++%3c%21--+achievement+Hello+World+--%3e%0d%0a++%3cstring+name%3d%22achievement_hello_world%22+translatable%3d%22false%22%3eCgkImLO7seUOEAIQAA%3c%2fstring%3e%0d%0a%3c%2fresources%3e%0d%0a
-and.ClientId=508252051864-2vv77gaoiq87ce2o7lunc4v1m5i2vjmi.apps.googleusercontent.com
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--%0d%0aGoogle+Play+game+services+IDs.%0d%0aSave+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.%0d%0a--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--+app_id+--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e743885855686%3c%2fstring%3e%0d%0a++%3c%21--+package_name+--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.OcasoGames.MasterOfCannons%3c%2fstring%3e%0d%0a++%3c%21--+achievement+Hello+World+--%3e%0d%0a++%3cstring+name%3d%22achievement_hello_world%22+translatable%3d%22false%22%3eCgkIxre1mNMVEAIQAg%3c%2fstring%3e%0d%0a%3c%2fresources%3e
+and.ClientId=743885855686-u2h234sb3vc1krketabvtbs099u8s2gh.apps.googleusercontent.com
 android.SetupDone=true
+and.BundleId=com.OcasoGames.MasterOfCannons

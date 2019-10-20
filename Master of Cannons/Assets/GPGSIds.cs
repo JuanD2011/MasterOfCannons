@@ -24,7 +24,7 @@
 
 public static class GPGSIds
 {
-        public const string achievement_hello_world = "CgkImLO7seUOEAIQAA"; // <GPGSID>
+        public const string achievement_hello_world = "CgkIxre1mNMVEAIQAg"; // <GPGSID>
 
 }
 
