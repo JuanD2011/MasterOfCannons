@@ -17,10 +17,7 @@ public class GlobalMultipliers : MonoBehaviour
     {
         bool canSet = CanSetWickMultiplier(sender);
         if (canSet)
-        {
-            float percentage = percentageIncrease * wickLenght;
-            WickLenght += percentage;
-        }
+            WickLenght += percentageIncrease;
     }
 
     static bool CanSetWickMultiplier(object obj)

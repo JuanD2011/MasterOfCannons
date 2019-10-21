@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
     private float specialProgress = 0f;
     protected float specialTime = 4f;
-    private bool canActivateSpecial = false;
+    protected bool canActivateSpecial = false;
     protected bool hasSpecial = false;
 
     public Rigidbody Rigidbody { get; private set; }
     public Vector3 velocityUpdated { get; private set; }
     public bool CanActivateSpecial { get => canActivateSpecial; }
 
+    public static event Delegates.Action<float> OnChargeSpecial;
+
     private void Awake()
     {
+        PlayerInputHandler.OnSpecialFunc += OnSpecial;
         Rigidbody = GetComponent<Rigidbody>();
         hasSpecial = false;
     }
@@ -60,4 +64,33 @@ public class Character : MonoBehaviour
             Rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
+
+    #region Special
+    protected virtual IEnumerator OnSpecial()
+    {
+        canActivateSpecial = false;
+        hasSpecial = true;
+        for (float t = 0; t <= specialTime; t += Time.unscaledDeltaTime)
+        {
+            OnChargeSpecial(1 - (t / specialTime));
+            yield return null;
+        }
+        hasSpecial = false;
+        //specialProgress = 0;
+    }
+
+    public void UpdateSpecialProgress(float timePercentageInCannon)
+    {
+        if (canActivateSpecial || hasSpecial) return;
+        specialProgress += (1 - timePercentageInCannon);
+        OnChargeSpecial.Invoke(specialProgress);
+        if (specialProgress > 0.95f)
+        {
+            PlayerInputHandler.canActivateSpecialHandler.Invoke();
+            canActivateSpecial = true;
+            specialProgress = 0;
+        }
+
+    }
+    #endregion
 }

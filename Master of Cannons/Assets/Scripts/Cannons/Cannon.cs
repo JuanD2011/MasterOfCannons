@@ -3,7 +3,10 @@
 public class Cannon : MonoBehaviour
 {
     [SerializeField]
-    protected float shootForce = 10f, wickLength = 5f;
+    private float wickLength;
+
+    [SerializeField]
+    protected float shootForce = 10f;
 
     [SerializeField]
     bool doCatchRotation = false;
@@ -15,6 +18,8 @@ public class Cannon : MonoBehaviour
     protected float elapsedWickTime = 0f;
     protected Transform reference = null;
     private Character characterInCannon = null;
+    
+    protected float WickLength { get => wickLength * GlobalMultipliers.WickLenght; private set => wickLength = value; }
 
     public event Delegates.Action<bool> OnCharacterInCannon = null;
 
@@ -26,9 +31,7 @@ public class Cannon : MonoBehaviour
     private void Start()
     {
         GetReference();
-
         PlayerInputHandler.OnShootAction += Shoot;
-        wickLength *= GlobalMultipliers.WickLenght;
     }
 
     private void GetReference()
@@ -45,14 +48,14 @@ public class Cannon : MonoBehaviour
     private void Update()
     {
         if (burningWick && !MenuGameManager.IsPaused) elapsedWickTime += Time.deltaTime;
-
-        if (elapsedWickTime > wickLength) Shoot();
+        if (elapsedWickTime > WickLength) Shoot();
     }
 
     private void Shoot()
     {
         if (characterInCannon != null)
         {
+            characterInCannon.UpdateSpecialProgress(elapsedWickTime / WickLength);
             burningWick = false;
             elapsedWickTime = 0f;
             characterInCannon.transform.SetParent(null);

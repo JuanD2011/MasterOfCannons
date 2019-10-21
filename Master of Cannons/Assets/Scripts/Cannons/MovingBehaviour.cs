@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class MovingBehaviour : MonoBehaviour
 {
     [SerializeField]
-    protected bool startMoving = false;
+    protected bool startMoving = true;
 
     [SerializeField]
     protected float speed = 5f;

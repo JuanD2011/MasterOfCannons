@@ -4,12 +4,12 @@ public class StickyCharacter : Character
 {
     float minDistanceToStick = 0.8f;
     float maxDistanceToStick = 1.2f;
-    float lerpTime = 0.3f;
+    float lerpTime = 0.4f;
 
     protected override void Start()
     {
         base.Start();
-        //hasSpecial = true;
+        specialTime = 20f;
     }
 
     private void OnCollisionEnter(Collision collision)
