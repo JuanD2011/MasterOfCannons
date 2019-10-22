@@ -17,12 +17,12 @@ public class PlayerData : ScriptableObject
         if (_CollectibleType == CollectibleType.Coin)
         {
             coins += _Amount;
-            OnCollectibleAdded(CollectibleType.Coin);
+            OnCollectibleAdded?.Invoke(CollectibleType.Coin);
         }
         else if(_CollectibleType == CollectibleType.Star)
         {
             stars += _Amount;
-            OnCollectibleAdded(CollectibleType.Star);
+            OnCollectibleAdded?.Invoke(CollectibleType.Star);
         }
     }
 }
