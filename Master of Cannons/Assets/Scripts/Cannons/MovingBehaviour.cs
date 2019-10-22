@@ -20,10 +20,8 @@ public class MovingBehaviour : CannonBehaviour
 
     protected override void Awake() => base.Awake();
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
         repeatMethod += Move;
 
         for (int i = 0; i < transform.childCount; i++)

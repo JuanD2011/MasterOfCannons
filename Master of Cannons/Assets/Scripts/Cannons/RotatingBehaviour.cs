@@ -11,11 +11,11 @@ public class RotatingBehaviour : MovingBehaviour
 
     protected override void Awake() => base.Awake();
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         initialRotation = transform.eulerAngles;
         repeatMethod += Move;
+        cannon.OnCharacterInCannon += OnCharacterInCannon;
 
         if (startMoving) Move();
     }

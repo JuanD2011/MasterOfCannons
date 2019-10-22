@@ -9,10 +9,5 @@ public abstract class CannonBehaviour : MonoBehaviour
         cannon = GetComponentInChildren<Cannon>();
     }
 
-    protected virtual void Start()
-    {
-        cannon.OnCharacterInCannon += OnCharacterInCannon;
-    }
-
     protected abstract void OnCharacterInCannon(bool _value);
 }

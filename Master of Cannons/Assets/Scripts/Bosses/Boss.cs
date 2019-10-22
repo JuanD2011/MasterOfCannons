@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 
-public class Boss : MonoBehaviour
+public abstract class Boss : MonoBehaviour
 {
     [SerializeField]
-    private float life = 0f;
+    protected float life = 0f;
 
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
+    [SerializeField]
+    protected Character character = null;
 }
