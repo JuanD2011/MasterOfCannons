@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class UICoin : MonoBehaviour
+public class UIGameCoins : MonoBehaviour
 {
-    TextMeshProUGUI m_Text = null;
+    private TextMeshProUGUI m_Text = null;
 
     private void Awake()
     {

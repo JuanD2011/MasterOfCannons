@@ -3,13 +3,26 @@ using TMPro;
 
 public class UIStarsNeeded : MonoBehaviour
 {
-    [SerializeField] Level m_Level = null;
-    TextMeshProUGUI textMeshProUGUI = null;
+    [SerializeField] private Level m_Level = null;
+    [SerializeField] private TextMeshProUGUI textMeshProUGUI = null;
+
+    private PlayerData playerData = null;
+
+    private int starsCount = 0;
 
     private void Awake()
     {
-        textMeshProUGUI = GetComponent<TextMeshProUGUI>();
+        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");
 
-        textMeshProUGUI.text = m_Level.StarsNedeed.ToString();
+        starsCount = m_Level.StarsNedeed - playerData.stars;
+
+        if (starsCount > 0)
+        {
+            textMeshProUGUI.text = starsCount.ToString();
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = 0;
+        }
     }
 }

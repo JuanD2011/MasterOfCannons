@@ -6,6 +6,8 @@ public class PlayerData : ScriptableObject
     public int coins = 0;
     public int stars = 0;
 
+    public event Delegates.Action<CollectibleType> OnCollectibleAdded = null;
+
     /// <summary>
     /// Add the amount by the type
     /// </summary>
@@ -15,10 +17,12 @@ public class PlayerData : ScriptableObject
         if (_CollectibleType == CollectibleType.Coin)
         {
             coins += _Amount;
+            OnCollectibleAdded(CollectibleType.Coin);
         }
         else if(_CollectibleType == CollectibleType.Star)
         {
             stars += _Amount;
+            OnCollectibleAdded(CollectibleType.Star);
         }
     }
 }

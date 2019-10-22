@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UIStars : MonoBehaviour
+public class UIGameStars : MonoBehaviour
 {
     Animator[] starsAnimator = new Animator[3];
 
