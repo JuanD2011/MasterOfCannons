@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4564228077697818620
 Transform:
   m_ObjectHideFlags: 0
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootForce: 18
   wickLength: 5
+  shootForce: 18
   doCatchRotation: 0
   catchRotation: {x: 0, y: 0, z: 180}

@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a22f6b116cf884f8abc8d42dc5c292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootForce: 18
   wickLength: 500
+  shootForce: 18
   doCatchRotation: 1
   catchRotation: {x: 0, y: 0, z: 180}

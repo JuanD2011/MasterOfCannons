@@ -14,7 +14,7 @@ public class AimingBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        cannon = GetComponent<Cannon>();
+        cannon = GetComponentInChildren<Cannon>();
     }
 
     private void Start()

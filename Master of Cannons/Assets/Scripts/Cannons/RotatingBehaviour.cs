@@ -5,10 +5,16 @@ public class RotatingBehaviour : MovingBehaviour
     [Tooltip("Will find the shortest path to reach the angle")]
     [SerializeField] Vector3[] angles = new Vector3[2];
 
+    private Vector3 initialRotation = Vector3.zero;
+
     int anglesCounter = 0;
 
-    private void Start()
+    protected override void Awake() => base.Awake();
+
+    protected override void Start()
     {
+        base.Start();
+        initialRotation = transform.eulerAngles;
         repeatMethod += Move;
 
         if (startMoving) Move();
@@ -16,7 +22,9 @@ public class RotatingBehaviour : MovingBehaviour
 
     protected override void Move()
     {
-        LeanTween.rotate(gameObject, angles[anglesCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
+        LeanTween.rotate(gameObject, angles[anglesCounter] + initialRotation, 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
         anglesCounter = (anglesCounter + 1) % angles.Length;
     }
+
+    protected override void OnCharacterInCannon(bool _value) => base.OnCharacterInCannon(_value);
 }

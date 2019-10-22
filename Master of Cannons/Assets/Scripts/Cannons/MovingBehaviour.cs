@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MovingBehaviour : MonoBehaviour
+public class MovingBehaviour : CannonBehaviour
 {
     [SerializeField]
     protected bool startMoving = true;
@@ -18,9 +18,13 @@ public class MovingBehaviour : MonoBehaviour
 
     protected System.Action repeatMethod = null;
 
-    private void Start()
+    protected override void Awake() => base.Awake();
+
+    protected override void Start()
     {
-        repeatMethod += MoveToTarget;
+        base.Start();
+
+        repeatMethod += Move;
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -29,10 +33,10 @@ public class MovingBehaviour : MonoBehaviour
 
         if (startMoving) Move();
 
-        MenuGameManager.OnPause += SetMovement;
+        MenuGameManager.OnPause += PauseMovement;
     }
 
-    private void SetMovement(bool _Value)
+    private void PauseMovement(bool _Value)
     {
         if (_Value)
         {
@@ -46,12 +50,16 @@ public class MovingBehaviour : MonoBehaviour
 
     protected virtual void Move()
     {
-        MoveToTarget();
-    }
-
-    private void MoveToTarget()
-    {
         LeanTween.move(gameObject, targets[targetCounter], 1f).setEase(tweenType).setOnComplete(repeatMethod).setSpeed(speed);
         targetCounter = (targetCounter + 1) % targets.Count;
+    }
+
+    protected override void OnCharacterInCannon(bool _value)
+    {
+        if (!startMoving)
+        {
+            if (_value) Move();
+            else PauseMovement(true);
+        }
     }
 }
