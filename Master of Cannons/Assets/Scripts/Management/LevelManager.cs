@@ -5,35 +5,26 @@ using System.Collections;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private PlayerData playerData = null;
-    [SerializeField] protected Slider slider = null;
+    [SerializeField]
+    protected Slider slider = null;
 
-    public static Delegates.Action<LoadLevelStatusType> OnLoadLevel = null;
+    private AsyncOperation operation = null;
 
-    AsyncOperation operation = null;
+    private MenuManager menuManager = null;
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        OnLoadLevel = null;
+        menuManager = GetComponent<MenuManager>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        Level.OnLevelSelected += IsLevelPlayable;
+         menuManager.OnLoadLevel += LoadLevel;
     }
 
-    private void IsLevelPlayable(int _StarsRequired, int _LevelBuildIndex)
+    private void LoadLevel(int _LevelBuildIndex)
     {
-        if (playerData.stars < _StarsRequired)
-        {
-            Debug.Log("Insufficient stars");
-            OnLoadLevel(LoadLevelStatusType.InsufficientStars);
-        }
-        else
-        {
-            StartCoroutine(LoadAsynchronously(_LevelBuildIndex));
-            OnLoadLevel(LoadLevelStatusType.Successful);
-        }
+        StartCoroutine(LoadAsynchronously(_LevelBuildIndex));
     }
 
     protected IEnumerator LoadAsynchronously(int _LevelBuildIndex)

@@ -5,9 +5,16 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private Settings settings = null;
 
+    [SerializeField]
+    private PlayerData playerData = null;
+
     public static bool canSelectLevel = false;
 
+    private static bool languageSetOnce = false;
+
     protected SettingsTabManager settingsTabManager = null;
+
+    public event Delegates.Action<int> OnLoadLevel = null;
 
     private void Awake()
     {
@@ -15,33 +22,38 @@ public class MenuManager : MonoBehaviour
 
         Memento.LoadData(settings);
 
-        SetLanguage();
+        if (!languageSetOnce)
+        {
+            SetLanguage();
+            languageSetOnce = true;
+        }
 
         CheckIfIsInLevelSelection();
     }
 
     private void Start()
     {
-        LevelManager.OnLoadLevel += ManageLevelPlayerAction;
+        Level.OnLevelSelected += ManageLevelPlayerAction;
     }
 
     private void CheckIfIsInLevelSelection()
     {
-        if (!LevelGameManager.LevelSelection) return;
+        if (!MenuGameManager.LevelSelection) return;
 
         settingsTabManager.PanelAnim(4);//Initialize level selection panel
         SelectingLevels(true);
     }
 
-    private void ManageLevelPlayerAction(LoadLevelStatusType _LoadLevelStatusType)
+    private void ManageLevelPlayerAction(int _StarsNeeded, int _LevelBuildIndex)
     {
-        if (_LoadLevelStatusType == LoadLevelStatusType.Successful)
+        if (playerData.stars >= _StarsNeeded)
         {
             settingsTabManager.PanelAnim(1);
+            SendOnLoadLevel(_LevelBuildIndex);
         }
-        else if (_LoadLevelStatusType == LoadLevelStatusType.InsufficientStars)
+        else
         {
-            //TODO show message that the player has not enough stars to play
+            Debug.Log("Insufficient Stars");
         }
     }
 
@@ -51,24 +63,23 @@ public class MenuManager : MonoBehaviour
         Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
     }
 
-    /// <summary>
-    /// Equals can select level to the _value
-    /// </summary>
-    /// <param name="_Value"></param>
-    public void SelectingLevels(bool _Value) => canSelectLevel = _Value;
-
-    /// <summary>
-    /// Save settings
-    /// </summary>
-    public void SaveSettings()
-    {
-        Memento.SaveData(settings);
-    }
-
     private void OnApplicationQuit()
     {
         if (settings == null) return;
 
         Memento.SaveData(settings);
     }
+    
+    /// <summary>
+    /// Equals can select level to the _value
+    /// </summary>
+    /// <param name="_Value"></param>
+    private void SelectingLevels(bool _Value) => canSelectLevel = _Value;
+
+    /// <summary>
+    /// Save settings
+    /// </summary>
+    public void SaveSettings() => Memento.SaveData(settings);
+
+    protected void SendOnLoadLevel(int _LevelBuildIndex) => OnLoadLevel(_LevelBuildIndex);
 }

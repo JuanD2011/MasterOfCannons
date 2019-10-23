@@ -18,9 +18,9 @@ public class Level : MonoBehaviour
         OnLevelSelected = null;
     }
 
-    private void OnMouseDown()
+    private void OnMouseUp()
     {
         if (!MenuManager.canSelectLevel) return;
-        OnLevelSelected(StarsNedeed, levelBuildIndex);
+        OnLevelSelected(starsNedeed, levelBuildIndex);
     }
 }

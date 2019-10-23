@@ -2,7 +2,7 @@
 
 public class CollectibleManager : MonoBehaviour
 {
-    PlayerData playerData = null;
+    private PlayerData playerData = null;
 
     public static byte CollectedCoins { get; private set; } = 0;
     public static byte CollectedStars { get; private set; } = 0;
@@ -32,7 +32,16 @@ public class CollectibleManager : MonoBehaviour
         playerData.AddCollectible(CollectibleType.Star, CollectedStars);
 
         Memento.SaveData(playerData);
-    } 
+    }
+
+    /// <summary>
+    /// This function is principally called when the user reset the world or go back to menu scene
+    /// </summary>
+    public void UpdateCoins()
+    {
+        playerData.AddCollectible(CollectibleType.Coin, CollectedCoins);
+        Memento.SaveData(playerData);
+    }
 
     private void CollectibleCollected(CollectibleType _CollectibleType)
     {
@@ -46,5 +55,10 @@ public class CollectibleManager : MonoBehaviour
             CollectedStars += 1;
             OnCollectibleAdded(CollectibleType.Star);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        UpdateCoins();
     }
 }
