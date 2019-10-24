@@ -13,12 +13,15 @@ public class Character : MonoBehaviour
     public Vector3 velocityUpdated { get; private set; }
     public bool CanActivateSpecial { get => canActivateSpecial; }
 
+    public Collider Collider { get; private set; }
+
     public static event Delegates.Action<float> OnChargeSpecial;
 
     private void Awake()
     {
         PlayerInputHandler.OnSpecialFunc += OnSpecial;
         Rigidbody = GetComponent<Rigidbody>();
+        Collider = GetComponent<Collider>();
         hasSpecial = false;
     }
 
@@ -62,6 +65,24 @@ public class Character : MonoBehaviour
         else
         {
             Rigidbody.constraints = RigidbodyConstraints.None;
+        }
+    }
+
+    /// <summary>
+    /// Sets the character interactibility with other objects to value
+    /// </summary>
+    /// <param name="_value"></param>
+    public void SetFunctional(bool _value)
+    {
+        if (_value)
+        {
+            Collider.enabled = true;
+            SetKinematic(false);
+        }
+        else
+        {
+            Collider.enabled = false;
+            SetKinematic(true);
         }
     }
 
