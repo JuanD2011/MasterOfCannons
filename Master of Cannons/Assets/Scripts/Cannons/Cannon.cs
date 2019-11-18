@@ -55,7 +55,7 @@ public class Cannon : MonoBehaviour
     {
         if (characterInCannon != null)
         {
-            //characterInCannon.UpdateSpecialProgress(elapsedWickTime / WickLength);
+            characterInCannon.UpdateSpecialProgress(elapsedWickTime / WickLength);
             burningWick = false;
             elapsedWickTime = 0f;
             characterInCannon.transform.SetParent(null);

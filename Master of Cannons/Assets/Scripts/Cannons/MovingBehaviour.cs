@@ -17,6 +17,7 @@ public class MovingBehaviour : CannonBehaviour
     private int targetCounter = 0;
 
     protected System.Action repeatMethod = null;
+    public List<Vector3> Targets { get => targets; }
 
     protected override void Awake() => base.Awake();
 
