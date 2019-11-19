@@ -93,11 +93,16 @@ public class Character : MonoBehaviour
         hasSpecial = true;
         for (float t = 0; t <= specialTime; t += Time.unscaledDeltaTime)
         {
+            if (!hasSpecial) {
+                OnDisableSpecial();
+                yield break;
+            }
+
             OnChargeSpecial(1 - (t / specialTime));
             yield return null;
         }
-        hasSpecial = false;
-        //specialProgress = 0;
+
+        OnDisableSpecial();
     }
 
     public void UpdateSpecialProgress(float timePercentageInCannon)
@@ -112,6 +117,12 @@ public class Character : MonoBehaviour
             specialProgress = 0;
         }
 
+    }
+
+    protected virtual void OnDisableSpecial()
+    {
+        hasSpecial = false;
+        OnChargeSpecial(0f);
     }
     #endregion
 }
