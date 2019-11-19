@@ -16,10 +16,10 @@ public class Cannon : MonoBehaviour
 
     protected bool burningWick = false;
     protected float elapsedWickTime = 0f;
-    protected Transform reference = null;
     private Character characterInCannon = null;
     
     protected float WickLength { get => wickLength * GlobalMultipliers.WickLenght; private set => wickLength = value; }
+    public Transform Reference { get; protected set; } = null;
 
     public event Delegates.Action<bool> OnCharacterInCannon = null;
     public static event Delegates.Action<Vector3> OnChangeLosingBoundaries = null;
@@ -41,7 +41,7 @@ public class Cannon : MonoBehaviour
         {
             if (transform.GetChild(i).CompareTag("Reference"))
             {
-                reference = transform.GetChild(i);
+                Reference = transform.GetChild(i);
             }
         }
     }
@@ -72,8 +72,8 @@ public class Cannon : MonoBehaviour
         OnCharacterInCannon?.Invoke(true);
         OnChangeLosingBoundaries?.Invoke(transform.position);
         burningWick = true;
-        characterInCannon.transform.position = reference.position;
-        characterInCannon.CannonEnterReset(reference);
+        characterInCannon.transform.position = Reference.position;
+        characterInCannon.CannonEnterReset(Reference);
 
         if (doCatchRotation) CatchRotation();
     }

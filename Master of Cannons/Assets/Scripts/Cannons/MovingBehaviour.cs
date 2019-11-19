@@ -14,12 +14,18 @@ public class MovingBehaviour : CannonBehaviour
 
     private List<Vector3> targets = new List<Vector3>();
 
+    protected LineRenderer trailRenderer = null;
+
     private int targetCounter = 0;
 
     protected System.Action repeatMethod = null;
     public List<Vector3> Targets { get => targets; }
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake()
+    {
+        base.Awake();
+        trailRenderer = GetComponent<LineRenderer>();
+    }
 
     private void Start()
     {
@@ -30,6 +36,7 @@ public class MovingBehaviour : CannonBehaviour
             if (transform.GetChild(i).CompareTag("Target")) targets.Add(transform.GetChild(i).position);
         }
 
+        RenderPath();
         if (startMoving) Move();
 
         MenuGameManager.OnPause += PauseMovement;
@@ -59,6 +66,15 @@ public class MovingBehaviour : CannonBehaviour
         {
             if (_value) Move();
             else PauseMovement(true);
+        }
+    }
+
+    protected virtual void RenderPath()
+    {
+        trailRenderer.positionCount = Targets.Count;
+        for (int i = 0; i < trailRenderer.positionCount; i++)
+        {
+            trailRenderer.SetPosition(i, Targets[i]);
         }
     }
 }
