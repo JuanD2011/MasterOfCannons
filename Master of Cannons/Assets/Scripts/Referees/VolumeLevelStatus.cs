@@ -12,13 +12,7 @@ public class VolumeLevelStatus : MonoBehaviour
         OnVolumeEntered = null;
     }
 
-    private void OnTriggerEnter(Collider _Other)
-    {
-        OnVolumeEntered(volumeType);
-    }
+    private void OnTriggerEnter(Collider _Other) => OnVolumeEntered(volumeType);
 
-    private void Reset()
-    {
-        GetComponent<Collider>().isTrigger = true;
-    }
+    private void Reset() => GetComponent<Collider>().isTrigger = true;
 }

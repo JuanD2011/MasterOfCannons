@@ -22,6 +22,7 @@ public class Cannon : MonoBehaviour
     protected float WickLength { get => wickLength * GlobalMultipliers.WickLenght; private set => wickLength = value; }
 
     public event Delegates.Action<bool> OnCharacterInCannon = null;
+    public static event Delegates.Action<Vector3> OnChangeLosingBoundaries = null;
 
     protected virtual void Awake()
     {
@@ -69,6 +70,7 @@ public class Cannon : MonoBehaviour
     private void CatchCharacter()
     {
         OnCharacterInCannon?.Invoke(true);
+        OnChangeLosingBoundaries?.Invoke(transform.position);
         burningWick = true;
         characterInCannon.transform.position = reference.position;
         characterInCannon.CannonEnterReset(reference);

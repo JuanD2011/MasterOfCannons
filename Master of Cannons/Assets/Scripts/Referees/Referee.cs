@@ -3,15 +3,14 @@
 public class Referee : MonoBehaviour
 {
     public static event Delegates.Action OnGameOver = null;
+    [SerializeField] private GameObject losingVolumeCompound = null;
 
-    private void Awake()
-    {
-        OnGameOver = null;
-    }
+    private void Awake() => OnGameOver = null;
 
     private void Start()
     {
         VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+        Cannon.OnChangeLosingBoundaries += ChangeLosingBoundaries;
     }
 
     private void ManageVolumeStatus(VolumeLevelStatusType _VolumeLevelStatus)
@@ -30,5 +29,12 @@ public class Referee : MonoBehaviour
                 break;
         }
         OnGameOver();
+    }
+
+    private void ChangeLosingBoundaries(Vector3 _latestCannonHit)
+    {
+        Vector3 posToChange = losingVolumeCompound.transform.position;
+        posToChange.y = _latestCannonHit.y;
+        losingVolumeCompound.transform.position = posToChange;
     }
 }
