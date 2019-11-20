@@ -26,7 +26,7 @@ public class CannonTrailRenderer : MonoBehaviour
             {
                 Debug.Log("Rendering");
                 RotatingBehaviour rotateBehaviour = behaviour as RotatingBehaviour;
-                LineRendererPath.RenderBezierCurve(GetComponent<LineRenderer>(), 1, rotateBehaviour.Angles, transform.position);
+                LineRendererPath.RenderBezierCurve(GetComponent<LineRenderer>(), 5, rotateBehaviour.Angles, transform.position);
             }
         }
     }
