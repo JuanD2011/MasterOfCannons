@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 6946837625399168604}
   - component: {fileID: 6946837625399168605}
   - component: {fileID: 618574572}
+  - component: {fileID: 720672637426249505}
   - component: {fileID: 773760941}
   m_Layer: 10
   m_Name: Moving Cannon
@@ -204,6 +205,18 @@ MonoBehaviour:
   shootForce: 18
   doCatchRotation: 0
   catchRotation: {x: 0, y: 0, z: 180}
+--- !u!114 &720672637426249505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6946837625399168602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115e5ee3f555dc1408a69b55df612786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!120 &773760941
 LineRenderer:
   m_ObjectHideFlags: 0
