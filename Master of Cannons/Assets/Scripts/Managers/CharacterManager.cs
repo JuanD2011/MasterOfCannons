@@ -20,6 +20,7 @@ public class CharacterManager : MonoBehaviour
                 break;
             case CharacterType.CannonGod:
                 character.AddComponent<CannonGodCharacter>();
+                character.AddComponent<PlaceCannonSystem>();
                 break;
             case CharacterType.Hairy:
                 character.AddComponent<HairyCharacter>();
