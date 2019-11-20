@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 public class CharacterSkinSelection : MonoBehaviour
 {
@@ -12,38 +13,51 @@ public class CharacterSkinSelection : MonoBehaviour
     private SkinsDatabase skinsDatabase = null;
 
     [SerializeField]
-    private GameObject skinTemplate = null, paginationToggle = null;
+    private GameObject skinTemplate = null;
+
+    [SerializeField]
+    private HorizontalScrollSnap horizontalScrollSnap = null;
 
     private int skinIndex = 0;
+
+    private GameObject skinTmp = null;
 
     /// <summary>
     /// Instantiate all the skins for the current selected character.
     /// </summary>
     public void Initialize()
     {
-        for (int i = 0; i < playerData.currentCharacter.Skins.Length; i++)
+        horizontalScrollSnap.RemoveAllChildren(out GameObject[] gameObjects);
+
+        for (int i = 0; i < pagination.childCount; i++) pagination.GetChild(i).gameObject.SetActive(false);
+
+        //TODO do the same with skins
+        for (int i = 0; i < skinsDatabase.currentSkinData.Skins.Length; i++)
         {
-            Instantiate(skinTemplate, content);
-            Instantiate(paginationToggle, pagination);
+            skinTmp = Instantiate(skinTemplate);
+            horizontalScrollSnap.AddChild(skinTmp);
+            pagination.GetChild(i).gameObject.SetActive(true);
         }
     }
 
     /// <summary>
     /// Set character
     /// </summary>
-    public void SetCharacter(int _Index) { playerData.currentCharacter = skinsDatabase.skins[_Index]; }
+    public void SetCharacter(int _Index) { skinsDatabase.currentSkinData = skinsDatabase.skins[_Index]; }
 
     /// <summary>
     /// Set current skin 
     /// </summary>
     /// <param name="_Index"></param>
-    public void SetSkin() { playerData.currentCharacter.CurrentSkin = playerData.currentCharacter.Skins[skinIndex]; }
+    public void SetSkin()
+    {
+        playerData.currentCharacter.CurrentSkin = skinsDatabase.currentSkinData.Skins[skinIndex];
+        playerData.currentCharacter.Name = skinsDatabase.currentSkinData.Name;
+    }
 
     /// <summary>
     /// Set skin index
     /// </summary>
     /// <param name="_Index"></param>
-    public void SetSkinIndex(int _Index) { skinIndex = _Index;
-        Debug.Log(_Index);
-    }
+    public void SetSkinIndex(int _Index) { skinIndex = _Index; }
 }

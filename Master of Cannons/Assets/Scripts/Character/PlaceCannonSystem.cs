@@ -48,7 +48,7 @@ public class PlaceCannonSystem : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 currentTargetPos = Screen2WorldTap();
-                canPutTarget = !Physics.CheckSphere(currentTargetPos, 1.5f, cannonLayerMask);
+                canPutTarget = !Physics.CheckSphere(currentTargetPos, 2f, cannonLayerMask);
                 if (canPutTarget)
                 {
                     instantiatedCannon = Instantiate(aimingCannon, currentTargetPos, Quaternion.identity);
@@ -68,11 +68,10 @@ public class PlaceCannonSystem : MonoBehaviour
         GameObject instantiatedCannon = null;
         int index = 0;
         bool canPutTarget = false;
-        int pointsToSet = 3;
+        int pointsToSet = 2;
 
         Vector3 lastTargetPos = Vector3.zero;
         Vector3[] targets = new Vector3[pointsToSet];
-        float mForwardPos = transform.position.z;
 
         while (index < pointsToSet)
         {
@@ -81,15 +80,16 @@ public class PlaceCannonSystem : MonoBehaviour
                 Vector3 currentTargetPos = Screen2WorldTap();
 
                 if (index == 0)
-                    canPutTarget = !Physics.CheckSphere(currentTargetPos, 1.5f, cannonLayerMask);
+                    canPutTarget = !Physics.CheckSphere(currentTargetPos, 2f, cannonLayerMask);
                 else
-                    canPutTarget = !Physics.CheckCapsule(lastTargetPos, currentTargetPos, 1f, cannonLayerMask);
+                    canPutTarget = !Physics.CheckCapsule(lastTargetPos, currentTargetPos, 3f, cannonLayerMask);
 
                 if (canPutTarget)
                 {
                     targets[index] = currentTargetPos;
                     GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     sphere.transform.position = currentTargetPos;
+                    sphere.transform.localScale = Vector3.one / 2f;
                     index++;
                     lastTargetPos = targets[index - 1];
                 }
@@ -129,14 +129,17 @@ public class PlaceCannonSystem : MonoBehaviour
             instantiatedCannon.transform.rotation = Quaternion.AngleAxis(targetRotation - 90, Vector3.forward);
             yield return null;
         }
-    }
+    }    
 
     private Vector3 Screen2WorldTap()
     {
+        Camera mainCam = Camera.main;
+        Transform mainCamTransform = mainCam.transform;
         Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Vector3.Distance(transform.position, Camera.main.transform.position);
-        Vector3 currentTargetPos = Camera.main.ScreenToWorldPoint(mousePos);
-        currentTargetPos.z = transform.position.z;
+        Vector3 depthPosition = new Vector3(mainCamTransform.position.x, mainCamTransform.position.y, transform.position.z);
+        mousePos.z = Mathf.Abs(Vector3.Distance(mainCamTransform.position, depthPosition));        
+        Vector3 currentTargetPos = mainCam.ScreenToWorldPoint(mousePos);
+        //currentTargetPos.z = transform.position.z;
         return currentTargetPos;
     }
 
@@ -182,7 +185,7 @@ public class PlaceCannonSystem : MonoBehaviour
                 auxCollider.transform.rotation = Quaternion.Euler(0, 0, -zRot);
 
                 float distance = Vector3.Distance(movBehaviour.Targets[j], movBehaviour.Targets[j+1]);
-                auxCollider.GetComponent<CapsuleCollider>().height = distance + 0.5f;
+                auxCollider.GetComponent<CapsuleCollider>().height = distance + 1f;
 
                 fakeColliders.Add(auxCollider);
             }

@@ -15,13 +15,25 @@ MonoBehaviour:
   skins:
   - name: Sticky
     skins:
-    - {fileID: 1389591753885734125, guid: 21281669b9dbbe44596bd495e7fcae23, type: 3}
-    - {fileID: 195153225524213917, guid: 845559ea22b81364495c8dac59e7dce5, type: 3}
+    - {fileID: 7179511578770460706, guid: 4debd589f1e42994ba01ca440d837e47, type: 3}
+    - {fileID: 3563618061348818863, guid: 0052bd66f81c8fb419af0de2142439b5, type: 3}
   - name: Ghost
-    skins: []
+    skins:
+    - {fileID: 7179511578770460706, guid: e3a59e50ff741aa4cb7e954c4878e993, type: 3}
+    - {fileID: 3563618061348818863, guid: a11ff2d5409d187478b51ace85ffab34, type: 3}
   - name: Slow Mo
-    skins: []
+    skins:
+    - {fileID: 7179511578770460706, guid: 73082e8d238e3894b8c4612f2487d92f, type: 3}
+    - {fileID: 3563618061348818863, guid: 2e0fb2f96eb94b9439b907116ab626ab, type: 3}
   - name: Cannon God
-    skins: []
+    skins:
+    - {fileID: 7179511578770460706, guid: 52e7f59c4ab39e94baf16c25a587468c, type: 3}
+    - {fileID: 3563618061348818863, guid: cd80b34d54d534249a84b6887a73427b, type: 3}
+    - {fileID: 3563618061348818863, guid: 7c001f746c0f8344c939904d0143f44b, type: 3}
   - name: Hairy
+    skins:
+    - {fileID: 7179511578770460706, guid: 6cf451c9edbecc440ba80d8eed828317, type: 3}
+    - {fileID: 3563618061348818863, guid: 00ccb5a6580a05f4fa0042cc2647dea9, type: 3}
+  currentSkinData:
+    name: 
     skins: []

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CannonGodCharacter : Character
 {
     enum CannonType { Aiming, Moving }
-    [SerializeField] CannonType cannonType = CannonType.Aiming;
     Delegates.Action<Vector3> setPos2CannonPlaced = null;
 
     protected override void Start()
@@ -15,14 +15,44 @@ public class CannonGodCharacter : Character
         {
             transform.position = cannonPlacedPos;
             OnDisableSpecial();
-        };
+        };   
     }
 
     protected override IEnumerator OnSpecial()
     {
-        System.Type t = null;
+        CreateCanvas();
+        yield return new WaitForSecondsRealtime(0.3f);
+        StartCoroutine(base.OnSpecial());            
+        Time.timeScale = 0f;
+    }
 
-        switch (cannonType)     
+    protected override void OnDisableSpecial()
+    {
+        base.OnDisableSpecial();
+        Time.timeScale = 1;
+        GetComponent<PlaceCannonSystem>().StopAllCoroutines();
+        PlaceCannonSystem.destroyFakeColliders?.Invoke();
+    }
+
+    protected void CreateCanvas()
+    {
+        GameObject canvas = UIUtilities.CreateCanvas("CannonSelectionCanvas");
+        GameObject horLayout = UIUtilities.CreateHorizontalLayout("Buttons", canvas);
+
+        for (int i = 0; i < System.Enum.GetNames(typeof(CannonType)).Length; i++)
+        {            
+            CannonType cannonType = (CannonType)i;
+            string cannonTypeName = string.Format("{0} Cannon", cannonType.ToString());            
+            Delegates.Action buttonAction = () => OnClickCannonType(cannonType, canvas);
+            Font font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+            GameObject button = UIUtilities.CreateButton(cannonTypeName, cannonTypeName, horLayout, buttonAction, Color.black, font);
+        }
+    }
+
+    private void OnClickCannonType(CannonType cannonType, GameObject canvas)
+    {
+        System.Type t = null;
+        switch (cannonType)
         {
             case CannonType.Aiming:
                 t = typeof(AimingBehaviour);
@@ -35,16 +65,9 @@ public class CannonGodCharacter : Character
         }
 
         PlaceCannonSystem.placeCannonHandler(t, setPos2CannonPlaced);
-        yield return new WaitForSecondsRealtime(0.3f);
-        StartCoroutine(base.OnSpecial());            
-        Time.timeScale = 0f;
+        Destroy(canvas);
     }
 
-    protected override void OnDisableSpecial()
-    {
-        base.OnDisableSpecial();
-        Time.timeScale = 1;
-        GetComponent<PlaceCannonSystem>().StopAllCoroutines();
-        PlaceCannonSystem.destroyFakeColliders?.Invoke();
-    }    
+   
 }
+
