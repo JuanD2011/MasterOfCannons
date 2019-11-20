@@ -43,17 +43,18 @@ public class CharacterSkinSelection : MonoBehaviour
     /// <summary>
     /// Set character
     /// </summary>
-    public void SetCharacter(int _Index) { skinsDatabase.currentSkinData = skinsDatabase.skins[_Index]; }
+    public void SetCharacter(int _Index)
+    {
+        skinsDatabase.currentSkinData = skinsDatabase.skins[_Index];
+        playerData.currentCharacter.Name = skinsDatabase.currentSkinData.Name;
+        playerData.currentCharacter.CharacterType = skinsDatabase.currentSkinData.CharacterType;
+    }
 
     /// <summary>
     /// Set current skin 
     /// </summary>
     /// <param name="_Index"></param>
-    public void SetSkin()
-    {
-        playerData.currentCharacter.CurrentSkin = skinsDatabase.currentSkinData.Skins[skinIndex];
-        playerData.currentCharacter.Name = skinsDatabase.currentSkinData.Name;
-    }
+    public void SetSkin() => playerData.currentCharacter.CurrentSkin = skinsDatabase.currentSkinData.Skins[skinIndex];
 
     /// <summary>
     /// Set skin index
