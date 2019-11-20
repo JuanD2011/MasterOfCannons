@@ -21,6 +21,12 @@ public class CharacterSkinSelection : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
+        for (int i = 0; i < content.childCount; i++)
+        {
+            Destroy(content.GetChild(i));
+            Destroy(pagination.GetChild(i));
+        }
+
         for (int i = 0; i < playerData.currentCharacter.Skins.Length; i++)
         {
             Instantiate(skinTemplate, content);
@@ -43,7 +49,5 @@ public class CharacterSkinSelection : MonoBehaviour
     /// Set skin index
     /// </summary>
     /// <param name="_Index"></param>
-    public void SetSkinIndex(int _Index) { skinIndex = _Index;
-        Debug.Log(_Index);
-    }
+    public void SetSkinIndex(int _Index) { skinIndex = _Index; }
 }
