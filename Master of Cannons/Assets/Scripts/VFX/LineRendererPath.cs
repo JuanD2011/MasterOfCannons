@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public static class LineRendererPath
 {
@@ -7,10 +8,19 @@ public static class LineRendererPath
     {
         try
         {
-            _lineRenderer.positionCount = targets.Length;
-            for (int i = 0; i < _lineRenderer.positionCount; i++)
+            if (targets.Length == 2)
             {
-                _lineRenderer.SetPosition(i, targets[i]);
+                Vector3[] retarget = new Vector3[3];
+                retarget[0] = targets[0];
+                retarget[1] = (targets[0] + targets[1]) / 2;
+                retarget[2] = targets[1];
+                _lineRenderer.positionCount = retarget.Length;
+                _lineRenderer.SetPositions(retarget.ToArray());
+            }
+            else
+            {
+                _lineRenderer.positionCount = targets.Length;
+                _lineRenderer.SetPositions(targets);
             }
         }
         catch { Debug.Log("There is no Line Renderer to handle"); }
