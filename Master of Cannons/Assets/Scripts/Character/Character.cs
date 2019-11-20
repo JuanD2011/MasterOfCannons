@@ -108,7 +108,7 @@ public class Character : MonoBehaviour
     public void UpdateSpecialProgress(float timePercentageInCannon)
     {
         if (canActivateSpecial || hasSpecial) return;
-        specialProgress += (1 - timePercentageInCannon);
+        specialProgress += (1 - timePercentageInCannon) * 0.3f;
         OnChargeSpecial.Invoke(specialProgress);
         if (specialProgress > 0.95f)
         {
