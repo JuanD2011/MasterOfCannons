@@ -8,6 +8,10 @@ public class CharacterManager : MonoBehaviour
     [SerializeField]
     private PlayerData playerData = null;
 
+    [Header("Only if current character is Cannon God")]
+    [SerializeField]
+    private GameObject aimingCannon = null, movingCannon = null;
+
     private void Awake()
     {
         switch (playerData.currentCharacter.CharacterType)
@@ -21,6 +25,9 @@ public class CharacterManager : MonoBehaviour
             case CharacterType.CannonGod:
                 character.AddComponent<CannonGodCharacter>();
                 character.AddComponent<PlaceCannonSystem>();
+                PlaceCannonSystem placeCannonSystem = character.GetComponent<PlaceCannonSystem>();
+                placeCannonSystem.AimingCannon = aimingCannon;
+                placeCannonSystem.MovingCannon = movingCannon;
                 break;
             case CharacterType.Hairy:
                 character.AddComponent<HairyCharacter>();

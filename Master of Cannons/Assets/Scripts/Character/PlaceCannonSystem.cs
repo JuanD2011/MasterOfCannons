@@ -6,13 +6,16 @@ using System.Collections.Generic;
 
 public class PlaceCannonSystem : MonoBehaviour
 {
-    [SerializeField] GameObject movingCannon = null;
-    [SerializeField] GameObject aimingCannon = null;
+    [SerializeField] private GameObject movingCannon = null;
+    [SerializeField] private GameObject aimingCannon = null;
     public static Action<System.Type, Action<Vector3>> placeCannonHandler;
     public static Action destroyFakeColliders;
 
     int cannonLayer = 10;
     int cannonLayerMask = 0;
+
+    public GameObject MovingCannon { get => movingCannon; set => movingCannon = value; }
+    public GameObject AimingCannon { get => aimingCannon; set => aimingCannon = value; }
 
     private void Start()
     {
@@ -51,7 +54,7 @@ public class PlaceCannonSystem : MonoBehaviour
                 canPutTarget = !Physics.CheckSphere(currentTargetPos, 2f, cannonLayerMask);
                 if (canPutTarget)
                 {
-                    instantiatedCannon = Instantiate(aimingCannon, currentTargetPos, Quaternion.identity);
+                    instantiatedCannon = Instantiate(AimingCannon, currentTargetPos, Quaternion.identity);
                     yield return new WaitForSecondsRealtime(0.3f);
                     onCannonPlaced?.Invoke(currentTargetPos);
                 }
@@ -97,7 +100,7 @@ public class PlaceCannonSystem : MonoBehaviour
             yield return null;
         }
 
-        instantiatedCannon = Instantiate(movingCannon, targets[0], Quaternion.identity);        
+        instantiatedCannon = Instantiate(MovingCannon, targets[0], Quaternion.identity);        
         if(pointsToSet > 2)
         {
             for (int i = 3; i <= pointsToSet; i++)

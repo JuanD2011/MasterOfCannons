@@ -72,3 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 0}
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
+  aimingCannon: {fileID: 681510735815896685, guid: ef034b2263cabf7429828a423e531b79,
+    type: 3}
+  movingCannon: {fileID: 6946837625399168602, guid: 19c5f2b6e3ee70149ba99a355155066c,
+    type: 3}
