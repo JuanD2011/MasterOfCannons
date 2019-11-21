@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SlowMoCharacter : Character
 {
@@ -11,26 +12,35 @@ public class SlowMoCharacter : Character
         specialTime = 10f;
     }
 
-    //private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (hasSpecial && other.gameObject.layer == 10)
+            StartCoroutine(SlowMotion());
+    }
+
+    //private void OnTriggerStay(Collider other)
     //{
-    //    if (hasSpecial && other.gameObject.layer == 10)
+    //    if (!inSlowMo && hasSpecial && other.gameObject.layer == 10)
     //        StartCoroutine(SlowMotion());
     //}
 
-    private void OnTriggerStay(Collider other)
+    protected override IEnumerator OnSpecial()
     {
-        if (!inSlowMo && hasSpecial && other.gameObject.layer == 10)
-            StartCoroutine(SlowMotion());
+        StartCoroutine(base.OnSpecial());
+        StartCoroutine(SlowMotion());
+        yield return null;
     }
 
     System.Collections.IEnumerator SlowMotion()
     {
-        inSlowMo = true;
+        //inSlowMo = true;
         Time.timeScale = slowMoScale;
         Time.fixedDeltaTime = 0.02f * slowMoScale;
-        yield return new WaitUntil(() => transform.parent == null);
+        yield return new WaitUntil(() => transform.parent == null || hasSpecial == false);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
-        inSlowMo = false;
+        //inSlowMo = false;
     }
+
+
 }

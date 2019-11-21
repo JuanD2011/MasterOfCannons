@@ -51,7 +51,7 @@ public class PlaceCannonSystem : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 currentTargetPos = Screen2WorldTap();
-                canPutTarget = !Physics.CheckSphere(currentTargetPos, 2f, cannonLayerMask);
+                canPutTarget = !Physics.CheckSphere(currentTargetPos, 1.5f, cannonLayerMask);
                 if (canPutTarget)
                 {
                     instantiatedCannon = Instantiate(AimingCannon, currentTargetPos, Quaternion.identity);
@@ -83,9 +83,9 @@ public class PlaceCannonSystem : MonoBehaviour
                 Vector3 currentTargetPos = Screen2WorldTap();
 
                 if (index == 0)
-                    canPutTarget = !Physics.CheckSphere(currentTargetPos, 2f, cannonLayerMask);
+                    canPutTarget = !Physics.CheckSphere(currentTargetPos, 1.5f, cannonLayerMask);
                 else
-                    canPutTarget = !Physics.CheckCapsule(lastTargetPos, currentTargetPos, 3f, cannonLayerMask);
+                    canPutTarget = !Physics.CheckCapsule(lastTargetPos, currentTargetPos, 1.5f, cannonLayerMask);
 
                 if (canPutTarget)
                 {
@@ -100,7 +100,8 @@ public class PlaceCannonSystem : MonoBehaviour
             yield return null;
         }
 
-        instantiatedCannon = Instantiate(MovingCannon, targets[0], Quaternion.identity);        
+        instantiatedCannon = Instantiate(MovingCannon, targets[0], Quaternion.identity);
+        Destroy(instantiatedCannon.GetComponent<MovingBehaviour>());
         if(pointsToSet > 2)
         {
             for (int i = 3; i <= pointsToSet; i++)
@@ -112,6 +113,8 @@ public class PlaceCannonSystem : MonoBehaviour
         }
         for (int i = 0; i < pointsToSet; i++)
             instantiatedCannon.transform.Find(string.Format("Target{0}", i + 1)).position = targets[i];
+
+        instantiatedCannon.AddComponent<MovingBehaviour>();
 
         yield return new WaitForSecondsRealtime(0.3f);
         yield return StartCoroutine(SetCannonRotation(instantiatedCannon.transform));        

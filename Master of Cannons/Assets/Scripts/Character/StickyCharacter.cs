@@ -3,7 +3,7 @@
 public class StickyCharacter : Character
 {
     float minDistanceToStick = 0.8f;
-    float maxDistanceToStick = 1.2f;
+    float maxDistanceToStick = 1.8f;
     float lerpTime = 0.4f;
 
     protected override void Start()
