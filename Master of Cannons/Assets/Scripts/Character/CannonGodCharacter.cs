@@ -5,7 +5,8 @@ public class CannonGodCharacter : Character
 {
     enum CannonType { Aiming, Moving }
     Delegates.Action<Vector3> setPos2CannonPlaced = null;
-
+    private GameObject canvas = null;
+    
     protected override void Start()
     {
         base.Start();
@@ -14,7 +15,9 @@ public class CannonGodCharacter : Character
         {
             transform.position = cannonPlacedPos;
             OnDisableSpecial();
-        };   
+        };
+
+        gameObject.AddComponent<PlaceCannonSystem>();
     }
 
     protected override IEnumerator OnSpecial()
@@ -28,6 +31,7 @@ public class CannonGodCharacter : Character
     protected override void OnDisableSpecial()
     {
         base.OnDisableSpecial();
+        Destroy(canvas);
         Time.timeScale = 1;
         GetComponent<PlaceCannonSystem>().StopAllCoroutines();
         PlaceCannonSystem.destroyFakeColliders?.Invoke();
@@ -35,7 +39,7 @@ public class CannonGodCharacter : Character
 
     protected void CreateCanvas()
     {
-        GameObject canvas = UIUtilities.CreateCanvas("CannonSelectionCanvas");
+        canvas = UIUtilities.CreateCanvas("CannonSelectionCanvas");
         GameObject horLayout = UIUtilities.CreateHorizontalLayout("Buttons", canvas);
 
         for (int i = 0; i < System.Enum.GetNames(typeof(CannonType)).Length; i++)

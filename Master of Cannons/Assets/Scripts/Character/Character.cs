@@ -98,7 +98,7 @@ public class Character : MonoBehaviour
                 yield break;
             }
 
-            OnChargeSpecial(1 - (t / specialTime));
+            OnChargeSpecial.Invoke(1 - (t / specialTime));
             yield return null;
         }
 
@@ -114,7 +114,6 @@ public class Character : MonoBehaviour
         {
             PlayerInputHandler.canActivateSpecialHandler.Invoke();
             canActivateSpecial = true;
-            specialProgress = 0;
         }
 
     }
@@ -122,7 +121,8 @@ public class Character : MonoBehaviour
     protected virtual void OnDisableSpecial()
     {
         hasSpecial = false;
-        OnChargeSpecial(0f);
+        specialProgress = 0;
+        OnChargeSpecial(specialProgress);
     }
     #endregion
 }

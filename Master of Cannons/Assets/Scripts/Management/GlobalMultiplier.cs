@@ -13,7 +13,7 @@ public class GlobalMultipliers : MonoBehaviour
     /// </summary>
     /// <param name="sender"> Object that called the method </param>
     /// <param name="percentageIncrease"> How much do you want it that increase with respect to the current value? </param>
-    public static void IncreaseWickLenght(object sender, float percentageIncrease)
+    public static void SetWickLenght(object sender, float percentageIncrease)
     {
         bool canSet = CanSetWickMultiplier(sender);
         if (canSet)

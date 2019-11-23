@@ -2,7 +2,7 @@
 
 public class HairyCharacter : Character
 {
-
+    private float increasePercentage = 0.2f;
     protected override void Start()
     {
         base.Start();
@@ -10,8 +10,8 @@ public class HairyCharacter : Character
     }
     protected override IEnumerator OnSpecial()
     {
-        GlobalMultipliers.IncreaseWickLenght(this, 0.2f);
+        GlobalMultipliers.SetWickLenght(this, increasePercentage);
         yield return (base.OnSpecial());
-        GlobalMultipliers.IncreaseWickLenght(this, -0.2f);
+        GlobalMultipliers.SetWickLenght(this, -increasePercentage);
     }
 }

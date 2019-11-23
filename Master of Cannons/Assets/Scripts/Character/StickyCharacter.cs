@@ -17,8 +17,7 @@ public class StickyCharacter : Character
         if (hasSpecial && collision.gameObject.layer == 10)
         {
             //Transform cannonReference = collision.transform.root.GetChild(0);  
-
-            //ESTO SE PUEDE MEJORAR POSICIONANDO A "REFERENCE" DE PRIMERO EN LA JERARQUIA DE TODOS LOS CAÑONES            
+     
             Transform[] cannonChilds = collision.transform.root.GetComponentsInChildren<Transform>();
             Transform cannonReference = null;
 

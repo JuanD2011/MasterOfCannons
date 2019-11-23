@@ -6,21 +6,18 @@ using System.Collections.Generic;
 
 public class PlaceCannonSystem : MonoBehaviour
 {
-    [SerializeField] private GameObject movingCannon = null;
-    [SerializeField] private GameObject aimingCannon = null;
+    private CannonsObjects cannonObj = null;
     public static Action<System.Type, Action<Vector3>> placeCannonHandler;
     public static Action destroyFakeColliders;
 
     int cannonLayer = 10;
     int cannonLayerMask = 0;
 
-    public GameObject MovingCannon { get => movingCannon; set => movingCannon = value; }
-    public GameObject AimingCannon { get => aimingCannon; set => aimingCannon = value; }
-
-    private void Start()
+    private void Awake()
     {
         placeCannonHandler = PlaceCannon;
         cannonLayerMask = 1 << cannonLayer;
+        cannonObj = Resources.Load<CannonsObjects>("Scriptable Objects/Cannons Objects");
     }
 
     public void PlaceCannon(System.Type type, Action<Vector3> onCannonPlaced)
@@ -54,7 +51,7 @@ public class PlaceCannonSystem : MonoBehaviour
                 canPutTarget = !Physics.CheckSphere(currentTargetPos, 1.5f, cannonLayerMask);
                 if (canPutTarget)
                 {
-                    instantiatedCannon = Instantiate(AimingCannon, currentTargetPos, Quaternion.identity);
+                    instantiatedCannon = Instantiate(cannonObj.AimingCannon, currentTargetPos, Quaternion.identity);
                     yield return new WaitForSecondsRealtime(0.3f);
                     onCannonPlaced?.Invoke(currentTargetPos);
                 }
@@ -100,7 +97,7 @@ public class PlaceCannonSystem : MonoBehaviour
             yield return null;
         }
 
-        instantiatedCannon = Instantiate(MovingCannon, targets[0], Quaternion.identity);
+        instantiatedCannon = Instantiate(cannonObj.MovingCannon, targets[0], Quaternion.identity);
         Destroy(instantiatedCannon.GetComponent<MovingBehaviour>());
         if(pointsToSet > 2)
         {

@@ -13,6 +13,8 @@ public class Referee : MonoBehaviour
         Cannon.OnChangeLosingBoundaries += ChangeLosingBoundaries;
     }
 
+    private void OnDisable() => Cannon.OnChangeLosingBoundaries -= ChangeLosingBoundaries;
+
     private void ManageVolumeStatus(VolumeLevelStatusType _VolumeLevelStatus)
     {
         switch (_VolumeLevelStatus)
