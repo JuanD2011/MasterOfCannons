@@ -14,14 +14,19 @@ public class GhostCharacter : Character
     private void OnTriggerEnter(Collider other)
     {
         GameObject otherGameObj = other.gameObject;
-        if (canActivateSpecial && otherGameObj.layer == 10)
+        if (specialProgress >= 0.8f && otherGameObj.layer == 10)
             lastCannon = otherGameObj.gameObject;
     }
 
     protected override IEnumerator OnSpecial()
-    {
-        lastCannon.SetActive(true);
+    {        
         transform.position = lastCannon.transform.Find("Reference").position;
         yield return (base.OnSpecial());
+        float t = 0;
+        while(t <= 3)
+        {
+            SetFunctional(false);
+            yield return null;
+        }
     }
 }

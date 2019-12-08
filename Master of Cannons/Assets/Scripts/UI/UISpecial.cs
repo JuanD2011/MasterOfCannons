@@ -11,6 +11,8 @@ public class UISpecial : MonoBehaviour
         specialFill = transform.GetChild(0).GetComponent<Image>();
     }
 
-    void UpdateSpecialFill(float amount) { if(specialFill != null) specialFill.fillAmount = amount; }
+    private void OnDisable() => Character.OnChargeSpecial -= UpdateSpecialFill;   
+
+    void UpdateSpecialFill(float amount) { specialFill.fillAmount = amount; }
 
 }

@@ -4,14 +4,14 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
-    private float specialProgress = 0f;
+    protected float specialProgress = 0f;
     protected float specialTime = 4f;
     protected bool canActivateSpecial = false;
     protected bool hasSpecial = false;
 
     public Rigidbody Rigidbody { get; private set; }
     public Vector3 velocityUpdated { get; private set; }
-    public bool CanActivateSpecial { get => canActivateSpecial; }
+    public bool HasSpecial { get => hasSpecial; }
 
     public Collider Collider { get; private set; }
 

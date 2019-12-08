@@ -8,6 +8,9 @@ public abstract class Boss : MonoBehaviour
     [SerializeField, Range(1, 10)]
     protected byte difficulty = 1;
 
+    [SerializeField]
+    bool lerpCharacter = false;
+
     protected int Life { get => life; private set => life = value; }
 
     public static event Delegates.Action<int> OnBossHit = null;
@@ -23,6 +26,6 @@ public abstract class Boss : MonoBehaviour
     protected void BossHit()
     {
         Life -= BossFightManager.BossFight.DamagePerHit;
-        OnBossHit?.Invoke(Life);
+        if(lerpCharacter) OnBossHit?.Invoke(Life);
     } 
 }

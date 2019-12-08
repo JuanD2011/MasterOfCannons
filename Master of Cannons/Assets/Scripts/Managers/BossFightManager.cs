@@ -4,7 +4,7 @@ public class BossFightManager : MonoBehaviour
 {
     public static BossFightManager BossFight;
 
-    [SerializeField]
+    [SerializeField] GameObject characterGO;
     private Character character = null;
 
     [SerializeField]
@@ -29,6 +29,7 @@ public class BossFightManager : MonoBehaviour
 
     private void Start()
     {
+        character = characterGO.GetComponent<Character>();
         characterStartPosition = character.transform.position;
         Boss.OnBossHit += OnBossHit;
     }

@@ -91,4 +91,9 @@ public class Cannon : MonoBehaviour
             CatchCharacter();
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Character")) characterInCannon = null;
+    }
 }
