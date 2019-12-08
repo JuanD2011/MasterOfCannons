@@ -16,13 +16,22 @@ public class AudioSetting : MonoBehaviour
     [SerializeField]
     private AudioType m_Type = AudioType.Music;
 
+    [SerializeField]
+    private Color enabledColor = new Color(0, 149, 135), disabledColor = Color.red;
+
+    private readonly string on = "On", off = "Off";
+
     private const float mutedVolume = -80f;
+
+    private TextTranslation textTranslation = null;
 
     /// <summary>
     /// Initialize the mixer
     /// </summary>
     public void Init()
     {
+        textTranslation = GetComponentInChildren<TextTranslation>();
+
         switch (m_Type)
         {
             case AudioType.Music:
@@ -34,7 +43,7 @@ public class AudioSetting : MonoBehaviour
             default:
                 break;
         }
-        UpdateIcon();
+        UpdateUI();
     }
 
     /// <summary>
@@ -74,32 +83,38 @@ public class AudioSetting : MonoBehaviour
             default:
                 break;
         }
-        UpdateIcon();
+        UpdateUI();
     }
 
-    private void UpdateIcon()
+    private void UpdateUI()
     {
         switch (m_Type)
         {
             case AudioType.Music:
                 if (settings.isMusicActive)
                 {
-                    m_Image.color = Color.white;
+                    m_Image.color = enabledColor;
+                    textTranslation.TextID = on;
                 }
                 else
                 {
-                    m_Image.color = Color.red;
+                    m_Image.color = disabledColor;
+                    textTranslation.TextID = off;
                 }
+                textTranslation.UpdateText();
                 break;
             case AudioType.SFX:
                 if (settings.isSFXActive)
                 {
-                    m_Image.color = Color.white;
+                    m_Image.color = enabledColor;
+                    textTranslation.TextID = on;
                 }
                 else
                 {
-                    m_Image.color = Color.red;
+                    m_Image.color = disabledColor;
+                    textTranslation.TextID = off;
                 }
+                textTranslation.UpdateText();
                 break;
             default:
                 break;

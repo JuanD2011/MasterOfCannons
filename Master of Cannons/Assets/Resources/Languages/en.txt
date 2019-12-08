@@ -1,6 +1,9 @@
 MasterOfCannons=Master Of Cannons
+Language=Language
 Music=Music
 SFX=SFX
+On=On
+Off=Off
 en=English
 es=Spanish
 fr=French
