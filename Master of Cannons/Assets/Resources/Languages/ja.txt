@@ -1,4 +1,6 @@
 ﻿MasterOfCannons=大砲の達人
+Music=Música
+SFX=Efectos
 en=Inglés
 es=Español
 fr=Francés

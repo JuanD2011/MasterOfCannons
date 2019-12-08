@@ -34,6 +34,7 @@ public class AudioSetting : MonoBehaviour
             default:
                 break;
         }
+        UpdateIcon();
     }
 
     /// <summary>

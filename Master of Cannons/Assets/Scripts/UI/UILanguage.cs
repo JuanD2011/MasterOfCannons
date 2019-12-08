@@ -7,23 +7,17 @@ public class UILanguage : MonoBehaviour
     [SerializeField]
     private Settings settings = null;
 
-    [SerializeField]
-    private TextMeshProUGUI acronymText = null;
-
     private TMP_Dropdown m_Dropdown = null;
 
-    private void Awake()
-    {
-        m_Dropdown = GetComponent<TMP_Dropdown>();
+    private void Awake() => m_Dropdown = GetComponent<TMP_Dropdown>();
 
-        InitializeDropdown();
-    }
-
-    protected void Start()
+    private void Start()
     {
         m_Dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 
-        SetAcronym();
+        InitializeDropdown();
+
+        Translation.OnLanguageLoaded += UpdateDropdownTexts;
     }
 
     private void InitializeDropdown()
@@ -32,24 +26,27 @@ public class UILanguage : MonoBehaviour
 
         for (int i = 0; i < Translation.LanguageTypes.Length; i++)
         {
-            options.Add(new TMP_Dropdown.OptionData(Translation.LanguageTypes[i].ToString()));
+            options.Add(new TMP_Dropdown.OptionData(Translation.GetTextTranslated(Translation.LanguageTypes[i].ToString())));
         }
 
-        m_Dropdown.AddOptions(options);
+        m_Dropdown.options = options;
 
         m_Dropdown.value = settings.languageId;
+    }
+
+    private void UpdateDropdownTexts()
+    {
+        m_Dropdown.captionText.SetText(string.Format("{0}", Translation.GetTextTranslated(Translation.GetCurrentLanguage().ToString())));
+
+        for (int i = 0; i < m_Dropdown.options.Count; i++)
+        {
+            m_Dropdown.options[i].text = string.Format("{0}", Translation.GetTextTranslated(Translation.LanguageTypes[i].ToString()));
+        }
     }
 
     private void OnDropdownValueChanged(int _Value)
     {
         Translation.ChangeLanguage(_Value);
-        SetAcronym();
-    }
-
-    private void SetAcronym()
-    {
-        acronymText.SetText(Translation.GetCurrentLanguage().ToString());
-
         settings.languageId = Translation.CurrentLanguageId;
     }
 }

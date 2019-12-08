@@ -77,4 +77,14 @@ public class Translation
 
         OnLanguageLoaded?.Invoke();
     }
+
+    /// <summary>
+    /// Returns the text from the key with the current language
+    /// </summary>
+    /// <param name="_Key"></param>
+    /// <returns></returns>
+    public static string GetTextTranslated(string _Key)
+    {
+        return Fields[_Key];
+    }
 }

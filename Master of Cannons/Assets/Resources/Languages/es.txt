@@ -1,4 +1,6 @@
 ﻿MasterOfCannons=Maestro de cañones
+Music=Música
+SFX=Efectos
 en=Inglés
 es=Español
 fr=Francés
