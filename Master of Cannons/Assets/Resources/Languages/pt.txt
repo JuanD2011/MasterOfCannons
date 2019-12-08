@@ -1,1 +1,7 @@
 ﻿MasterOfCannons=mestre de canhões
+en=Inglés
+es=Español
+fr=Francés
+ja=Japonés
+pt=Portugués
+zh=Chino

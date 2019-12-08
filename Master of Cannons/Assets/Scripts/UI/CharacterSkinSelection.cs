@@ -4,7 +4,7 @@ using UnityEngine.UI.Extensions;
 public class CharacterSkinSelection : MonoBehaviour
 {
     [SerializeField]
-    private Transform content = null, pagination = null;
+    private Transform pagination = null;
 
     [SerializeField]
     private PlayerData playerData = null;

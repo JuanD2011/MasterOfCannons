@@ -1,1 +1,7 @@
 MasterOfCannons=Master Of Cannons
+en=English
+es=Spanish
+fr=French
+ja=Japanese
+pt=Portuguese
+zh=Chinese

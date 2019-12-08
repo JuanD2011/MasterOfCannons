@@ -1,1 +1,7 @@
 ﻿MasterOfCannons=大砲の達人
+en=Inglés
+es=Español
+fr=Francés
+ja=Japonés
+pt=Portugués
+zh=Chino

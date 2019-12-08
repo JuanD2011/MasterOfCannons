@@ -1,1 +1,7 @@
 ﻿MasterOfCannons=Maître Des Canons
+en=Inglés
+es=Español
+fr=Francés
+ja=Japonés
+pt=Portugués
+zh=Chino

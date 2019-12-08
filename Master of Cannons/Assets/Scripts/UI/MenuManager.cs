@@ -59,8 +59,8 @@ public class MenuManager : MonoBehaviour
 
     private void SetLanguage()
     {
-        Translation.currentLanguageId = settings.languageID;
-        Translation.LoadLanguage(Translation.idToLanguage[Translation.currentLanguageId]);
+        Translation.CurrentLanguageId = settings.languageId;
+        Translation.LoadLanguage(Translation.idToLanguage[Translation.CurrentLanguageId].ToString());
     }
 
     private void OnApplicationQuit()

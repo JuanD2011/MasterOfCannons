@@ -4,59 +4,44 @@ using UnityEngine;
 
 public class Translation
 {
-    public static Dictionary<byte, string> idToLanguage = new Dictionary<byte, string>{ { 0, "en" }, { 1, "es" }, { 2, "zh" }, {3, "fr" }, { 4, "ja" }, { 5, "pt" }};
-    public static Dictionary<string, string> Fields { get; private set; } = new Dictionary<string, string>();
-
-    public static byte currentLanguageId = 0;
+    public static Dictionary<int, LanguageType> idToLanguage = new Dictionary<int, LanguageType>{ { 0, LanguageType.en}, { 1, LanguageType.es }, { 2, LanguageType.zh }, {3, LanguageType.fr }, { 4, LanguageType.ja }, { 5, LanguageType.pt }};
 
     public static event Action OnLanguageLoaded = null;
 
+    public static Dictionary<string, string> Fields { get; private set; } = new Dictionary<string, string>();
+    public static int CurrentLanguageId { get; set; } = 0;
+
+    public static LanguageType[] LanguageTypes
+    {
+        get
+        {
+            LanguageType[] languageTypes = new LanguageType[idToLanguage.Count];
+
+            for (int i = 0; i < languageTypes.Length; i++)
+            {
+                languageTypes[i] = idToLanguage[i];
+            }
+
+            return languageTypes;
+        }
+    }
+    
     /// <summary>
     /// Get the current language
     /// </summary>
     /// <returns></returns>
     public static LanguageType GetCurrentLanguage()
     {
-        LanguageType currentLanguage = LanguageType.UNKNOWN;
-
-        switch (idToLanguage[currentLanguageId])
-        {
-            case "en":
-                currentLanguage = LanguageType.en;
-                break;
-            case "es":
-                currentLanguage = LanguageType.es;
-                break;
-            case "zh":
-                currentLanguage = LanguageType.zh;
-                break;
-            case "fr":
-                currentLanguage = LanguageType.fr;
-                break;
-            case "ja":
-                currentLanguage = LanguageType.ja;
-                break;
-            case "pt":
-                currentLanguage = LanguageType.pt;
-                break;
-            default:
-                currentLanguage = LanguageType.UNKNOWN;
-                break;
-        }
-
-        return currentLanguage;
+        return idToLanguage[CurrentLanguageId];
     }
 
     /// <summary>
-    /// Change the language ordinally
+    /// Change the language by the index
     /// </summary>
-    public static void ChangeLanguage()
+    public static void ChangeLanguage(int _Id)
     {
-        currentLanguageId++;
-
-        if (currentLanguageId > idToLanguage.Count - 1) currentLanguageId = 0;
-
-        LoadLanguage(idToLanguage[currentLanguageId]);
+        CurrentLanguageId = _Id;
+        LoadLanguage(idToLanguage[CurrentLanguageId].ToString());
     }
 
     /// <summary>
