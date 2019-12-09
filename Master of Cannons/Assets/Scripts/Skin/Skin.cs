@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class SkinData
+public class CharacterData
 {
     [SerializeField]
     private string name = "";

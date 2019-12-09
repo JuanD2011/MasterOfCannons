@@ -4,13 +4,13 @@ using UnityEngine.UI.Extensions;
 public class CharacterSkinSelection : MonoBehaviour
 {
     [SerializeField]
-    private Transform pagination = null;
+    private Transform pagination = null, content = null;
 
     [SerializeField]
     private PlayerData playerData = null;
 
     [SerializeField]
-    private SkinsDatabase skinsDatabase = null;
+    private CharactersDatabase skinsDatabase = null;
 
     [SerializeField]
     private GameObject skinTemplate = null;
@@ -27,17 +27,18 @@ public class CharacterSkinSelection : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        horizontalScrollSnap.RemoveAllChildren(out GameObject[] gameObjects);
-
+        for (int i = 0; i < content.childCount; i++) Destroy(content.GetChild(i).gameObject);
         for (int i = 0; i < pagination.childCount; i++) pagination.GetChild(i).gameObject.SetActive(false);
 
-        //TODO do the same with skins
         for (int i = 0; i < skinsDatabase.currentSkinData.Skins.Length; i++)
         {
-            skinTmp = Instantiate(skinTemplate);
-            horizontalScrollSnap.AddChild(skinTmp);
+            //skinTmp = Instantiate(skinTemplate);
+            //horizontalScrollSnap.AddChild(skinTmp);
+
             pagination.GetChild(i).gameObject.SetActive(true);
         }
+
+        horizontalScrollSnap.UpdateLayout();
     }
 
     /// <summary>
