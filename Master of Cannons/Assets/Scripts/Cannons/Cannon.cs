@@ -3,10 +3,10 @@
 public class Cannon : MonoBehaviour
 {
     [SerializeField]
-    private float wickLength;
+    private float wickLength = 5f;
 
     [SerializeField]
-    protected float shootForce = 10f;
+    protected float shootForce = 18f;
 
     [SerializeField]
     bool doCatchRotation = false;

@@ -15,10 +15,9 @@ public class StickyCharacter : Character
     private void OnCollisionEnter(Collision collision)
     {
         if (hasSpecial && collision.gameObject.layer == 10)
-        {
-            //Transform cannonReference = collision.transform.root.GetChild(0);  
-     
-            Transform[] cannonChilds = collision.transform.root.GetComponentsInChildren<Transform>();
+        {            
+            Transform cannonRoot = collision.gameObject.GetComponentInParent<Cannon>().transform;
+            Transform[] cannonChilds = cannonRoot.GetComponentsInChildren<Transform>();
             Transform cannonReference = null;
 
             foreach (Transform t in cannonChilds)

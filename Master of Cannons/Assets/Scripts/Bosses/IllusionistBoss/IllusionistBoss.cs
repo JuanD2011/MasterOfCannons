@@ -2,54 +2,110 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IllusionistBoss : MonoBehaviour
+public class IllusionistBoss : Boss
 {
-    CannonsObjects cannons = null;
 
     [SerializeField] float movementSpeed = 0;
-    //[SerializeField] Transform character = null;
     [SerializeField] Transform cannonsContainer = null;
-    List<Transform> cannonsList;
+    [SerializeField] int illusionCannonsNumber = 4;
 
-    private void Awake()
+    Transform[] cannons;
+    [SerializeField] Transform character = null;
+    protected override void Awake()
     {
-        cannons = Resources.Load<CannonsObjects>("Scriptable Objects/Cannons Objects");
-        for(int i = 0; i < cannonsContainer.childCount; i++)
-            cannonsList.Add(cannonsContainer.GetChild(i));
+        base.Awake();
+        int arrayLength = cannonsContainer.childCount;
+        cannons = new Transform[arrayLength];
+        for(int i = 0; i < arrayLength; i++)
+            cannons[i] = cannonsContainer.GetChild(i);
 
         StartCoroutine(SetIllusionCannons());
     }
 
     private void Update()
     {
-        //transform.position = Vector3.MoveTowards(transform.position, character.position, Time.deltaTime * movementSpeed);
+        transform.position = Vector3.MoveTowards(transform.position, character.position, Time.deltaTime * movementSpeed);
     }
+
+
 
     IEnumerator SetIllusionCannons()
     {
+        Transform[] randomCannons = Randoms.ChooseRandomElements(cannons, illusionCannonsNumber);
 
-        yield return new WaitForSeconds(1f);
-        for(int i = 0; i < cannonsList.Count; i++)
+        for(int i = 0; i < cannons.Length; i++)
         {
-            float randomNumber = Random.Range(0f, 1f);
-            if (randomNumber >= 0.5f) continue;
-
-            foreach (Component c in cannonsList[i].GetComponents<Component>())
-            {
-                if (cannonsList[i].Find("Reference").childCount == 0 && !(c is Transform) && !(c is Collider))
-                {
-                    Destroy(c);
-                }
-            }
-
-            Renderer cannonRender = cannonsList[i].Find("GFX").GetComponent<Renderer>();
-            Color color = cannonRender.material.GetColor("_BaseColor") * 0.7f;            
-            cannonRender.material.SetColor("_BaseColor", color);
-            cannonsList[i].gameObject.AddComponent<IllusionCannon>();
+            bool illusionCannon = cannons[i].GetComponent<IllusionCannon>();
+            if (illusionCannon)
+                CannonSet(cannons[i], false);
         }
+
+        yield return new WaitForSeconds(2f);
+
+        for(int i = 0; i < randomCannons.Length; i++)
+        {
+            if (randomCannons[i].Find("Reference").childCount == 0)
+                CannonSet(randomCannons[i], true);
+        }
+
+        StartCoroutine(SetIllusionCannons());
 
     }
     
+    IEnumerator AttackAnticipation(IEnumerator coroutine)
+    {
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(coroutine);
+        yield return null;
+    }
+
+    private void CannonSet(Transform cannon, bool isIllusion)
+    {
+        Transform gfx = cannon.Find("GFX");
+        Renderer cannonRender = gfx.GetComponent<Renderer>();
+        Color color = cannonRender.material.GetColor("_BaseColor");
+
+        if(isIllusion)
+        {
+            foreach (Component c in cannon.GetComponents<Component>())
+                if (!(c is Transform) && !(c is Collider))
+                    Destroy(c);
+
+            color *= 0.5f;
+            cannon.gameObject.AddComponent<IllusionCannon>();            
+            gfx.gameObject.AddComponent<IllusionCannon>();
+        }
+        else
+        {
+            if (!cannon.gameObject.activeInHierarchy)
+            {
+                gfx.gameObject.SetActive(true);
+                cannon.gameObject.SetActive(true);
+            }
+            Destroy(cannon.GetComponent<IllusionCannon>());
+            Destroy(gfx.GetComponent<IllusionCannon>());            
+            cannon.gameObject.AddComponent<Cannon>();
+            cannon.gameObject.AddComponent<AimingBehaviour>();
+            color /= 0.5f;
+        }
+
+        gfx.GetComponent<Collider>().isTrigger = isIllusion;
+        cannonRender.material.SetColor("_BaseColor", color);
+
+    }
+
+    protected override void SetDifficulty()
+    {
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Character"))
+        {
+            BossHit();
+        }
+    }
+
     public class IllusionCannon : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other)

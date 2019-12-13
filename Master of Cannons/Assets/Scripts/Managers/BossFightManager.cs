@@ -4,7 +4,7 @@ public class BossFightManager : MonoBehaviour
 {
     public static BossFightManager BossFight;
 
-    [SerializeField] GameObject characterGO;
+    [SerializeField] GameObject characterGO = null;
     private Character character = null;
 
     [SerializeField]
@@ -36,6 +36,7 @@ public class BossFightManager : MonoBehaviour
 
     private void OnBossHit(int _bossLife)
     {
+        print("called");
         character.SetFunctional(false);
         LeanTween.move(character.gameObject, characterStartPosition, 1f)
             .setSpeed(CharacterLerpSpeed)

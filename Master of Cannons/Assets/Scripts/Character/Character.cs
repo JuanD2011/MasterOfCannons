@@ -119,7 +119,7 @@ public class Character : MonoBehaviour
     }
 
     protected virtual void OnDisableSpecial()
-    {
+    {        
         hasSpecial = false;
         specialProgress = 0;
         OnChargeSpecial(specialProgress);

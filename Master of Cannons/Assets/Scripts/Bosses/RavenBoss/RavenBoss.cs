@@ -106,8 +106,8 @@ public class RavenBoss : Boss
     private void RandomizeRavens()
     {
         for (int i = 0; i < cannons.Length; i++)
-        {            
-            float randomNumber = Random.Range(0f, 1f);
+        {
+            float randomNumber = Random.value;
             if (randomNumber >= ravensPercentage) continue;
             if (!ravens[i].isVisible)
                 SpawnRaven(ravens[i], cannons[i].transform.position);
@@ -153,7 +153,7 @@ public class RavenBoss : Boss
             Character character = other.GetComponent<Character>();
             FindObjectOfType<Cinemachine.CinemachineVirtualCamera>().Follow = null;
             character.SetKinematic(false);            
-            other.GetComponent<Character>().Rigidbody.AddForce(Vector3.back * 10f, ForceMode.Impulse);
+            character.Rigidbody.AddForce(Vector3.back * 10f, ForceMode.Impulse);
             StartCoroutine(WaitForDepth());
         }
         else if (other.gameObject.layer == 10)

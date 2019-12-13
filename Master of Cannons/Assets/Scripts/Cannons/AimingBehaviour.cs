@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class AimingBehaviour : MonoBehaviour
+public class AimingBehaviour : CannonBehaviour
 {
     private float targetRotation = 0f;
 
@@ -10,17 +10,17 @@ public class AimingBehaviour : MonoBehaviour
 
     private bool canAim = false;
 
-    private Cannon cannon = null;
+    //private Cannon cannon = null;
 
-    private void Awake()
-    {
-        cannon = GetComponentInChildren<Cannon>();
-    }
+    //private void Awake()
+    //{
+    //    cannon = GetComponentInChildren<Cannon>();
+    //}
 
     private void Start()
     {
         m_Camera = Camera.main;
-        cannon.OnCharacterInCannon += SetCanAim;
+        cannon.OnCharacterInCannon += OnCharacterInCannon;
     }
 
     private void SetCanAim(bool _value) => canAim = _value;
@@ -41,5 +41,10 @@ public class AimingBehaviour : MonoBehaviour
         direction = new Vector3(_AimVector.x, _AimVector.y, 0) - m_Camera.WorldToScreenPoint(transform.position);
         targetRotation = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(targetRotation - 90, Vector3.forward);
+    }
+
+    protected override void OnCharacterInCannon(bool _value)
+    {
+        canAim = _value;
     }
 }
