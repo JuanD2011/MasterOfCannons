@@ -6,6 +6,8 @@ public class PlayerData : ScriptableObject
     public int coins = 0;
     public int stars = 0;
 
+    public bool defaultCharacterSet = false;
+
     public PlayerSkin currentCharacter = null;
 
     public event Delegates.Action<CollectibleType> OnCollectibleAdded = null;

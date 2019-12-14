@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coins: 0
   stars: 3
+  defaultCharacterSet: 1
+  currentCharacter:
+    name: Default
+    Skin: {fileID: 7179511578770460706, guid: a0238e9a3d79b034aaa5ba64e73e719f, type: 3}

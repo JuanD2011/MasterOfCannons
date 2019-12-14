@@ -1,9 +1,10 @@
 ﻿public enum CharacterType
 {
-    Ghost,
+    Default,
     Sticky,
+    Ghost,
+    SlowMo,
     CannonGod,
     Hairy,
-    SlowMo,
     None
 };
