@@ -3,14 +3,10 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
-    public static AudioManager instance;
-
     public AudioClips audioClips;
 
-    [Header("Number of AudioSources")]
-    [Tooltip("Number of AudioSource to be instantiated")]
     [Range(3, 10)]
     [SerializeField] int audioSourcesAmount = 3;
 
@@ -23,26 +19,22 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] AudioSetting[] audioSettings = new AudioSetting[2];
 
-    [SerializeField] bool initAudioSettings = false;
-
     public AudioSource CurrentAudioSource { get { return currentAudioSource; } }
 
-    private void Awake()
+    protected override void OnAwake()
     {
-        if (instance == null) instance = this;
-        else Destroy(this);
-
         CreateAudioSources(audioSourcesAmount);
     }
 
     private void Start()
     {
-        if (audioSettings != null && initAudioSettings)
+        //Audio settings initialization, this is in start because we first need the information to be loaded.
+        if (audioSettings != null)
         {
-            foreach (AudioSetting item in audioSettings)
+            for (int i = 0; i < audioSettings.Length; i++)
             {
-                item.Init();
-            }
+                audioSettings[i].Init();
+            } 
         }
     }
 
@@ -54,7 +46,7 @@ public class AudioManager : MonoBehaviour
         {
             if (i == 0)//Music AudioSource
             {
-                GameObject gameObject = Instantiate(audioSourceTemplate);
+                GameObject gameObject = Instantiate(audioSourceTemplate, transform);
                 gameObject.name = string.Format("{0} AudioSource_{1}", AudioType.Music.ToString(), i);
                 AudioSource audioSourceCreated = gameObject.GetComponent<AudioSource>();
                 audioSourceCreated.outputAudioMixerGroup = audioMixer.FindMatchingGroups(AudioType.Music.ToString())[0];
@@ -67,7 +59,7 @@ public class AudioManager : MonoBehaviour
             }
             else// SFx AudioSources
             {
-                GameObject gameObject = Instantiate(audioSourceTemplate);
+                GameObject gameObject = Instantiate(audioSourceTemplate, transform);
                 gameObject.name = string.Format("{0} AudioSource_{1}", AudioType.SFX.ToString(), i);
                 AudioSource audioSourceCreated = gameObject.GetComponent<AudioSource>();
                 audioSourceCreated.outputAudioMixerGroup = audioMixer.FindMatchingGroups(AudioType.SFX.ToString())[0];

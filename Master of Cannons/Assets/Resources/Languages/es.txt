@@ -2,8 +2,8 @@
 Language=Idioma
 Music=Música
 SFX=Efectos
-On=Encendido
-Off=Apagado
+On=Si
+Off=No
 en=Inglés
 es=Español
 fr=Francés

@@ -2,4 +2,5 @@
 {
     Music,
     SFX,
+    None
 };

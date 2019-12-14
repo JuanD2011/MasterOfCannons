@@ -14,12 +14,13 @@ public class AudioSetting : MonoBehaviour
     private Image m_Image = null;
 
     [SerializeField]
-    private AudioType m_Type = AudioType.Music;
+    private AudioType m_Type = AudioType.None;
 
     [SerializeField]
     private Color enabledColor = new Color(0, 149, 135), disabledColor = Color.red;
 
-    private readonly string on = "On", off = "Off";
+    private const string on = "On", off = "Off";
+    private const string mixerMusicVolume = "MusicVolume", mixerSFXVolume = "SFXVolume";
 
     private const float mutedVolume = -80f;
 
@@ -35,10 +36,10 @@ public class AudioSetting : MonoBehaviour
         switch (m_Type)
         {
             case AudioType.Music:
-                if (!settings.isMusicActive) audioMixer.SetFloat("MusicVolume", mutedVolume);
+                if (!settings.isMusicActive) audioMixer.SetFloat(mixerMusicVolume, mutedVolume);
                 break;
             case AudioType.SFX:
-                if (!settings.isSFXActive) audioMixer.SetFloat("SFXVolume", mutedVolume);
+                if (!settings.isSFXActive) audioMixer.SetFloat(mixerSFXVolume, mutedVolume);
                 break;
             default:
                 break;
@@ -55,29 +56,29 @@ public class AudioSetting : MonoBehaviour
         switch (m_Type)   
         {
             case AudioType.Music:
-                audioMixer.GetFloat("MusicVolume", out value);
+                audioMixer.GetFloat(mixerMusicVolume, out value);
                 if (value > mutedVolume)
                 {
                     settings.isMusicActive = false;
-                    audioMixer.SetFloat("MusicVolume", mutedVolume);
+                    audioMixer.SetFloat(mixerMusicVolume, mutedVolume);
                 }
                 else if (value <= mutedVolume)
                 {
                     settings.isMusicActive = true;
-                    audioMixer.SetFloat("MusicVolume", 0f);
+                    audioMixer.SetFloat(mixerMusicVolume, 0f);
                 }
                 break;
             case AudioType.SFX:
-                audioMixer.GetFloat("SFXVolume", out value);
+                audioMixer.GetFloat(mixerSFXVolume, out value);
                 if (value > mutedVolume)
                 {
-                    audioMixer.SetFloat("SFXVolume", mutedVolume);
+                    audioMixer.SetFloat(mixerSFXVolume, mutedVolume);
                     settings.isSFXActive = false;
                 }
                 else if (value <= mutedVolume)
                 {
                     settings.isSFXActive = true;
-                    audioMixer.SetFloat("SFXVolume", 0f);
+                    audioMixer.SetFloat(mixerSFXVolume, 0f);
                 }
                 break;
             default:

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f29af7281885cb4aba03bcc198279aa, type: 3}
   m_Name: AudioClips
   m_EditorClassIdentifier: 
-  inGameMusic: {fileID: 0}
-  defaultButton: {fileID: 0}
+  inGameMusic: {fileID: 8300000, guid: d17ce864d4ed0ab4dbc09b90d2fadaaf, type: 3}
+  defaultButton: {fileID: 8300000, guid: a0b1e3ee9a59a8d40891fba5ded9741a, type: 3}
   acceptButton: {fileID: 0}
   cancelButton: {fileID: 0}
   notificationAlert: {fileID: 0}

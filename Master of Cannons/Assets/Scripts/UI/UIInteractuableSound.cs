@@ -15,13 +15,13 @@ public class UIInteractuableSound : MonoBehaviour, IPointerClickHandler
         switch (m_ButtonSoundType)
         {
             case ButtonSoundType.Default:
-                AudioManager.instance.PlaySFx(AudioManager.instance.audioClips.defaultButton, 1f, false);
+                AudioManager.Instance.PlaySFx(AudioManager.Instance.audioClips.defaultButton, 1f, false);
                 break;
             case ButtonSoundType.Accept:
-                AudioManager.instance.PlaySFx(AudioManager.instance.audioClips.acceptButton, 1f, false);
+                AudioManager.Instance.PlaySFx(AudioManager.Instance.audioClips.acceptButton, 1f, false);
                 break;
             case ButtonSoundType.Back:
-                AudioManager.instance.PlaySFx(AudioManager.instance.audioClips.cancelButton, 1f, false);
+                AudioManager.Instance.PlaySFx(AudioManager.Instance.audioClips.cancelButton, 1f, false);
                 break;
             default:
                 break;

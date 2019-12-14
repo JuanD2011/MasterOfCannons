@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517e559b7d5940643a17f214eda16646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
   audioClips: {fileID: 11400000, guid: ed71225998592cb4d90388f3ccaa14a3, type: 2}
   audioSourcesAmount: 3
   audioSourceTemplate: {fileID: 1342834441763172139, guid: 558b3f6e2797ae74b97ced325d9ea919,
@@ -51,4 +52,3 @@ MonoBehaviour:
   audioSettings:
   - {fileID: 0}
   - {fileID: 0}
-  initAudioSettings: 0

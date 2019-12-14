@@ -358,6 +358,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1725444777727888468, guid: 1e5d87c5fd37ac44390ccc04ead55438,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1725444777727888471, guid: 1e5d87c5fd37ac44390ccc04ead55438,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -577,6 +582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1803456210}
   - component: {fileID: 1803456211}
+  - component: {fileID: 1803456212}
   m_Layer: 0
   m_Name: ===Game Manager===
   m_TagString: Untagged
@@ -613,6 +619,18 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 2c4e63be4355c6242a0cd8c6e7f067da, type: 2}
   charactersDatabase: {fileID: 11400000, guid: 974d03ea6e712584e955d2e2a6e93488, type: 2}
   loadData: 0
+--- !u!114 &1803456212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803456209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24705bf4a89ce774581892e59c66361a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1879370650
 GameObject:
   m_ObjectHideFlags: 0
