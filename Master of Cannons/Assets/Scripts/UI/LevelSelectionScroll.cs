@@ -23,7 +23,6 @@ public class LevelSelectionScroll : MonoBehaviour
         InitializePosition();
     }
 
-
     private void Update()
     {
         if (m_ScrollRect.velocity == Vector2.zero) return;

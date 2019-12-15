@@ -17,25 +17,11 @@ public class AudioManager : Singleton<AudioManager>
 
     AudioSource currentAudioSource;
 
-    [SerializeField] AudioSetting[] audioSettings = new AudioSetting[2];
-
     public AudioSource CurrentAudioSource { get { return currentAudioSource; } }
 
     protected override void OnAwake()
     {
         CreateAudioSources(audioSourcesAmount);
-    }
-
-    private void Start()
-    {
-        //Audio settings initialization, this is in start because we first need the information to be loaded.
-        if (audioSettings != null)
-        {
-            for (int i = 0; i < audioSettings.Length; i++)
-            {
-                audioSettings[i].Init();
-            } 
-        }
     }
 
     private void CreateAudioSources(int audioSourcesAmount)

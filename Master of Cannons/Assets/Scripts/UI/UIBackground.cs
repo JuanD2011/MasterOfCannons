@@ -16,4 +16,13 @@ public class UIBackground : MonoBehaviour
             gameObject.SetActive(true);
         }
     }
+
+    /// <summary>
+    /// Set background game object active state
+    /// </summary>
+    /// <param name="_Value"></param>
+    public void SetActive(bool _Value)
+    {
+        gameObject.SetActive(_Value);
+    }
 }

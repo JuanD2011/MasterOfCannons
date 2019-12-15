@@ -2,11 +2,11 @@
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField]
-    private Settings settings = null;
+    [SerializeField] private Settings settings = null;
 
-    [SerializeField]
-    private PlayerData playerData = null;
+    [SerializeField] private PlayerData playerData = null;
+
+    [SerializeField] private UIBackground uIBackground = null;
 
     public static bool canSelectLevel = false;
 
@@ -14,12 +14,13 @@ public class MenuManager : MonoBehaviour
 
     protected SettingsTabManager settingsTabManager = null;
 
-    public event Delegates.Action<int> OnLoadLevel = null;
+    public event Delegates.Action<int> onLoadLevel = null;
 
     private void Awake()
     {
         settingsTabManager = GetComponent<SettingsTabManager>();
 
+        //TODO Only load setting the first time the user enter the application
         Memento.LoadData(settings);
 
         if (!languageSetOnce)
@@ -41,6 +42,7 @@ public class MenuManager : MonoBehaviour
         if (!MenuGameManager.LevelSelection) return;
 
         settingsTabManager.PanelAnim(4);//Initialize level selection panel
+        uIBackground.SetActive(false);
         SelectingLevels(true);
     }
 
@@ -81,5 +83,5 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void SaveSettings() => Memento.SaveData(settings);
 
-    protected void SendOnLoadLevel(int _LevelBuildIndex) => OnLoadLevel(_LevelBuildIndex);
+    protected void SendOnLoadLevel(int _LevelBuildIndex) => onLoadLevel(_LevelBuildIndex);
 }

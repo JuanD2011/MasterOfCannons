@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
 
     protected virtual void Start()
     {
-         menuManager.OnLoadLevel += LoadLevel;
+         menuManager.onLoadLevel += LoadLevel;
     }
 
     private void LoadLevel(int _LevelBuildIndex)

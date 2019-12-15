@@ -26,13 +26,21 @@ public class AudioSetting : MonoBehaviour
 
     private TextTranslation textTranslation = null;
 
+    private void Awake()
+    {
+        textTranslation = GetComponentInChildren<TextTranslation>();
+    }
+
+    private void Start()
+    {
+        Init();
+    }
+
     /// <summary>
-    /// Initialize the mixer
+    /// Initialize the mixer and Intialize the UI
     /// </summary>
     public void Init()
     {
-        textTranslation = GetComponentInChildren<TextTranslation>();
-
         switch (m_Type)
         {
             case AudioType.Music:
