@@ -29,7 +29,7 @@ public class BossFightManager : MonoBehaviour
 
     private void Start()
     {
-        character = characterGO.GetComponent<Character>();
+        character = characterObject.GetComponent<Character>();
         characterStartPosition = character.transform.position;
         Boss.OnBossHit += OnBossHit;
     }
