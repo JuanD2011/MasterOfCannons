@@ -4,7 +4,7 @@ public class BossFightManager : MonoBehaviour
 {
     public static BossFightManager BossFight;
 
-    [SerializeField] GameObject characterGO = null;
+    [SerializeField] GameObject characterObject = null;
     private Character character = null;
 
     [SerializeField]
