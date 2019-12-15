@@ -2,8 +2,11 @@
 Language=Language
 Music=Música
 SFX=Efectos
+Credits=Credits
 On=On
 Off=Off
+Connected=Connected
+Disconnected=Disconnected
 en=Inglés
 es=Español
 fr=Francés
