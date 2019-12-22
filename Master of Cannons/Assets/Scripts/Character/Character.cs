@@ -27,8 +27,8 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        MenuGameManager.OnPause += Freeze;
-        Referee.OnGameOver += Freeze;
+        MenuGameManager.onPause += Freeze;
+        Referee.onGameOver += Freeze;
     }
 
     private void Update()
@@ -52,7 +52,7 @@ public class Character : MonoBehaviour
 
     public void SetKinematic(bool _value) => Rigidbody.isKinematic = _value;
 
-    private void Freeze()
+    private void Freeze(LevelStatus _levelStatus)
     {
         Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }

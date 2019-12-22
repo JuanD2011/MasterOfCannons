@@ -1,0 +1,23 @@
+{
+  "levelDatas": 
+  [
+    {
+      "number": 1,
+      "levelBuildIndex": 1,
+      "starsNedeed": 0,
+
+      "pointsOneStar": 90,
+      "pointsTwoStars": 110,
+      "pointsThreeStars": 200
+    },
+    {
+      "id": 1,
+      "levelBuildIndex": 2,
+      "starsNedeed": 3,
+
+      "pointsOneStar": 90,
+      "pointsTwoStars": 110,
+      "pointsThreeStars": 200
+    }
+  ]
+}

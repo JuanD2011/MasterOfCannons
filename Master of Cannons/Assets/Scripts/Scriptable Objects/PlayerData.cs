@@ -23,10 +23,5 @@ public class PlayerData : ScriptableObject
             coins += _Amount;
             OnCollectibleAdded?.Invoke(CollectibleType.Coin);
         }
-        else if(_CollectibleType == CollectibleType.Star)
-        {
-            stars += _Amount;
-            OnCollectibleAdded?.Invoke(CollectibleType.Star);
-        }
     }
 }

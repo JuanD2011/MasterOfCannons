@@ -4,20 +4,15 @@ using UnityEngine.UI;
 
 public class AudioSetting : MonoBehaviour
 {
-    [SerializeField]
-    private AudioMixer audioMixer = null;
+    [SerializeField] private AudioMixer audioMixer = null;
 
-    [SerializeField]
-    private Settings settings = null;
+    [SerializeField] private Settings settings = null;
 
-    [SerializeField]
-    private Image m_Image = null;
+    [SerializeField] private Image m_Image = null;
 
-    [SerializeField]
-    private AudioType m_Type = AudioType.None;
+    [SerializeField] private AudioType m_Type = AudioType.None;
 
-    [SerializeField]
-    private Color enabledColor = new Color(0, 149, 135), disabledColor = Color.red;
+    [SerializeField] private Color enabledColor = new Color(0, 149, 135), disabledColor = Color.red;
 
     private const string on = "On", off = "Off";
     private const string mixerMusicVolume = "MusicVolume", mixerSFXVolume = "SFXVolume";

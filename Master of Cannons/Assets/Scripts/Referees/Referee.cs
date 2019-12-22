@@ -2,37 +2,40 @@
 
 public class Referee : MonoBehaviour
 {
-    public static event Delegates.Action OnGameOver = null;
     [SerializeField] private GameObject losingVolumeCompound = null;
 
-    private void Awake() => OnGameOver = null;
+    public static event Delegates.Action<LevelStatus> onGameOver = null;
+
+    private void Awake()
+    {
+        onGameOver = null;
+    } 
 
     private void Start()
     {
-        VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+        VolumeLevelStatus.onVolumeEntered += ManageLevelStatus;
         Cannon.OnChangeLosingBoundaries += ChangeLosingBoundaries;
     }
 
-    private void OnDisable() => Cannon.OnChangeLosingBoundaries -= ChangeLosingBoundaries;
-
-    private void ManageVolumeStatus(VolumeLevelStatusType _VolumeLevelStatus)
+    private void OnDestroy()
     {
-        switch (_VolumeLevelStatus)
-        {
-            case VolumeLevelStatusType.Victory:
-                Debug.Log("Victory");
-                break;
-            case VolumeLevelStatusType.Defeat:
-                Debug.Log("Defeat");
-                break;
-            case VolumeLevelStatusType.None:
-                break;
-            default:
-                break;
-        }
-        OnGameOver();
+        VolumeLevelStatus.onVolumeEntered -= ManageLevelStatus;
+        Cannon.OnChangeLosingBoundaries -= ChangeLosingBoundaries;
     }
 
+    /// <summary>
+    /// Send game over event
+    /// </summary>
+    /// <param name="_levelStatus"></param>
+    private void ManageLevelStatus(LevelStatus _levelStatus)
+    {
+        onGameOver(_levelStatus);
+    }
+
+    /// <summary>
+    /// Update losing volume, depending on the last cannon
+    /// </summary>
+    /// <param name="_latestCannonHit"></param>
     private void ChangeLosingBoundaries(Vector3 _latestCannonHit)
     {
         Vector3 posToChange = losingVolumeCompound.transform.position;

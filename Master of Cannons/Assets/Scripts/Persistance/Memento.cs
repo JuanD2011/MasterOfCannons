@@ -59,4 +59,25 @@ public static class Memento
     {
         File.Delete(string.Format("{0}/game_save/{1}/{2}.txt", Application.persistentDataPath, _serializableClass.ToString(), _serializableClass.ToString()));
     }
+
+    /// <summary>
+    /// Use to serialize data.
+    /// </summary>
+    /// <param name="_dataToSerialize">Data to serialize.</param>
+    /// <returns></returns>
+    public static string SerializeData(object _dataToSerialize)
+    {
+        return JsonUtility.ToJson(_dataToSerialize);
+    }
+
+    /// <summary>
+    /// Deserialize a string and returns any type of object
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="_dataToDeserialize"></param>
+    /// <returns></returns>
+    public static T DeserializeData<T>(string _dataToDeserialize)
+    {
+        return JsonUtility.FromJson<T>(_dataToDeserialize);
+    }
 }

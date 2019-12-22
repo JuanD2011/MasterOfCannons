@@ -3,13 +3,11 @@
 [RequireComponent(typeof(BoxCollider))]
 public class VolumeLevelStatus : MonoBehaviour
 {
-    [SerializeField] VolumeLevelStatusType volumeType = VolumeLevelStatusType.None;
+    [SerializeField] LevelStatus volumeType = LevelStatus.None;
 
-    public static event Delegates.Action<VolumeLevelStatusType> OnVolumeEntered = null;
+    public static event Delegates.Action<LevelStatus> onVolumeEntered = null;
 
-    private void Awake() => OnVolumeEntered = null;
-
-    private void OnTriggerEnter(Collider _Other) => OnVolumeEntered(volumeType);
+    private void OnTriggerEnter(Collider _Other) => onVolumeEntered(volumeType);
 
     private void Reset() => GetComponent<Collider>().isTrigger = true;
 }

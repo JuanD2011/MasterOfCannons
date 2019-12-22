@@ -3,8 +3,7 @@ using TMPro;
 
 public class UICurrency : MonoBehaviour
 {
-    [SerializeField]
-    private CollectibleType collectibleType = CollectibleType.None;
+    [SerializeField] private CollectibleType collectibleType = CollectibleType.None;
 
     private PlayerData playerData = null;
 
@@ -12,7 +11,7 @@ public class UICurrency : MonoBehaviour
 
     private void Awake()
     {
-        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");
+        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");//TODO Get cached data.
 
         m_Text = GetComponent<TextMeshProUGUI>();
     }
@@ -23,15 +22,11 @@ public class UICurrency : MonoBehaviour
         playerData.OnCollectibleAdded += UpdateText;
     }
 
-    private void UpdateText(CollectibleType _CollectibleType)
+    private void UpdateText(CollectibleType _collectibleType)
     {
-        if (_CollectibleType == CollectibleType.Coin)
+        if (_collectibleType == CollectibleType.Coin)
         {
             m_Text.text = playerData.coins.ToString();
-        }
-        else if (_CollectibleType == CollectibleType.Star)
-        {
-            m_Text.text = playerData.stars.ToString();
         }
     }
 }

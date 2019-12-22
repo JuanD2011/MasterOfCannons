@@ -13,7 +13,7 @@ public class UIGameCoins : MonoBehaviour
     private void Start()
     {
         UpdateText(CollectibleType.Coin);
-        CollectibleManager.OnCollectibleAdded += UpdateText;
+        CollectibleManager.onCollectibleAdded += UpdateText;
     }
 
     private void UpdateText(CollectibleType _CollectibleType)

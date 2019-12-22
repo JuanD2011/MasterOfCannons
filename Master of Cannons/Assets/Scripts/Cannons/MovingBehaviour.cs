@@ -30,10 +30,9 @@ public class MovingBehaviour : CannonBehaviour
     {
         repeatMethod += Move;
 
-
         if (startMoving) Move();
 
-        MenuGameManager.OnPause += PauseMovement;
+        MenuGameManager.onPause += PauseMovement;
     }
 
     private void PauseMovement(bool _Value)

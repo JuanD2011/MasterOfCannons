@@ -5,31 +5,29 @@ public class CollectibleManager : MonoBehaviour
     private PlayerData playerData = null;
 
     public static byte CollectedCoins { get; private set; } = 0;
-    public static byte CollectedStars { get; private set; } = 0;
 
-    public static event Delegates.Action<CollectibleType> OnCollectibleAdded = null;
+    public static event Delegates.Action<CollectibleType> onCollectibleAdded = null;
 
     private void Awake()
     {
-        OnCollectibleAdded = null;
-        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");
+        onCollectibleAdded = null;
+        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");//TODO Load this from firebase
 
-        CollectedCoins = 0; CollectedStars = 0;
+        CollectedCoins = 0;
     }
 
     private void Start()
     {
-        Collectible.OnCollected += CollectibleCollected;
-        Referee.OnGameOver += UpdateCollectibles;
+        Collectible.onCollected += CollectibleCollected;
+        Referee.onGameOver += UpdateCollectibles;
     }
 
     /// <summary>
     /// Add current coins to scriptable object
     /// </summary>
-    public void UpdateCollectibles()
+    public void UpdateCollectibles(LevelStatus _levelStatus)
     {
         playerData.AddCollectible(CollectibleType.Coin, CollectedCoins);
-        playerData.AddCollectible(CollectibleType.Star, CollectedStars);
 
         Memento.SaveData(playerData);
     }
@@ -48,12 +46,7 @@ public class CollectibleManager : MonoBehaviour
         if (_CollectibleType == CollectibleType.Coin)
         {
             CollectedCoins += 1;
-            OnCollectibleAdded(CollectibleType.Coin);
-        }
-        else if (_CollectibleType == CollectibleType.Star)
-        {
-            CollectedStars += 1;
-            OnCollectibleAdded(CollectibleType.Star);
+            onCollectibleAdded(CollectibleType.Coin);
         }
     }
 
