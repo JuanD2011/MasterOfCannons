@@ -4,7 +4,7 @@ public class ShakeBehaviour : MonoBehaviour
 {
     private void Start()
     {
-        Boss.OnBossHit += OnBossHit;
+        Boss.OnBossDamage += OnBossHit;
     }
 
     private void OnBossHit(int _bossLife)

@@ -4,15 +4,13 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
     [SerializeField] private bool dontDestroyOnLoad = false;
 
-    private static T instance = null;
-
-    public static T Instance { get => instance; }
+    public static T Instance { get; protected set; }
 
     private void Awake()
     {
         if (Instance == null)
         {
-            instance = this as T;
+            Instance = this as T;
         }
         else
         {
@@ -38,14 +36,5 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     /// This should be called by the classes that needs to implement Awake method.
     /// </summary>
     protected abstract void OnAwake();
-    
-    /// <summary>
-    /// Return true if the Instance is not null.
-    /// </summary>
-    /// <returns></returns>
-    public static bool IsNotNull()
-    {
-        if (Instance != null) return true;
-        return false;
-    }
+   
 }

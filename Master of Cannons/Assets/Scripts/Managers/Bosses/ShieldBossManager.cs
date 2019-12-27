@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 
-public class BossFightManager : MonoBehaviour
+public class ShieldBossManager : BossFightManager
 {
-    public static BossFightManager BossFight;
-
-    [SerializeField] GameObject characterObject = null;
-    private Character character = null;
+    public static ShieldBossManager Instance;
 
     [SerializeField]
     private int damagePerHit = 0;
@@ -18,23 +15,23 @@ public class BossFightManager : MonoBehaviour
 
     private Vector3 characterStartPosition = Vector3.zero;
 
-    public Character Character { get => character; private set => character = value; }
     public int DamagePerHit { get => damagePerHit; private set => damagePerHit = value; }
 
     private void Awake()
     {
-        if (BossFight == null) BossFight = this;
-        else Destroy(this);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
     {
-        character = characterObject.GetComponent<Character>();
         characterStartPosition = character.transform.position;
-        Boss.OnBossHit += OnBossHit;
+        Boss.OnBossDamage += OnBossDamage;
     }
 
-    private void OnBossHit(int _bossLife)
+    private void OnDestroy() => Boss.OnBossDamage -= OnBossDamage;
+
+    protected override void OnBossDamage(int _bossLife)
     {
         print("called");
         character.SetFunctional(false);

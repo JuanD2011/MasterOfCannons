@@ -5,6 +5,9 @@ public class RotatingShieldBoss : Boss
     private float timeToRotate = 2f;
     Vector3 rotation = new Vector3();
     private System.Action OnCompleteAction = null;
+   
+    [SerializeField]
+    bool lerpCharacter = false;
 
     [SerializeField]
     private LeanTweenType tweenType = LeanTweenType.linear;
@@ -19,7 +22,7 @@ public class RotatingShieldBoss : Boss
     private void Chase()
     {
         OnCompleteAction = Chase;
-        Vector3 target = Quaternion.LookRotation(BossFightManager.BossFight.Character.transform.position - transform.position, transform.forward).eulerAngles;
+        Vector3 target = Quaternion.LookRotation(ShieldBossManager.Instance.Character.transform.position - transform.position, transform.forward).eulerAngles;
         rotation = new Vector3(target.x, target.y, 90);
 
         LeanTween.rotate(gameObject, rotation, timeToRotate)
@@ -70,7 +73,13 @@ public class RotatingShieldBoss : Boss
     {
         if (other.CompareTag("Character"))
         {
-            BossHit();
+            BossDamaged();
         }
+    }
+
+    protected override void BossDamaged()
+    {
+        Life -= ShieldBossManager.Instance.DamagePerHit;
+        if (lerpCharacter) InvokeOnBossDamage(Life);
     }
 }

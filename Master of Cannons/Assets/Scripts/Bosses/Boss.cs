@@ -8,24 +8,19 @@ public abstract class Boss : MonoBehaviour
     [SerializeField, Range(1, 10)]
     protected byte difficulty = 1;
 
-    [SerializeField]
-    bool lerpCharacter = false;
+    protected int Life { get => life; set => life = value; }
 
-    protected int Life { get => life; private set => life = value; }
-
-    public static event Delegates.Action<int> OnBossHit = null;
+    public static event Delegates.Action<int> OnBossDamage = null;
 
     protected virtual void Awake()
     {
         SetDifficulty();
-        OnBossHit = null;
+        OnBossDamage = null;
     }
 
     protected abstract void SetDifficulty();
 
-    protected void BossHit()
-    {
-        Life -= BossFightManager.BossFight.DamagePerHit;
-        if(lerpCharacter) OnBossHit?.Invoke(Life);
-    } 
+    protected abstract void BossDamaged();
+
+    protected void InvokeOnBossDamage(int _life) => OnBossDamage?.Invoke(_life);
 }
