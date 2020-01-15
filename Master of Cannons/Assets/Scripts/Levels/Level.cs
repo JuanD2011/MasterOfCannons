@@ -3,7 +3,7 @@
 [RequireComponent(typeof(CapsuleCollider))]
 public class Level : MonoBehaviour
 {
-    public static event Delegates.Action<LevelData> onLevelSelected = null;
+    public static event Delegates.Action<LevelData> OnLevelSelected = null;
 
     public LevelData LevelData { get; private set; } = null;
 
@@ -19,6 +19,6 @@ public class Level : MonoBehaviour
     private void OnMouseUp()
     {
         if (!MenuManager.canSelectLevel) return;
-        onLevelSelected(LevelData);
+        OnLevelSelected(LevelData);
     }
 }

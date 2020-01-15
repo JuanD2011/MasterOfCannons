@@ -80,4 +80,9 @@ public static class Memento
     {
         return JsonUtility.FromJson<T>(_dataToDeserialize);
     }
+
+    public static void LoadData<T>(T _serializableClass, string _json)
+    {
+        JsonUtility.FromJsonOverwrite(_json, _serializableClass);
+    }
 }

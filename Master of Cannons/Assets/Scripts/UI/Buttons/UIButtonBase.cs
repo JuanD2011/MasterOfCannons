@@ -8,11 +8,10 @@ public abstract class UIButtonBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        m_Button = GetComponent<Button>();
+        m_Button = GetComponentInChildren<Button>();
     }
 
-    protected virtual
-        void Start()
+    protected virtual void Start()
     {
         m_Button.onClick.AddListener(() => OnButtonClicked());
     }

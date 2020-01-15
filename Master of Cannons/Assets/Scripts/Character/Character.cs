@@ -27,8 +27,8 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        MenuGameManager.onPause += Freeze;
-        Referee.onGameOver += Freeze;
+        MenuGameManager.OnPause += Freeze;
+        Referee.OnGameOver += Freeze;
     }
 
     private void Update()
@@ -110,12 +110,12 @@ public class Character : MonoBehaviour
         if (canActivateSpecial || hasSpecial) return;
         specialProgress += (1 - timePercentageInCannon) * 0.3f;
         OnChargeSpecial.Invoke(specialProgress);
+
         if (specialProgress > 0.95f)
         {
             PlayerInputHandler.canActivateSpecialHandler.Invoke();
             canActivateSpecial = true;
         }
-
     }
 
     protected virtual void OnDisableSpecial()

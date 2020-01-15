@@ -7,10 +7,15 @@ public class PlayerInputHandler : MonoBehaviour, IPointerClickHandler
 {
     Button specialButton = null;
     public static event Action OnShootAction = null;
-    public static event Func<System.Collections.IEnumerator> OnSpecialFunc;
+    public static event Func<System.Collections.IEnumerator> OnSpecialFunc = null;
     public static Action canActivateSpecialHandler;
 
-    void Start()
+    private void Awake()
+    {
+        OnShootAction = null;
+    }
+
+    private void Start()
     {
         specialButton = GetComponentInChildren<Button>();
         specialButton.interactable = false;

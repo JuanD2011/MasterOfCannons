@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "Player Data", menuName = "Player Data")]
 public class PlayerData : ScriptableObject
@@ -9,19 +10,4 @@ public class PlayerData : ScriptableObject
     public bool defaultCharacterSet = false;
 
     public PlayerSkin currentCharacter = null;
-
-    public event Delegates.Action<CollectibleType> OnCollectibleAdded = null;
-
-    /// <summary>
-    /// Add the amount by the type
-    /// </summary>
-    /// <param name="_Amount"></param>
-    public void AddCollectible(CollectibleType _CollectibleType , int _Amount)
-    {
-        if (_CollectibleType == CollectibleType.Coin)
-        {
-            coins += _Amount;
-            OnCollectibleAdded?.Invoke(CollectibleType.Coin);
-        }
-    }
 }

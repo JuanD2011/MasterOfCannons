@@ -32,7 +32,7 @@ public class MovingBehaviour : CannonBehaviour
 
         if (startMoving) Move();
 
-        MenuGameManager.onPause += PauseMovement;
+        MenuGameManager.OnPause += PauseMovement;
     }
 
     private void PauseMovement(bool _Value)

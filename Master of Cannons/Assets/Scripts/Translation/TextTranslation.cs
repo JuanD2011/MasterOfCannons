@@ -3,11 +3,9 @@ using TMPro;
 
 public class TextTranslation : MonoBehaviour
 {
-    [SerializeField]
-    private string textID = "";
+    [SerializeField] private string textID = "";
 
-    [SerializeField]
-    private bool initTextInStart = true;
+    [SerializeField] private bool initTextInStart = true;
 
     private TextMeshProUGUI text = null;
 
@@ -15,7 +13,10 @@ public class TextTranslation : MonoBehaviour
 
     private void Awake()
     {
-        text = GetComponent<TextMeshProUGUI>();
+        if (text == null)
+        {
+            text = GetComponent<TextMeshProUGUI>(); 
+        }
     }
 
     private void Start()
@@ -33,6 +34,10 @@ public class TextTranslation : MonoBehaviour
     /// </summary>
     public void UpdateText()
     {
-        if (text != null && Translation.Fields.ContainsKey(TextID)) text.SetText(Translation.Fields[TextID]);
+        if (text == null)
+        {
+            text = GetComponent<TextMeshProUGUI>();
+        }
+        text.SetText(Translation.GetTextTranslated(TextID));
     }
 }

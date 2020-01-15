@@ -4,22 +4,22 @@ public class Referee : MonoBehaviour
 {
     [SerializeField] private GameObject losingVolumeCompound = null;
 
-    public static event Delegates.Action<LevelStatus> onGameOver = null;
+    public static event Delegates.Action<LevelStatus> OnGameOver = null;
 
     private void Awake()
     {
-        onGameOver = null;
+        OnGameOver = null;
     } 
 
     private void Start()
     {
-        VolumeLevelStatus.onVolumeEntered += ManageLevelStatus;
+        VolumeLevelStatus.OnVolumeEntered += ManageLevelStatus;
         Cannon.OnChangeLosingBoundaries += ChangeLosingBoundaries;
     }
 
     private void OnDestroy()
     {
-        VolumeLevelStatus.onVolumeEntered -= ManageLevelStatus;
+        VolumeLevelStatus.OnVolumeEntered -= ManageLevelStatus;
         Cannon.OnChangeLosingBoundaries -= ChangeLosingBoundaries;
     }
 
@@ -29,7 +29,7 @@ public class Referee : MonoBehaviour
     /// <param name="_levelStatus"></param>
     private void ManageLevelStatus(LevelStatus _levelStatus)
     {
-        onGameOver(_levelStatus);
+        OnGameOver(_levelStatus);
     }
 
     /// <summary>

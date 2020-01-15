@@ -13,15 +13,89 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] GameObject audioSourceTemplate = null;
     [SerializeField] AudioMixer audioMixer = null;
 
-    List<AudioSource> audioSources;
+    [SerializeField] private Settings settings = null;
 
-    AudioSource currentAudioSource;
+    #region Audio settings
+
+    private const string mixerMusicVolume = "MusicVolume", mixerSFXVolume = "SFXVolume";
+
+    private const float mutedVolume = -80f;
+    
+    #endregion
+
+    private List<AudioSource> audioSources;
+
+    private AudioSource currentAudioSource;
 
     public AudioSource CurrentAudioSource { get { return currentAudioSource; } }
 
     protected override void OnAwake()
     {
         CreateAudioSources(audioSourcesAmount);
+    }
+
+    private void Start()
+    {
+        //In start because we depend on memento loading data process
+        InitializeAudioMixer();
+    }
+
+    /// <summary>
+    /// Initialize audiomixer
+    /// </summary>
+    private void InitializeAudioMixer()
+    {
+        if (!settings.isMusicActive)
+        {
+            audioMixer.SetFloat(mixerMusicVolume, mutedVolume);
+        }
+
+        if (!settings.isSFXActive)
+        {
+            audioMixer.SetFloat(mixerSFXVolume, mutedVolume);
+        } 
+    }
+
+    /// <summary>
+    /// Function that is called to mute audio mixer's channel
+    /// </summary>
+    /// <param name="_audioType"></param>
+    public void MuteAudio(AudioType _audioType, Delegates.Action _onMutedAudio)
+    {
+        float value = 0f;
+
+        switch (_audioType)
+        {
+            case AudioType.Music:
+                audioMixer.GetFloat(mixerMusicVolume, out value);
+                if (value > mutedVolume)
+                {
+                    settings.isMusicActive = false;
+                    audioMixer.SetFloat(mixerMusicVolume, mutedVolume);
+                }
+                else if (value <= mutedVolume)
+                {
+                    settings.isMusicActive = true;
+                    audioMixer.SetFloat(mixerMusicVolume, 0f);
+                }
+                break;
+            case AudioType.SFX:
+                audioMixer.GetFloat(mixerSFXVolume, out value);
+                if (value > mutedVolume)
+                {
+                    audioMixer.SetFloat(mixerSFXVolume, mutedVolume);
+                    settings.isSFXActive = false;
+                }
+                else if (value <= mutedVolume)
+                {
+                    settings.isSFXActive = true;
+                    audioMixer.SetFloat(mixerSFXVolume, 0f);
+                }
+                break;
+            default:
+                break;
+        }
+        _onMutedAudio();
     }
 
     private void CreateAudioSources(int audioSourcesAmount)

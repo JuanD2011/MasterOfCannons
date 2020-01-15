@@ -2,21 +2,26 @@
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] private TextAsset playerDataTextAsset = null;
+    [SerializeField] private TextAsset playerLevelsDataTextAsset = null;
+
     [SerializeField] private Settings settings = null;
 
-    [SerializeField] private GameData gameData = null;
     [SerializeField] private PlayerData playerData = null;
+    [SerializeField] private PlayerLevelsData playerLevelsData = null;
+    [SerializeField] private GameData gameData = null;
 
     [SerializeField] private UIBackground uIBackground = null;
 
     public static bool canSelectLevel = false;
-
+        
     private static bool languageSetOnce = false;
     private static bool settingsLoaded = false;
+    private static bool playerDataLoaded = false;
 
     protected SettingsTabManager settingsTabManager = null;
 
-    public event Delegates.Action<int> onLoadLevel = null;
+    public event Delegates.Action<int> OnLoadLevel = null;
 
     private void Awake()
     {
@@ -25,7 +30,7 @@ public class MenuManager : MonoBehaviour
         //Only set language when the user joins the app
         if (!languageSetOnce)
         {
-            SetLanguage();
+            InitializeLanguage();
             languageSetOnce = true;
         }
 
@@ -36,17 +41,25 @@ public class MenuManager : MonoBehaviour
             settingsLoaded = true;
         }
 
-        CheckIfIsInLevelSelection();
+        //TODO load player data when he has logged in
+        if (!playerDataLoaded)
+        {
+            Memento.LoadData(playerLevelsData, playerLevelsDataTextAsset.text);
+            Memento.LoadData(playerData, playerDataTextAsset.text);
+            playerDataLoaded = true;
+        }
     }
 
     private void Start()
     {
-        Level.onLevelSelected += ManageLevelPlayerAction;
+        CheckIfIsInLevelSelection();//In start because we depend on settings tab manager
+
+        Level.OnLevelSelected += ManageLevelPlayerAction;
     }
 
     private void OnDestroy()
     {
-        Level.onLevelSelected -= ManageLevelPlayerAction;
+        Level.OnLevelSelected -= ManageLevelPlayerAction;
     }
 
     private void CheckIfIsInLevelSelection()
@@ -80,7 +93,7 @@ public class MenuManager : MonoBehaviour
     /// <summary>
     /// Set language
     /// </summary>
-    private void SetLanguage()
+    private void InitializeLanguage()
     {
         Translation.CurrentLanguageId = settings.languageId;
         Translation.LoadLanguage(Translation.idToLanguage[Translation.CurrentLanguageId].ToString());
@@ -105,5 +118,5 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void SaveSettings() => Memento.SaveData(settings);
 
-    protected void SendOnLoadLevel(int _levelBuildIndex) => onLoadLevel(_levelBuildIndex);
+    protected void SendOnLoadLevel(int _levelBuildIndex) => OnLoadLevel(_levelBuildIndex);
 }

@@ -49,6 +49,4 @@ MonoBehaviour:
   audioSourceTemplate: {fileID: 1342834441763172139, guid: 558b3f6e2797ae74b97ced325d9ea919,
     type: 3}
   audioMixer: {fileID: 24100000, guid: 5db701f68fc1bbc4dbfacb67d58030d4, type: 2}
-  audioSettings:
-  - {fileID: 0}
-  - {fileID: 0}
+  settings: {fileID: 11400000, guid: 48d4c3452cc75d04a8765fc8afb5082b, type: 2}

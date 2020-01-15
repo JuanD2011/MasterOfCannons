@@ -2,14 +2,14 @@
 
 public class MenuGameManager : MenuManager
 {
-    public static event Delegates.Action<bool> onPause = null;
+    public static event Delegates.Action<bool> OnPause = null;
 
     public static bool IsPaused { get; private set; } = false;
     public static bool LevelSelection { get; private set; } = false;
 
     private void Awake()
     {
-        onPause = null;
+        OnPause = null;
 
         settingsTabManager = GetComponent<SettingsTabManager>();
         LevelSelection = false;
@@ -17,12 +17,12 @@ public class MenuGameManager : MenuManager
 
     private void Start()
     {
-        Referee.onGameOver += ManageRefereeAction;
+        Referee.OnGameOver += ManageRefereeAction;
     }
 
     private void OnDestroy()
     {
-        Referee.onGameOver -= ManageRefereeAction;
+        Referee.OnGameOver -= ManageRefereeAction;
     }
 
     private void ManageRefereeAction(LevelStatus _VolumeStatus)
@@ -49,7 +49,7 @@ public class MenuGameManager : MenuManager
     public void SetGamePause(bool _Value)
     {
         IsPaused = _Value;
-        onPause.Invoke(_Value);
+        OnPause.Invoke(_Value);
     }
 
     /// <summary>

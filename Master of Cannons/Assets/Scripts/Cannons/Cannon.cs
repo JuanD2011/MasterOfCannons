@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Cannon : MonoBehaviour
+public class Cannon : MonoBehaviour, IScorable
 {
     [SerializeField]
     private float wickLength = 5f;
@@ -24,10 +24,7 @@ public class Cannon : MonoBehaviour
     public event Delegates.Action<bool> OnCharacterInCannon = null;
     public static event Delegates.Action<Vector3> OnChangeLosingBoundaries = null;
 
-    protected virtual void Awake()
-    {
-        PlayerInputHandler.OnShootAction -= Shoot;
-    }
+    protected virtual void Awake() { }
 
     private void Start()
     {
@@ -56,6 +53,8 @@ public class Cannon : MonoBehaviour
     {
         if (characterInCannon != null)
         {
+            GiveScore();
+
             characterInCannon.UpdateSpecialProgress(elapsedWickTime / WickLength);
             burningWick = false;
             elapsedWickTime = 0f;
@@ -95,5 +94,10 @@ public class Cannon : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Character")) characterInCannon = null;
+    }
+
+    public void GiveScore()
+    { 
+        ScoreManager.Instance.AddPoints((int)(200 * (1 - (elapsedWickTime / WickLength))));
     }
 }

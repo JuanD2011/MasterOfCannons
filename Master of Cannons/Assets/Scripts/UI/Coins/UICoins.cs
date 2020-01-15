@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class UICurrency : MonoBehaviour
+public class UICoins : MonoBehaviour
 {
     [SerializeField] private CollectibleType collectibleType = CollectibleType.None;
 
     private PlayerData playerData = null;
 
-    private TextMeshProUGUI m_Text = null;
+    protected TextMeshProUGUI m_Text = null;
 
     private void Awake()
     {
@@ -19,14 +19,13 @@ public class UICurrency : MonoBehaviour
     private void Start()
     {
         UpdateText(collectibleType);
-        playerData.OnCollectibleAdded += UpdateText;
     }
 
     private void UpdateText(CollectibleType _collectibleType)
     {
         if (_collectibleType == CollectibleType.Coin)
         {
-            m_Text.text = playerData.coins.ToString();
+            m_Text.SetText(playerData.coins.ToString());
         }
     }
 }

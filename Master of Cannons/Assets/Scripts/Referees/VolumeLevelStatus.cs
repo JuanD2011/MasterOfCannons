@@ -5,9 +5,9 @@ public class VolumeLevelStatus : MonoBehaviour
 {
     [SerializeField] LevelStatus volumeType = LevelStatus.None;
 
-    public static event Delegates.Action<LevelStatus> onVolumeEntered = null;
+    public static event Delegates.Action<LevelStatus> OnVolumeEntered = null;
 
-    private void OnTriggerEnter(Collider _Other) => onVolumeEntered(volumeType);
+    private void OnTriggerEnter(Collider _Other) => OnVolumeEntered(volumeType);
 
     private void Reset() => GetComponent<Collider>().isTrigger = true;
 }

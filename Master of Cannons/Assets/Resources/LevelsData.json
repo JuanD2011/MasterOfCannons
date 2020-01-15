@@ -6,12 +6,12 @@
       "levelBuildIndex": 1,
       "starsNedeed": 0,
 
-      "pointsOneStar": 90,
-      "pointsTwoStars": 110,
-      "pointsThreeStars": 200
+      "pointsOneStar": 10,
+      "pointsTwoStars": 50,
+      "pointsThreeStars": 70
     },
     {
-      "id": 1,
+      "number": 2,
       "levelBuildIndex": 2,
       "starsNedeed": 3,
 
