@@ -19,7 +19,6 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        PlayerInputHandler.OnSpecialFunc += OnSpecial;
         Rigidbody = GetComponent<Rigidbody>();
         Collider = GetComponent<Collider>();
         hasSpecial = false;
@@ -27,6 +26,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
+        PlayerInputHandler.OnSpecialFunc += OnSpecial;
         MenuGameManager.OnPause += Freeze;
         Referee.OnGameOver += Freeze;
     }

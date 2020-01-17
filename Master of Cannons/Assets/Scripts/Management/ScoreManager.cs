@@ -10,6 +10,8 @@ public class ScoreManager : Singleton<ScoreManager>
 
     public event Delegates.Action<int> OnPointsUpdated = null;
 
+    public byte Stars { get; private set; } = 0;
+
     protected override void OnAwake()
     {
         playerLevelsData = Resources.Load<PlayerLevelsData>("Scriptable Objects/Player Levels Data");//TODO Load this from firebase
@@ -24,26 +26,29 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         if (_levelStatus == LevelStatus.Defeat) return;
 
-        byte stars = 0;
+        Stars = 0;
 
         if (points >= gameData.currentLevelData.pointsOneStar && points < gameData.currentLevelData.pointsTwoStars)
         {
-            stars = 1;
+            Stars = 1;
         }
         else if (points >= gameData.currentLevelData.pointsTwoStars && points < gameData.currentLevelData.pointsThreeStars)
         {
-            stars = 2;
+            Stars = 2;
         }
         else if (points >= gameData.currentLevelData.pointsThreeStars)
         {
-            stars = 3;
+            Stars = 3;
         }
 
-        if (stars > playerLevelsData.levelsStars[gameData.currentLevelData.number - 1])
+        if (gameData.currentLevelData.number <= playerLevelsData.levelsStars.Count && playerLevelsData.levelsStars.Count > 0)
         {
-            playerLevelsData.levelsStars[gameData.currentLevelData.number - 1] = stars;
-            //TODO save json in firebase
-        }
+            if (Stars > playerLevelsData.levelsStars[gameData.currentLevelData.number - 1])
+            {
+                playerLevelsData.levelsStars[gameData.currentLevelData.number - 1] = Stars;
+                //TODO save json in firebase
+            } 
+        } 
     }
 
     /// <summary>
