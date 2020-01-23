@@ -6,12 +6,12 @@ public class PlayerInputHandler : MonoBehaviour
 {
     //private Button specialButton = null;
     public static event Action OnShootAction = null;
-    public static event Func<System.Collections.IEnumerator> OnSpecialFunc = null;
-    public static Action canActivateSpecialHandler;
+    //public static event Func<System.Collections.IEnumerator> OnSpecialFunc = null;
+    //public static Action canActivateSpecialHandler;
 
     private void Awake()
     {
-        OnSpecialFunc = null;
+        //OnSpecialFunc = null;
         OnShootAction = null;
     }
 
@@ -20,7 +20,7 @@ public class PlayerInputHandler : MonoBehaviour
         //TODO: Refactor this
         //specialButton = GetComponentInChildren<Button>();
         //specialButton.interactable = false;
-        canActivateSpecialHandler = CanActivateSpecial;
+        //canActivateSpecialHandler = CanActivateSpecial;
 
         //specialButton.onClick.AddListener(() =>
         //{
@@ -36,17 +36,13 @@ public class PlayerInputHandler : MonoBehaviour
         //specialButton.interactable = true;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        //TODO set this through raycast and verify if it does not hit UI
-        //OnShootAction?.Invoke();
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("eee");
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            OnShootAction();
         }
     }
 }

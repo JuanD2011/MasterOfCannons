@@ -26,7 +26,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        PlayerInputHandler.OnSpecialFunc += OnSpecial;
+        //PlayerInputHandler.OnSpecialFunc += OnSpecial;
         MenuGameManager.OnPause += Freeze;
         Referee.OnGameOver += Freeze;
     }
@@ -113,7 +113,7 @@ public class Character : MonoBehaviour
 
         if (specialProgress > 0.95f)
         {
-            PlayerInputHandler.canActivateSpecialHandler.Invoke();
+            //PlayerInputHandler.canActivateSpecialHandler.Invoke();
             canActivateSpecial = true;
         }
     }

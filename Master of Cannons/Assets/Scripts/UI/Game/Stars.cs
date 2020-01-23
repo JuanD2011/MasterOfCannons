@@ -19,8 +19,6 @@ public class Stars : MonoBehaviour
         waitFirstStar = new WaitForSeconds(timeFirstStar);
 
         starsAnimators = GetComponentsInChildren<Animator>();
-
-        //StartCoroutine(AnimateStars());
     }
 
     private void Start()
