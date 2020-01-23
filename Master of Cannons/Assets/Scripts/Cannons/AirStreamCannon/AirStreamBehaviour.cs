@@ -8,26 +8,37 @@ public class AirStreamBehaviour : MonoBehaviour
     private AirStreamType type = AirStreamType.None;
 
     [SerializeField]
-    private float streamMaxForce = 0f;
+    private float streamMaxForce = 30f;
+
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem blowParticles = null;
+    [SerializeField] private ParticleSystem suckParticles = null;
 
     private float range = 0f, distance = 0f, force = 0f;
-
     private bool playerInStreamZone = false;
-
     private Rigidbody playerRigidbody = null;
 
     private Cannon cannon = null;
+
+    private AirStreamSwitchBehaviour switcher = null;
+
+    public AirStreamType Type { get => type; set => type = value; }
 
     private void Awake()
     {
         range = GetComponent<BoxCollider>().size.y;
         cannon = GetComponentInChildren<Cannon>();
+        switcher = GetComponent<AirStreamSwitchBehaviour>();
     }
 
     private void Start()
     {
-        cannon.OnCharacterInCannon += OnCharacterInCannon;        
+        cannon.OnCharacterInCannon += OnCharacterInCannon;
+        if (switcher != null) switcher.OnSwich += OnSwich;
+        if (type == AirStreamType.None) Debug.LogError("No airstream type defined, this cannon may not work properly", gameObject);
+        SetParticlesActive(true);
     }
+
 
     private void OnCharacterInCannon(bool _value)
     {
@@ -35,6 +46,7 @@ public class AirStreamBehaviour : MonoBehaviour
         {
             playerInStreamZone = false;
             playerRigidbody = null;
+
         }
     }
 
@@ -62,7 +74,7 @@ public class AirStreamBehaviour : MonoBehaviour
     {
         Vector3 direction = Vector3.zero;
 
-        switch (type)
+        switch (Type)
         {
             case AirStreamType.Suck:
                 direction = -transform.up;
@@ -85,6 +97,34 @@ public class AirStreamBehaviour : MonoBehaviour
     private void Reset()
     {
         GetComponent<BoxCollider>().isTrigger = true;
+    }
+
+    private void SetParticlesActive(bool _value)
+    {
+        if (_value)
+        {
+            if (type == AirStreamType.Blow)
+            {
+                suckParticles.Stop();
+                blowParticles.Play();
+            }
+            else if (type == AirStreamType.Suck)
+            {
+                blowParticles.Stop();
+                suckParticles.Play();
+            } 
+        }
+        else
+        {
+            blowParticles.Stop();
+            suckParticles.Stop();
+        }
+    }
+    private void OnSwich()
+    {
+        if (type == AirStreamType.Blow) type = AirStreamType.Suck;
+        else if (type == AirStreamType.Suck) type = AirStreamType.Blow;
+        SetParticlesActive(true);
     }
 }
 
