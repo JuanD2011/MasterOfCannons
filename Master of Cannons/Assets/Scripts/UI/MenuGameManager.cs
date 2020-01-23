@@ -17,20 +17,25 @@ public class MenuGameManager : MenuManager
 
     private void Start()
     {
-        VolumeLevelStatus.OnVolumeEntered += ManageVolumeStatus;
+        Referee.OnGameOver += ManageRefereeAction;
     }
 
-    private void ManageVolumeStatus(VolumeLevelStatusType _VolumeStatus)
+    private void OnDestroy()
+    {
+        Referee.OnGameOver -= ManageRefereeAction;
+    }
+
+    private void ManageRefereeAction(LevelStatus _VolumeStatus)
     {
         switch (_VolumeStatus)
         {
-            case VolumeLevelStatusType.Victory:
+            case LevelStatus.Victory:
                 settingsTabManager.PanelAnim(3);
                 break;
-            case VolumeLevelStatusType.Defeat:
+            case LevelStatus.Defeat:
                 settingsTabManager.PanelAnim(4);
                 break;
-            case VolumeLevelStatusType.None:
+            case LevelStatus.None:
                 break;
             default:
                 break;

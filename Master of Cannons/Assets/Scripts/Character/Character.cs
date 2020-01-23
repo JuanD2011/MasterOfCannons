@@ -19,7 +19,6 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        PlayerInputHandler.OnSpecialFunc += OnSpecial;
         Rigidbody = GetComponent<Rigidbody>();
         Collider = GetComponent<Collider>();
         hasSpecial = false;
@@ -27,6 +26,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
+        //PlayerInputHandler.OnSpecialFunc += OnSpecial;
         MenuGameManager.OnPause += Freeze;
         Referee.OnGameOver += Freeze;
     }
@@ -52,7 +52,7 @@ public class Character : MonoBehaviour
 
     public void SetKinematic(bool _value) => Rigidbody.isKinematic = _value;
 
-    private void Freeze()
+    private void Freeze(LevelStatus _levelStatus)
     {
         Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }
@@ -110,12 +110,12 @@ public class Character : MonoBehaviour
         if (canActivateSpecial || hasSpecial) return;
         specialProgress += (1 - timePercentageInCannon) * 0.3f;
         OnChargeSpecial.Invoke(specialProgress);
+
         if (specialProgress > 0.95f)
         {
-            PlayerInputHandler.canActivateSpecialHandler.Invoke();
+            //PlayerInputHandler.canActivateSpecialHandler.Invoke();
             canActivateSpecial = true;
         }
-
     }
 
     protected virtual void OnDisableSpecial()

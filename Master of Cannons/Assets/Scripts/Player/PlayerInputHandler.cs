@@ -1,37 +1,48 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using Delegates;
-using UnityEngine.UI;
 
-public class PlayerInputHandler : MonoBehaviour, IPointerClickHandler
+public class PlayerInputHandler : MonoBehaviour
 {
-    Button specialButton = null;
+    //private Button specialButton = null;
     public static event Action OnShootAction = null;
-    public static event Func<System.Collections.IEnumerator> OnSpecialFunc;
-    public static Action canActivateSpecialHandler;
+    //public static event Func<System.Collections.IEnumerator> OnSpecialFunc = null;
+    //public static Action canActivateSpecialHandler;
 
-    void Start()
+    private void Awake()
     {
-        specialButton = GetComponentInChildren<Button>();
-        specialButton.interactable = false;
-        canActivateSpecialHandler = CanActivateSpecial;
+        //OnSpecialFunc = null;
+        OnShootAction = null;
+    }
 
-        specialButton.onClick.AddListener(() =>
-        {
-            specialButton.interactable = false;
-            specialButton.image.color = Color.grey;
-            StartCoroutine(OnSpecialFunc());
-        });
+    private void Start()
+    {
+        //TODO: Refactor this
+        //specialButton = GetComponentInChildren<Button>();
+        //specialButton.interactable = false;
+        //canActivateSpecialHandler = CanActivateSpecial;
+
+        //specialButton.onClick.AddListener(() =>
+        //{
+        //    specialButton.interactable = false;
+        //    specialButton.image.color = Color.grey;
+        //    StartCoroutine(OnSpecialFunc());
+        //});
     }
 
     void CanActivateSpecial()
     {
-        specialButton.image.color = Color.red;
-        specialButton.interactable = true;
+        //specialButton.image.color = Color.red;
+        //specialButton.interactable = true;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    private void Update()
     {
-        OnShootAction?.Invoke();
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            OnShootAction();
+        }
     }
 }

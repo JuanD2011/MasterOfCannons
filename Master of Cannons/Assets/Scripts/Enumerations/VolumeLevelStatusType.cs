@@ -1,4 +1,4 @@
-﻿public enum VolumeLevelStatusType
+﻿public enum LevelStatus
 {
     Victory,
     Defeat,

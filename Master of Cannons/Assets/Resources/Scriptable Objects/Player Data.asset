@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d1c5a7307baab49804a2ed05276ee4, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
-  coins: 0
-  stars: 3
+  coins: 52
+  stars: 0
   defaultCharacterSet: 1
   currentCharacter:
     name: Default
     Skin: {fileID: 7179511578770460706, guid: a0238e9a3d79b034aaa5ba64e73e719f, type: 3}
+  levelsStars: 

@@ -2,39 +2,64 @@
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] private TextAsset playerDataTextAsset = null;
+    [SerializeField] private TextAsset playerLevelsDataTextAsset = null;
+
     [SerializeField] private Settings settings = null;
 
     [SerializeField] private PlayerData playerData = null;
+    [SerializeField] private PlayerLevelsData playerLevelsData = null;
+    [SerializeField] private GameData gameData = null;
 
     [SerializeField] private UIBackground uIBackground = null;
 
     public static bool canSelectLevel = false;
-
+        
     private static bool languageSetOnce = false;
+    private static bool settingsLoaded = false;
+    private static bool playerDataLoaded = false;
 
     protected SettingsTabManager settingsTabManager = null;
 
-    public event Delegates.Action<int> onLoadLevel = null;
+    public event Delegates.Action<int> OnLoadLevel = null;
 
     private void Awake()
     {
         settingsTabManager = GetComponent<SettingsTabManager>();
 
-        //TODO Only load setting the first time the user enter the application
-        Memento.LoadData(settings);
-
+        //Only set language when the user joins the app
         if (!languageSetOnce)
         {
-            SetLanguage();
+            InitializeLanguage();
             languageSetOnce = true;
         }
 
-        CheckIfIsInLevelSelection();
+        //Only load settings when user joins the app
+        if (!settingsLoaded)
+        {
+            Memento.LoadData(settings);
+            settingsLoaded = true;
+        }
+
+        //TODO load player data when he has logged in
+        if (!playerDataLoaded)
+        {
+            Memento.LoadData(playerLevelsData, playerLevelsDataTextAsset.text);
+            Memento.LoadData(playerData, playerDataTextAsset.text);
+            playerDataLoaded = true;
+        }
     }
 
     private void Start()
     {
+        CheckIfIsInLevelSelection();//In start because we depend on settings tab manager
+
         Level.OnLevelSelected += ManageLevelPlayerAction;
+    }
+
+    private void OnDestroy()
+    {
+        Level.OnLevelSelected -= ManageLevelPlayerAction;
     }
 
     private void CheckIfIsInLevelSelection()
@@ -46,12 +71,18 @@ public class MenuManager : MonoBehaviour
         SelectingLevels(true);
     }
 
-    private void ManageLevelPlayerAction(int _StarsNeeded, int _LevelBuildIndex)
+    /// <summary>
+    /// Check if the player has sufficent stars, in that case, will load the scene
+    /// </summary>
+    /// <param name="_levelData"></param>
+    private void ManageLevelPlayerAction(LevelData _levelData)
     {
-        if (playerData.stars >= _StarsNeeded)
+        if (playerData.stars >= _levelData.starsNedeed)
         {
             settingsTabManager.PanelAnim(1);
-            SendOnLoadLevel(_LevelBuildIndex);
+            gameData.currentLevelData = _levelData;
+
+            SendOnLoadLevel(_levelData.levelBuildIndex);
         }
         else
         {
@@ -59,7 +90,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    private void SetLanguage()
+    /// <summary>
+    /// Set language
+    /// </summary>
+    private void InitializeLanguage()
     {
         Translation.CurrentLanguageId = settings.languageId;
         Translation.LoadLanguage(Translation.idToLanguage[Translation.CurrentLanguageId].ToString());
@@ -68,20 +102,21 @@ public class MenuManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         if (settings == null) return;
-
+#if !UNITY_EDITOR
         Memento.SaveData(settings);
+#endif
     }
     
     /// <summary>
     /// Equals can select level to the _value
     /// </summary>
-    /// <param name="_Value"></param>
-    private void SelectingLevels(bool _Value) => canSelectLevel = _Value;
+    /// <param name="_value"></param>
+    private void SelectingLevels(bool _value) => canSelectLevel = _value;
 
     /// <summary>
     /// Save settings
     /// </summary>
     public void SaveSettings() => Memento.SaveData(settings);
 
-    protected void SendOnLoadLevel(int _LevelBuildIndex) => onLoadLevel(_LevelBuildIndex);
+    protected void SendOnLoadLevel(int _levelBuildIndex) => OnLoadLevel(_levelBuildIndex);
 }

@@ -19,17 +19,25 @@ public class LevelManager : MonoBehaviour
 
     protected virtual void Start()
     {
-         menuManager.onLoadLevel += LoadLevel;
+         menuManager.OnLoadLevel += LoadLevel;
     }
 
-    private void LoadLevel(int _LevelBuildIndex)
+    private void LoadLevel(int _levelBuildIndex)
     {
-        StartCoroutine(LoadAsynchronously(_LevelBuildIndex));
+        StartCoroutine(LoadAsynchronously(_levelBuildIndex));
     }
 
-    protected IEnumerator LoadAsynchronously(int _LevelBuildIndex)
+    protected IEnumerator LoadAsynchronously(int _levelBuildIndex)
     {
-        operation = SceneManager.LoadSceneAsync(_LevelBuildIndex);
+        if (_levelBuildIndex <= SceneManager.sceneCount)
+        {
+            operation = SceneManager.LoadSceneAsync(_levelBuildIndex);
+        }
+        else
+        {
+            operation = SceneManager.LoadSceneAsync(0);//If the level that is trying to load does not exist, then load menu scene
+        }
+
         float progress = 0f;
         
         while (!operation.isDone)
