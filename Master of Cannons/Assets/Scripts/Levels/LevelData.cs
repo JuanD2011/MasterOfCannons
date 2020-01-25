@@ -1,8 +1,7 @@
 ﻿[System.Serializable]
 public class LevelData
 {
-    public int number
-        = 0;
+    public int number = 0;
     public int levelBuildIndex = 0;
     public int starsNedeed = 0;
 
