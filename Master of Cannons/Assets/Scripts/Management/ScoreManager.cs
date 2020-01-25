@@ -33,10 +33,12 @@ public class ScoreManager : Singleton<ScoreManager>
         if (points >= gameData.currentLevelData.pointsOneStar && points < gameData.currentLevelData.pointsTwoStars)
         {
             Stars = 1;
+            Debug.Log("one star");
         }
         else if (points >= gameData.currentLevelData.pointsTwoStars && points < gameData.currentLevelData.pointsThreeStars)
         {
             Stars = 2;
+            Debug.Log("two stars");
         }
         else if (points >= gameData.currentLevelData.pointsThreeStars)
         {

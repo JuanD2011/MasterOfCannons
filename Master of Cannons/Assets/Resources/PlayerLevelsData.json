@@ -1,10 +1,13 @@
 {
   "levelsStars": 
   [
-    0,
-    0,
-    0,
-    0,
-    0
+    {
+      "number": 1,
+      "stars": 1
+    },
+    {
+      "number": 2,
+      "stars": 0
+    }
   ]
 }
