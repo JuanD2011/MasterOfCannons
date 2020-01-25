@@ -31,21 +31,25 @@ public class ScoreManager : Singleton<ScoreManager>
         if (points >= gameData.currentLevelData.pointsOneStar && points < gameData.currentLevelData.pointsTwoStars)
         {
             Stars = 1;
+            Debug.Log("one star");
         }
         else if (points >= gameData.currentLevelData.pointsTwoStars && points < gameData.currentLevelData.pointsThreeStars)
         {
             Stars = 2;
+            Debug.Log("two stars");
         }
         else if (points >= gameData.currentLevelData.pointsThreeStars)
         {
             Stars = 3;
+            Debug.Log(gameData.currentLevelData.pointsThreeStars);
+            Debug.Log("three stars");
         }
 
         if (gameData.currentLevelData.number <= playerLevelsData.levelsStars.Count && playerLevelsData.levelsStars.Count > 0)
         {
-            if (Stars > playerLevelsData.levelsStars[gameData.currentLevelData.number - 1])
+            if (Stars > playerLevelsData.levelsStars[gameData.currentLevelData.number - 1].stars)
             {
-                playerLevelsData.levelsStars[gameData.currentLevelData.number - 1] = Stars;
+                playerLevelsData.levelsStars[gameData.currentLevelData.number - 1].stars = Stars;
                 //TODO save json in firebase
             } 
         } 

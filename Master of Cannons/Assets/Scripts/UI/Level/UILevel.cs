@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UILevel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textMeshProUGUI = null;
 
-    private PlayerData playerData = null;//TODO load this from other script, to avoid loadinging constantly the class
+    [SerializeField] Image[] starsOn = new Image[3];
+
+    private PlayerData playerData = null;//TODO load this from other script, to avoid constantly loading the class
+    private PlayerLevelsData playerLevelsData = null;
 
     private void Awake()
     {
         playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");//TODO Load this from firebase
+        playerLevelsData = Resources.Load<PlayerLevelsData>("Scriptable Objects/Player Levels Data");//TODO Load this from firebase
     }
 
     /// <summary>
@@ -26,7 +31,14 @@ public class UILevel : MonoBehaviour
         }
         else
         {
-            GetComponent<CanvasGroup>().alpha = 0;
+            transform.GetChild(0).gameObject.SetActive(false);
+
+            transform.GetChild(1).gameObject.SetActive(true);
+
+            for (byte i = 0; i < playerLevelsData.levelsStars[_levelData.number - 1].stars; i++)
+            {
+                starsOn[i].enabled = true;
+            }
         }
     }
 }
