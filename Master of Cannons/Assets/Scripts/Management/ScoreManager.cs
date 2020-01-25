@@ -5,6 +5,7 @@ public class ScoreManager : Singleton<ScoreManager>
     [SerializeField] private GameData gameData = null;
 
     private PlayerLevelsData playerLevelsData = null;
+    private PlayerData playerData = null;
 
     private int points = 0;
 
@@ -15,6 +16,7 @@ public class ScoreManager : Singleton<ScoreManager>
     protected override void OnAwake()
     {
         playerLevelsData = Resources.Load<PlayerLevelsData>("Scriptable Objects/Player Levels Data");//TODO Load this from firebase
+        playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");//TODO Load this from firebase
     }
 
     private void Start()
@@ -41,14 +43,16 @@ public class ScoreManager : Singleton<ScoreManager>
         else if (points >= gameData.currentLevelData.pointsThreeStars)
         {
             Stars = 3;
-            Debug.Log(gameData.currentLevelData.pointsThreeStars);
             Debug.Log("three stars");
         }
 
-        if (gameData.currentLevelData.number <= playerLevelsData.levelsStars.Count && playerLevelsData.levelsStars.Count > 0)
+        if (playerLevelsData.levelsStars.Count > 0)
         {
-            if (Stars > playerLevelsData.levelsStars[gameData.currentLevelData.number - 1].stars)
+            byte levelCurrentStars = playerLevelsData.levelsStars[gameData.currentLevelData.number - 1].stars;
+
+            if (Stars > levelCurrentStars)
             {
+                playerData.stars += Stars - levelCurrentStars;
                 playerLevelsData.levelsStars[gameData.currentLevelData.number - 1].stars = Stars;
                 //TODO save json in firebase
             } 
