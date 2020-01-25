@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class UICoins : MonoBehaviour
+/// <summary>
+/// Shows total collectible amount each time is on enable
+/// </summary>
+public class UICollectible : MonoBehaviour
 {
     [SerializeField] private CollectibleType collectibleType = CollectibleType.None;
 
@@ -16,16 +19,25 @@ public class UICoins : MonoBehaviour
         m_Text = GetComponent<TextMeshProUGUI>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         UpdateText(collectibleType);
     }
 
     private void UpdateText(CollectibleType _collectibleType)
     {
-        if (_collectibleType == CollectibleType.Coin)
+        switch (_collectibleType)
         {
-            m_Text.SetText(playerData.coins.ToString());
+            case CollectibleType.Coin:
+                m_Text.SetText(playerData.coins.ToString());
+                break;
+            case CollectibleType.Star:
+                m_Text.SetText(playerData.stars.ToString());
+                break;
+            case CollectibleType.None:
+                break;
+            default:
+                break;
         }
     }
 }

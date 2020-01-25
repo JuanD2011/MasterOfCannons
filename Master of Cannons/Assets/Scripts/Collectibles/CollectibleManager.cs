@@ -6,11 +6,8 @@ public class CollectibleManager : Singleton<CollectibleManager>
 
     public byte CollectedCoins { get; private set; } = 0;
 
-    public event Delegates.Action<CollectibleType> OnCollectibleAdded = null;
-
     protected override void OnAwake()
     {
-        OnCollectibleAdded = null;
         playerData = Resources.Load<PlayerData>("Scriptable Objects/Player Data");//TODO Load this from firebase
 
         CollectedCoins = 0;
@@ -45,7 +42,6 @@ public class CollectibleManager : Singleton<CollectibleManager>
         if (_collectibleType == CollectibleType.Coin)
         {
             CollectedCoins += 1;
-            OnCollectibleAdded(CollectibleType.Coin);
         }
     }
 

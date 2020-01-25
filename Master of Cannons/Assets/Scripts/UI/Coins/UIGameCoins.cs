@@ -1,7 +1,10 @@
 ﻿using TMPro;
+using UnityEngine;
 
-public class UIGameCoins : UICoins
+public class UIGameCoins : MonoBehaviour
 {
+    private TextMeshProUGUI m_Text = null; 
+
     private void Awake()
     {
         m_Text = GetComponent<TextMeshProUGUI>();
@@ -10,7 +13,6 @@ public class UIGameCoins : UICoins
     private void Start()
     {
         UpdateText(CollectibleType.Coin);
-        CollectibleManager.Instance.OnCollectibleAdded += UpdateText;
     }
 
     private void UpdateText(CollectibleType _CollectibleType)
