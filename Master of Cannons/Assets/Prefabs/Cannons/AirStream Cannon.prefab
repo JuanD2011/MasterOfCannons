@@ -4705,6 +4705,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4717,6 +4718,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -9457,6 +9459,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9469,6 +9472,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -9589,10 +9593,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8345005108301884047}
     m_Modifications:
-    - target: {fileID: 1498731755091202331, guid: eea0efd849cd0f146a2bd6124fa09edc,
+    - target: {fileID: 1498731755091202328, guid: eea0efd849cd0f146a2bd6124fa09edc,
         type: 3}
-      propertyPath: m_Name
-      value: Cannon
+      propertyPath: m_Radius
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 1498731755091202329, guid: eea0efd849cd0f146a2bd6124fa09edc,
         type: 3}
@@ -9649,16 +9653,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1498731755091202328, guid: eea0efd849cd0f146a2bd6124fa09edc,
+    - target: {fileID: 1498731755091202331, guid: eea0efd849cd0f146a2bd6124fa09edc,
         type: 3}
-      propertyPath: m_Radius
-      value: 0.45
+      propertyPath: m_Name
+      value: Cannon
       objectReference: {fileID: 0}
     - target: {fileID: 1498731756361190384, guid: eea0efd849cd0f146a2bd6124fa09edc,
         type: 3}
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1498731756361190396, guid: eea0efd849cd0f146a2bd6124fa09edc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 232d9586740e9e54fa0f51dc91920448, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eea0efd849cd0f146a2bd6124fa09edc, type: 3}
 --- !u!4 &2208489419309009349 stripped

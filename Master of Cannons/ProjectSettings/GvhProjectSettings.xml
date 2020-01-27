@@ -1,4 +1,12 @@
 <projectSettings>
+  <projectSetting name="com.google.unity.oss.play_services_resolverAnalyticsCookie" value="794181b9621d49c3a33417a1acb21d6d" />
+  <projectSetting name="com.google.unity.oss.play_services_resolverAnalyticsEnabled" value="True" />
+  <projectSetting name="Google.IOSResolver.VerboseLoggingEnabled" value="False" />
+  <projectSetting name="Google.VersionHandler.CleanUpPromptEnabled" value="True" />
+  <projectSetting name="Google.VersionHandler.RenameToCanonicalFilenames" value="False" />
+  <projectSetting name="Google.VersionHandler.RenameToDisableFilesEnabled" value="True" />
+  <projectSetting name="Google.VersionHandler.VerboseLoggingEnabled" value="False" />
+  <projectSetting name="Google.VersionHandler.VersionHandlingEnabled" value="True" />
   <projectSetting name="GooglePlayServices.PromptBeforeAutoResolution" value="False" />
   <projectSetting name="GooglePlayServices.UseJetifier" value="True" />
 </projectSettings>
